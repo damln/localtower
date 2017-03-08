@@ -28,6 +28,7 @@ module Localtower
       end
 
       use_generator(::Localtower::Generators::Migration, params[:migrations])
+      redirect_to migrations_path
     end
 
     def relations
@@ -35,6 +36,7 @@ module Localtower
 
     def post_relations
       use_generator(::Localtower::Generators::Relation, params[:relations])
+      redirect_to relations_path
     end
 
     def models
@@ -42,6 +44,7 @@ module Localtower
 
     def post_models
       use_generator(::Localtower::Generators::Model, params[:models])
+      redirect_to models_path
     end
 
     private
@@ -49,7 +52,6 @@ module Localtower
     def use_generator(generator_klass, options)
       generator = generator_klass.new(options)
       generator.run
-      redirect_to :back
     end
   end
 end

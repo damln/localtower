@@ -1,7 +1,7 @@
 PATH
   remote: /Users/damln/Work/localtower/localtower
   specs:
-    localtower (0.2.0)
+    localtower (0.1.1)
       active_link_to
       pg
       rails (>= 5.0.1)
