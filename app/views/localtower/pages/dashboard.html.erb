@@ -1,0 +1,55 @@
+<% content_for :title do %>Schema<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="title"></h4>
+      </div>
+
+      <div class="content">
+        <div class="row">
+
+          <% ::Localtower::Tools.models_presented.each do |model| %>
+
+          <div class="col-md-6">
+            <h3><%= model[:name] %></h3>
+
+            <table class="table table-hover table-striped">
+              <thead>
+                <th>Field</th>
+                <th>Type</th>
+                <th>Index?</th>
+              </thead>
+
+              <tbody>
+                <% model[:attributes_list].each do |attribute_data| %>
+
+                <tr>
+                  <td>
+                    <code>
+                    <%= attribute_data["name"] %>
+                    </code>
+                  </td>
+
+                  <td>
+                    <%= attribute_data["type_clean"] %>
+                  </td>
+
+                  <td>
+                    <% if attribute_data["index"].any? %>
+                    <span class="label label-primary">Yes</span>
+                    <% end %>
+                  </td>
+                </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

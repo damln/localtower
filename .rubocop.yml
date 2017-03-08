@@ -1,0 +1,52 @@
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+  Exclude:
+    - bin/**/*
+    - db/**/*
+    - node_modules/**/*
+    - public/**/*
+    - script/**/*
+    - spec/**/*
+    - config/initializers/**/*
+    - config/routes.rb
+
+LineLength:
+  Max: 140
+
+StringLiterals:
+  # EnforcedStyle: single_quotes or double_quotes
+  # EnforcedStyle: single_quotes
+  Enabled: false
+
+RedundantSelf:
+  Enabled: false
+
+SingleLineMethods:
+  Enabled: false
+
+GlobalVars:
+  Enabled: false
+
+Documentation:
+  Enabled: false
+
+MethodLength:
+  Enabled: false
+
+AndOr:
+  Enabled: false
+
+Not:
+  Enabled: false
+
+ClassLength:
+  CountComments: false
+  Max: 500
+
+Style/GuardClause:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false

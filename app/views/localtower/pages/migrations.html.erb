@@ -1,0 +1,99 @@
+<% content_for :title do %>Migrations<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="title"></h4>
+      </div>
+
+      <div class="content">
+        <%= form_tag migrations_path, class: "form" do %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Name of the Migration</label>
+              <input type="text" name="migrations[migration_name]" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-hover table-striped">
+          <thead>
+            <th>Action</th>
+            <th>Model</th>
+            <th>Column</th>
+            <th>New Column Name</th>
+            <th>Type</th>
+            <th>Index?</th>
+            <th>Can be null?</th>
+            <th></th>
+          </thead>
+
+          <tbody data-selector="tbody">
+            <tr data-selector="tr">
+              <td>
+                <%= select_tag "migrations[migrations][][action]", options_for_select(::Localtower::Generators::Migration::ACTIONS), class: "form-control", "data-selector" => "action" %>
+              </td>
+
+              <td>
+                <%= select_tag "migrations[migrations][][table_name]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control" %>
+              </td>
+
+              <td class="text-center">
+                <input type="text" name="migrations[migrations][][column]" class="form-control" data-selector="column_text">
+
+                <%= select_tag "migrations[migrations][][column_list]", options_for_select(::Localtower::Tools.all_columns), class: "form-control", include_blank: true, "data-selector" => "column_list", style: "display:none;" %>
+              </td>
+
+              <td>
+                <input type="text" name="migrations[migrations][][new_column_name]" class="form-control">
+              </td>
+
+              <td>
+                <%= select_tag "migrations[migrations][][column_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
+              </td>
+
+              <td>
+                <input type="checkbox" name="migrations[migrations][][index]" class="form-control">
+              </td>
+
+              <td>
+                <input type="checkbox" name="migrations[migrations][][nullable]" class="form-control" checked="">
+              </td>
+
+              <td>
+                <div class="pull-right">
+                  <button class="btn btn-danger btn-xs" data-selector="remove">Remove</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-warning btn-xs pull-right" data-selector="duplicate">Add a field</button>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- multiple lines: -->
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <button name="migrations[run_migrate]" type="submit" value="false" class="btn btn-warning" data-selector="submit">
+            Create the migration
+            </button>
+
+            <button name="migrations[run_migrate]" type="submit" value="true" class="btn btn-success" data-selector="submit">
+            Create the migration and <b>migrate</b>
+            </button>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,88 @@
+# --- PROJECT ---
+# (add your specific files)
+
+# --- RAILS ---
+/.bundle
+/log/*.log
+!/log/.keep
+public/uploads/**
+/tmp
+!/tmp/.keep
+*.zeus.sock*
+coverage
+
+# --- NODE ---
+*node_modules*
+
+# --- ARCHIVE ---
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.sqlite
+*.sqlite3
+
+# --- GENERATED ---
+*.tags*
+*.rbx*
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.pyc
+*.swp
+*.sass-cache
+*.diff
+*.err
+*.orig
+*.rej
+*.swo
+*.bak
+*.vi
+*.log
+*~
+
+# --- OS ---
+._.*
+*.DS_Store*
+.cache
+.project
+.settings
+ehthumbs.db
+Icon?
+.Spotlight-V100
+.Trashes
+nbproject
+Thumbs.db
+
+# --- IDE ---
+# XCODE:
+*~.nib
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.xcuserstate
+xcuserdata/
+*.mode1v3
+*.mode2v3
+
+# KOMODO:
+*.komodoproject
+.komodotools
+
+# DREAMWEAVER:
+_notes
+dwsync.xml
+
+.idea
+
+# --- VERSIONS ---
+.hg
+.svn
+.CVS

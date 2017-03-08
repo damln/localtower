@@ -1,0 +1,78 @@
+<% content_for :title do %>Models<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="title"></h4>
+      </div>
+
+      <div class="content">
+        <%= form_tag models_path, class: "form" do %>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>Name of the Model</label>
+              <input type="text" name="models[model_name]" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <table class="table table-hover table-striped">
+          <thead>
+            <th>Field</th>
+            <th>Kind</th>
+            <th>index?</th>
+            <th>Can be null?</th>
+            <th></th>
+          </thead>
+
+          <tbody data-selector="tbody">
+            <tr data-selector="tr">
+              <td>
+                <input type="text" name="models[attributes][][attribute_name]" class="form-control">
+              </td>
+              <td>
+                <%= select_tag "models[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
+              </td>
+              <td>
+                <input type="checkbox" value="true" name="models[attributes][][index]" class="form-control">
+              </td>
+              <td>
+                <input type="checkbox" value="true" name="models[attributes][][nullable]" class="form-control" checked>
+              </td>
+              <td>
+                <div class="pull-right">
+                  <button class="btn btn-danger btn-xs" data-selector="remove">Remove</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="row">
+          <div class="col-md-12">
+            <button class="btn btn-warning btn-xs pull-right" data-selector="duplicate">Add a field</button>
+          </div>
+        </div>
+
+        <hr>
+
+        <!-- multiple lines: -->
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <button name="models[run_migrate]" type="submit" value="false" class="btn btn-warning" data-selector="submit">
+            Create the model
+            </button>
+
+            <button name="models[run_migrate]" type="submit" value="true" class="btn btn-success" data-selector="submit">
+            Create the model and <b>migrate</b>
+            </button>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
