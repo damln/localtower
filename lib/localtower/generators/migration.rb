@@ -121,7 +121,7 @@ module Localtower
       # @opts =
       def initialize(opts)
         @thor = ThorGeneratorMigration.new
-        @opts = opts.deep_stringify_keys
+        @opts = JSON[opts.to_json]
       end
 
       def remove_all_migrations

@@ -2,7 +2,7 @@ module Localtower
   module Generators
     class Model
       def initialize(opts)
-        @opts = opts.deep_stringify_keys
+        @opts = JSON[opts.to_json]
       end
 
       def run
