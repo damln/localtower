@@ -1,7 +1,7 @@
 # Localtower
 
-
-
+![Schema](https://raw.githubusercontent.com/damln/localtower/master/public/1_schema.png)
+https://raw.githubusercontent.com/damln/localtower/master/public/1_schema.png
 ## INSTALL
 
 Add to your Gemfile:
