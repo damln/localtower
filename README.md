@@ -4,17 +4,17 @@
 
 ## INSTALL
 
-  # In your Gemfile
+    # In your Gemfile
 
-  group :development do
-    gem "localtower"
-  end
+    group :development do
+      gem "localtower"
+    end
 
-  # in config/routes.rb
+    # in config/routes.rb
 
-  if Rails.env.development?
-    mount Localtower::Engine, at: "localtower"
-  end
+    if Rails.env.development?
+      mount Localtower::Engine, at: "localtower"
+    end
 
 ## USAGE
 
