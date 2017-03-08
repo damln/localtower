@@ -4,11 +4,19 @@
 
 ## INSTALL
 
+Add to your Gemfile:
+
     # In your Gemfile
 
     group :development do
       gem "localtower"
     end
+
+In your terminal:
+
+    bundle install
+
+Add to your routes:
 
     # in config/routes.rb
 
