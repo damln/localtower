@@ -1,7 +1,18 @@
 # Localtower
 
+### SchemaSee the 
 ![Schema](https://raw.githubusercontent.com/damln/localtower/master/public/1_schema.png)
-https://raw.githubusercontent.com/damln/localtower/master/public/1_schema.png
+
+### Create a model
+![Models](https://raw.githubusercontent.com/damln/localtower/master/public/2_models_1.png)
+
+### Create a many to many relation
+![Relations](https://raw.githubusercontent.com/damln/localtower/master/public/3_relations.png)
+
+### Create a migration
+![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/4_migrations.png)
+
+
 ## INSTALL
 
 Add to your Gemfile:
