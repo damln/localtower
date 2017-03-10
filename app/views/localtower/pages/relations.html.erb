@@ -12,6 +12,17 @@
         <%= form_tag relations_path, class: "form" do %>
         <div class="row">
           <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+              <div class="form-group">
+                <div class="text-center">
+                  <label>Name of the Model (optional)</label>
+                </div>
+                <input type="text" name="relations[model_name]" class="form-control">
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
             <div class="col-md-5">
               <label>Model 1:</label>
 

@@ -13,7 +13,11 @@ module Localtower
           return nil
         end
 
-        model_name = "#{model_one_name.capitalize}#{model_two_name.capitalize}"
+        if @opts["model_name"].present?
+          model_name = @opts["model_name"].capitalize
+        else
+          model_name = "#{model_one_name.capitalize}#{model_two_name.capitalize}"
+        end
 
         data = {
           run_migrate: true,
