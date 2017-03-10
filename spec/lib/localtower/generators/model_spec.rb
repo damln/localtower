@@ -4,7 +4,8 @@ module Localtower
   module Generators
     describe Model do
 
-      before(:each) do
+      before(:all) do
+        clean_files
       end
 
       after(:all) do

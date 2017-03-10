@@ -4,6 +4,14 @@ def clean_files
   Dir["#{Rails.root}/app/models/**/*.*"].each { |model_file| File.delete(model_file) }
 end
 
+def migration_files
+  Dir["#{Rails.root}/db/migrate/*"]
+end
+
+def last_migration
+  migration_files.sort.last
+end
+
 #============================
 ENV['RAILS_ENV'] = 'test'
 

@@ -13,7 +13,7 @@ module Localtower
 
     class << self
       def force_reload!
-        app_folders = Dir["#{Rails.root}/app/**/*.rb"]
+        app_folders = Dir["#{Rails.root}/app/models/**/*.rb"]
         lib_folders = Dir["#{Rails.root}/lib/**/*.rb"]
 
         all_folders = (app_folders + lib_folders).flatten
@@ -25,15 +25,19 @@ module Localtower
       end
 
       def models
+        self.force_reload!
+
+        klass_parent = defined?(ApplicationRecord) ? ApplicationRecord : ActiveRecord::Base
+
         Dir["#{Rails.root}/app/models/\*.rb"].map { |f|
           File.basename(f, '.*').camelize.constantize
-        }.select { |klass| klass != ApplicationRecord }
+        }.select { |klass| klass != klass_parent }.select { |klass| klass.respond_to?(:columns_hash) }
       end
 
       def models_presented
+        self.force_reload!
+
         list = []
-        files = Dir["#{Rails.root}/app/models/**/*.*"]
-        files.each { |file| ActiveSupport::Dependencies.require_or_load(file) }
 
         self.models.each do |model|
           attributes_list = []
@@ -120,13 +124,23 @@ module Localtower
         self.perform_cmd("rails g migration #{str}", false)
 
         if not standalone
+          # self.perform_raw_cmd("z rake #{cmd_str}", standalone)
           self.perform_cmd('rake db:migrate')
-          self.perform_cmd('rake db:migrate RAILS_ENV=test')
+          # self.perform_cmd('rake db:migrate RAILS_ENV=test')
         end
       end
 
       def perform_cmd(cmd_str, standalone = true)
         self.perform_raw_cmd("bundle exec #{cmd_str}", standalone)
+
+        # if cmd_str["rake"]
+          # self.perform_raw_cmd("zeus #{cmd_str}", standalone)
+        # elsif cmd_str["rails g migration"]
+          # cmd = cmd_str.split("rails g migration")[1]
+          # self.perform_raw_cmd("zeus generate migration #{cmd}", standalone)
+        # else
+          # self.perform_raw_cmd("bundle exec #{cmd_str}", standalone)
+        # end
       end
 
       def perform_raw_cmd(cmd_str, standalone = false, root_dir = false)

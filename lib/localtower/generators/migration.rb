@@ -80,6 +80,27 @@ module Localtower
           inject_in_migration(file, line)
         end
 
+        def migration_belongs_to(data)
+          file = data["last_migration_file"]
+
+          line = "    add_reference :#{data["table_name"]}, :#{data["column"]}, foreign_key: true, index: true\n"
+
+          inject_in_migration(file, line)
+
+          file = "#{Rails.root}/app/models/#{data["table_name"].underscore.singularize}.rb"
+          after = /class #{data["table_name"].camelize.singularize} < ApplicationRecord\n/
+          line1 = "  belongs_to :#{data["column"].singularize.underscore}\n"
+
+          ::Localtower::Tools::ThorTools.new.insert_after_word(file, after, line1)
+
+
+          file = "#{Rails.root}/app/models/#{data["column"].underscore.singularize}.rb"
+          after = /class #{data["column"].camelize.singularize} < ApplicationRecord\n/
+          line1 = "  has_many :#{data["table_name"].pluralize.underscore}\n"
+
+          ::Localtower::Tools::ThorTools.new.insert_after_word(file, after, line1)
+        end
+
         def migration_create_table(data)
           file = data["last_migration_file"]
 
@@ -105,13 +126,14 @@ module Localtower
     end
 
     class Migration
-      TYPES = %w(string datetime text integer float json jsonb decimal binary boolean array references).freeze
+      TYPES = %w(string datetime text uuid integer float json jsonb decimal binary boolean array references).freeze
       ACTIONS = [
         'add_column',
         'remove_column',
         'rename_column',
         'change_column_type',
         'add_index_to_column',
+        'belongs_to',
         # 'add_index_to_column_combined',
         'remove_index_to_column',
         # 'create_table',
@@ -161,6 +183,7 @@ end
             'rename_column' => -> { rename_column(action_line) },
             'change_column_type' => -> { change_column_type(action_line) },
             'add_index_to_column' => -> { add_index_to_column(action_line) },
+            'belongs_to' => -> { belongs_to(action_line) },
             # 'add_index_to_column_combined' => -> { add_index_to_column_combined(action_line) },
             'remove_index_to_column' => -> { remove_index_to_column(action_line) },
             'create_table' => -> { create_table(action_line) },
@@ -227,6 +250,17 @@ end
         end
 
         @thor.migration_add_index_to_column(data)
+      end
+
+      def belongs_to(data)
+        if not data["table_name"].present? and data["belongs_to"].present?
+          return nil
+        end
+
+        data["column"] = data["belongs_to"].underscore.singularize
+        data['column_type'] = "references"
+
+        @thor.migration_belongs_to(data)
       end
 
       # def add_index_to_column_combined(data)

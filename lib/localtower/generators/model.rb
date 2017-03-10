@@ -26,7 +26,7 @@ module Localtower
 
         if @opts['run_migrate']
           ::Localtower::Tools.perform_cmd('rake db:migrate', false)
-          ::Localtower::Tools.perform_cmd('rake db:migrate RAILS_ENV=test', false)
+          # ::Localtower::Tools.perform_cmd('rake db:migrate RAILS_ENV=test', false)
         end
 
         self

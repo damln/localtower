@@ -9,6 +9,16 @@ FactoryGirl.define do
     ]
   end
 
+  factory :create_table_two, class: Hash do
+    migration_name "User"
+    migrations [
+      {
+        action: "create_table",
+        table_name: "users"
+      }
+    ]
+  end
+
   factory :add_column, class: Hash do
     migration_name "Post"
     migrations [
@@ -113,6 +123,17 @@ FactoryGirl.define do
         action: "add_index_to_column",
         table_name: "posts",
         column: "content_new",
+      }
+    ]
+  end
+
+  factory :belongs_to, class: Hash do
+    migration_name "Post"
+    migrations [
+      {
+        action: "belongs_to",
+        table_name: "posts",
+        belongs_to: "users",
       }
     ]
   end

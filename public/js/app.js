@@ -40,6 +40,7 @@ MainApp = {
       var action_input = $tr.find("[name='migrations[migrations][][action]']");
 
       var table_name_input = $tr.find("[name='migrations[migrations][][table_name]']");
+      var belongs_to_input = $tr.find("[name='migrations[migrations][][belongs_to]']");
 
       var column_text_input = $tr.find("[data-selector='column_text']");
       var column_input = $tr.find("[data-selector='column_list']");
@@ -52,7 +53,7 @@ MainApp = {
       var action = action_input.val();
 
 
-      $.each([column_text_input, column_input, new_column_name_input, column_type_input, index_input, nullable_input], function(i, el) {
+      $.each([belongs_to_input, column_text_input, column_input, new_column_name_input, column_type_input, index_input, nullable_input], function(i, el) {
         el.hide();
       });
 
@@ -62,6 +63,7 @@ MainApp = {
         remove_column: [column_input],
         rename_column: [column_input, new_column_name_input],
         change_column_type: [column_input, column_type_input],
+        belongs_to: [belongs_to_input],
         add_index_to_column: [column_input],
         remove_index_to_column: [column_input],
         drop_table: [],

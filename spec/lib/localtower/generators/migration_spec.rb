@@ -3,16 +3,8 @@ require 'spec_helper'
 module Localtower
   module Generators
     describe Migration do
-
-      def migration_files
-        Dir["#{Rails.root}/db/migrate/*"]
-      end
-
-      def last_migration
-        migration_files.sort.last
-      end
-
       before(:all) do
+        clean_files
       end
 
       after(:all) do
@@ -25,6 +17,15 @@ module Localtower
         generator = ::Localtower::Generators::Migration.new(data).run
 
         expect(::Localtower::Tools.word_in_file?(last_migration, /create_table :posts/)).to eq(true)
+      end
+
+      it 'create_table_two' do
+        data = attributes_for(:create_table_two)
+        data["run_migrate"] = true
+
+        generator = ::Localtower::Generators::Migration.new(data).run
+
+        expect(::Localtower::Tools.word_in_file?(last_migration, /create_table :users/)).to eq(true)
       end
 
       it 'add_column' do
