@@ -6,6 +6,10 @@ module Localtower
     def dashboard
     end
 
+    def status
+      @data = ::Localtower::Status.new.run
+    end
+
     def migrations
     end
 

@@ -1,0 +1,29 @@
+<% content_for :title do %>Status<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="title"></h4>
+      </div>
+
+      <div class="content">
+        <table class="table">
+          <% @data.each do |entry| %>
+          <tr>
+          <%
+          klass = ""
+          klass = (entry["status"] == 1) ? "success" : nil
+          klass = (entry["status"] == 0) ? "danger" : klass
+
+          %>
+            <td class="<%= klass %>">
+              <%= entry["name"] %>
+            </td>
+          </tr>
+          <% end %>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
