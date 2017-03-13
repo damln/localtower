@@ -1,16 +1,16 @@
 # Localtower
 
 ### See the schema
-![Schema](https://raw.githubusercontent.com/damln/localtower/master/public/1_schema.png)
+![Schema](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/1_schema.png)
 
 ### Create a model
-![Models](https://raw.githubusercontent.com/damln/localtower/master/public/2_models_1.png)
+![Models](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/2_models_1.png)
 
 ### Create a many to many relation
-![Relations](https://raw.githubusercontent.com/damln/localtower/master/public/3_relations.png)
+![Relations](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/3_relations.png)
 
 ### Create a migration
-![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/4_migrations.png)
+![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/4_migrations.png)
 
 
 ## INSTALL
