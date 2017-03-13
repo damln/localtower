@@ -12,29 +12,29 @@
 
         <table class="table table-hover table-striped">
           <thead>
-            <th>Action</th>
-            <th>Model</th>
-            <th>Belongs To</th>
-            <th>Column</th>
-            <th>New Column Name</th>
-            <th>Type</th>
-            <th>Index?</th>
-            <th>Can be null?</th>
-            <th></th>
+            <th> <span data-selector=''>On Model</span></th>
+            <th> <span data-selector=''>Action</span></th>
+            <th> <span data-selector='belongs_to_label'>Belongs To</span></th>
+            <th> <span data-selector='column_label'>Column</span></th>
+            <th> <span data-selector='new_column_name_label'>New Column Name</span></th>
+            <th> <span data-selector='column_type_label'>Type</span></th>
+            <th> <span data-selector='index_label'>Index?</span></th>
+            <th> <span data-selector='nullable_label'>Can be null?</span></th>
+            <th> <span data-selector=''></span></th>
           </thead>
 
           <tbody data-selector="tbody">
             <tr data-selector="tr">
               <td>
-                <%= select_tag "migrations[migrations][][action]", options_for_select(::Localtower::Generators::Migration::ACTIONS), class: "form-control", "data-selector" => "action" %>
-              </td>
-
-              <td>
                 <%= select_tag "migrations[migrations][][table_name]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control" %>
               </td>
 
               <td>
-                <%= select_tag "migrations[migrations][][belongs_to]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control" %>
+                <%= select_tag "migrations[migrations][][action]", options_for_select(::Localtower::Generators::Migration::ACTIONS), class: "form-control", "data-selector" => "action" %>
+              </td>
+
+              <td>
+                <%= select_tag "migrations[migrations][][belongs_to]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control", "data-selector" => "belongs_to" %>
               </td>
 
               <td class="text-center">
@@ -44,19 +44,19 @@
               </td>
 
               <td>
-                <input type="text" name="migrations[migrations][][new_column_name]" class="form-control">
+                <input type="text" name="migrations[migrations][][new_column_name]" class="form-control" data-selector="new_column_name">
               </td>
 
               <td>
-                <%= select_tag "migrations[migrations][][column_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
+                <%= select_tag "migrations[migrations][][column_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control", "data-selector" => "column_type" %>
               </td>
 
               <td>
-                <input type="checkbox" name="migrations[migrations][][index]" class="form-control">
+                <input type="checkbox" name="migrations[migrations][][index]" class="form-control" data-selector="index">
               </td>
 
               <td>
-                <input type="checkbox" name="migrations[migrations][][nullable]" class="form-control" checked="">
+                <input type="checkbox" name="migrations[migrations][][nullable]" class="form-control" checked="" data-selector="nullable">
               </td>
 
               <td>

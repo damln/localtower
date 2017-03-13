@@ -37,35 +37,95 @@ MainApp = {
     $.each(MainApp.bySelector("tr"), function() {
       var $tr = $(this);
 
-      var action_input = $tr.find("[name='migrations[migrations][][action]']");
-
-      var table_name_input = $tr.find("[name='migrations[migrations][][table_name]']");
-      var belongs_to_input = $tr.find("[name='migrations[migrations][][belongs_to]']");
-
-      var column_text_input = $tr.find("[data-selector='column_text']");
-      var column_input = $tr.find("[data-selector='column_list']");
-
-      var new_column_name_input = $tr.find("[name='migrations[migrations][][new_column_name]']");
-      var column_type_input = $tr.find("[name='migrations[migrations][][column_type]']");
-      var index_input = $tr.find("[name='migrations[migrations][][index]']");
-      var nullable_input = $tr.find("[name='migrations[migrations][][nullable]']");
-
+      var action_input = $tr.find("[data-selector='action']");
       var action = action_input.val();
 
+      var belongs_to_input = $tr.find("[data-selector='belongs_to']");
+      var belongs_to_label = MainApp.bySelector('belongs_to_label');
 
-      $.each([belongs_to_input, column_text_input, column_input, new_column_name_input, column_type_input, index_input, nullable_input], function(i, el) {
+      var column_text_input = $tr.find("[data-selector='column_text']");
+      var column_text_label = MainApp.bySelector('column_text_label');
+
+      var column_input = $tr.find("[data-selector='column_list']");
+      var column_label = MainApp.bySelector('column_label');
+
+      var new_column_name_input = $tr.find("[data-selector='new_column_name']");
+      var new_column_name_label = MainApp.bySelector('new_column_name_label');
+
+      var column_type_input = $tr.find("[data-selector='column_type']");
+      var column_type_label = MainApp.bySelector('column_type_label');
+
+      var index_input = $tr.find("[data-selector='index']");
+      var index_label = MainApp.bySelector('index_label');
+
+      var nullable_input = $tr.find("[data-selector='nullable']");
+      var nullable_label = MainApp.bySelector('nullable_label');
+
+      $.each(
+        [
+          belongs_to_input,
+          belongs_to_label,
+
+          column_text_input,
+          column_text_label,
+
+          column_input,
+          column_label,
+
+          new_column_name_input,
+          new_column_name_label,
+
+          column_type_input,
+          column_type_label,
+
+          index_input,
+          index_label,
+
+          nullable_input,
+          nullable_label,
+        ], function(i, el) {
         el.hide();
       });
 
-
       var mapping = {
-        add_column: [column_text_input, column_type_input, index_input, nullable_input],
-        remove_column: [column_input],
-        rename_column: [column_input, new_column_name_input],
-        change_column_type: [column_input, column_type_input],
-        belongs_to: [belongs_to_input],
-        add_index_to_column: [column_input],
-        remove_index_to_column: [column_input],
+        add_column: [
+          column_text_input,
+          column_text_label,
+          column_type_input,
+          column_type_label,
+          index_input,
+          index_label,
+          nullable_input,
+          nullable_label,
+        ],
+        remove_column: [
+          column_input,
+          column_label,
+        ],
+        rename_column: [
+          column_input,
+          column_label,
+          new_column_name_input,
+          new_column_name_label,
+        ],
+        change_column_type: [
+          column_input,
+          column_label,
+          column_type_input,
+          column_type_label,
+        ],
+        belongs_to: [
+          belongs_to_input,
+          belongs_to_label,
+        ],
+        add_index_to_column: [
+          column_input,
+          column_label,
+        ],
+        remove_index_to_column: [
+          column_input,
+          column_label,
+        ],
         drop_table: [],
       }
 
@@ -99,7 +159,6 @@ MainApp = {
     $(document).on(action, "[data-selector='" + selector + "']", callback);
   }
 }
-
 
 MainApp.init();
 
