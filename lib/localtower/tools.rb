@@ -43,9 +43,17 @@ module Localtower
           attributes_list = []
 
           model.columns_hash.each do |_k, v|
+
+            belongs_to = nil
+
+            if v.name.strip =~ /\_id$/
+              belongs_to = v.name.strip.gsub(/_id$/, "").singularize.camelize
+            end
+
             attributes_list << {
               'name' => v.name.strip,
               'type' => v.sql_type.strip,
+              'belongs_to' => belongs_to,
               'type_clean' => v.sql_type.split(' ')[0].strip,
               'primary' => (v.respond_to?(:primary) ? v.primary : false),
               'index' => self.indexes_for_model_and_attribute(model, v.name),

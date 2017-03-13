@@ -2,23 +2,24 @@
 
 <div class="row">
   <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <h4 class="title"></h4>
-      </div>
+    <div class="content">
+      <div class="">
 
-      <div class="content">
-        <div class="row">
+        <div class="grid">
+          <div class="grid-sizer"></div>
 
           <% ::Localtower::Tools.models_presented.each do |model| %>
 
-          <div class="col-md-6">
-            <h3><%= model[:name] %></h3>
+          <div class="grid-item text-small card">
+            <div class="text-center">
+              <h5><%= model[:name] %></h5>
+            </div>
 
-            <table class="table table-hover table-striped">
+            <table class="table table-hover table-striped table-condensed">
               <thead>
                 <th>Field</th>
                 <th>Type</th>
+                <th>Belongs To</th>
                 <th>Index?</th>
               </thead>
 
@@ -37,8 +38,18 @@
                   </td>
 
                   <td>
+                    <% if attribute_data["belongs_to"] %>
+                    <span class="label label-primary">
+                      <%= attribute_data["belongs_to"] %>
+                    </span>
+                    <% end %>
+                  </td>
+
+                  <td>
                     <% if attribute_data["index"].any? %>
-                    <span class="label label-primary">Yes</span>
+                    <span class="label label-success">Yes</span>
+                    <% else %>
+                    <span class="label label-default">No</span>
                     <% end %>
                   </td>
                 </tr>
@@ -47,8 +58,9 @@
             </table>
           </div>
           <% end %>
-
+          <div class="clearfix"></div>
         </div>
+
       </div>
     </div>
   </div>
