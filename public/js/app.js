@@ -19,7 +19,13 @@ MainApp = {
     });
 
     MainApp.whenActionOnElement("click", "submit", function(e) {
+      var current = $(e.currentTarget);
       $(".full-message").show();
+
+      if (current.val() === "false") {
+        $(".full-message-migrate").show();
+      }
+
     });
 
     MainApp.whenActionOnElement("change", "action", function(e) {
