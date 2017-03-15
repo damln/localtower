@@ -15,6 +15,9 @@
 
 ## INSTALL
 
+Only tested with Rails 4.2 and Rails 5.1 (should work with any Rails 4.2+ application).
+Only tested with PostgreSQL.
+
 Add to your ./Gemfile:
 
     # In your Gemfile
