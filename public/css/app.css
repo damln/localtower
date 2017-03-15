@@ -1,3 +1,46 @@
+
+.tower-nav{
+  display: none;
+  justify-content: space-around;
+  padding: 10px 0 0;
+  background-color: #1F77D0;
+  text-align: center;
+}
+
+.tower-nav div{
+  display: inline;
+  border-radius: 4px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.tower-nav div:hover{
+  background: rgba(255, 255, 255, 0.23);
+}
+
+.tower-a{
+  display: inline-block;
+  color: white;
+}
+
+.tower-a:hover{
+  color: white;
+}
+
+.tower-nav p{
+  margin: 0;
+    line-height: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+@media (max-width: 991px) {
+  .tower-nav{
+    display: flex;
+  }
+}
+
 .full-message {
   z-index: 999;
   position: fixed;
