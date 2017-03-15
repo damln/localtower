@@ -65,8 +65,8 @@ Run the spec:
     bundle exec rspec spec/
 
 Notes:
-Tests are currently very slow because this is testing rails commands so it boots the rails for each test. Zeus or spring should be introced.
+Tests are currently very slow because this is testing rails commands so it boots the framework for each test. Zeus or spring should be introduced.
 
 ## Contribute
 
-Thanks for reporting issues, I'll make my best.
+Thanks for reporting issues, I'll do my best.
