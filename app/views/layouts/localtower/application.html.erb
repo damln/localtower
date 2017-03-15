@@ -68,6 +68,36 @@
           </ul>
         </div>
       </div>
+      <div class="tower-nav">
+          <div class="<%= is_active_link?(dashboard_path, :inclusive) ? "active" : nil %>">
+              <a class="tower-a" href="<%= dashboard_path %>">
+                <i class="pe-7s-home"></i>
+                <p>Schema</p>
+              </a>
+            </div>
+
+
+            <div class="<%= is_active_link?(models_path, :inclusive) ? "active" : nil %>">
+              <a class="tower-a" href="<%= models_path %>">
+                <i class="pe-7s-server"></i>
+                <p>New Model</p>
+              </a>
+            </div>
+
+            <div class="<%= is_active_link?(relations_path, :inclusive) ? "active" : nil %>">
+              <a class="tower-a" href="<%= relations_path %>">
+                <i class="pe-7s-shuffle"></i>
+                <p>New Relation</p>
+              </a>
+            </div>
+
+            <div class="<%= is_active_link?(migrations_path, :inclusive) ? "active" : nil %>">
+              <a class="tower-a" href="<%= migrations_path %>">
+                <i class="pe-7s-edit"></i>
+                <p>New Migration</p>
+              </a>
+            </div>
+      </div>
 
       <div class="main-panel">
         <div class="content">
