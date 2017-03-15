@@ -12,7 +12,7 @@
         <%= form_tag relations_path, class: "form" do %>
         <div class="row">
           <div class="form-group">
-            <div class="col-md-offset-4 col-md-4">
+            <div class="col-md-offset-4 col-sm-offset-3 col-md-4 col-sm-6">
               <div class="form-group">
                 <div class="text-center">
                   <label>Name of the Model (optional)</label>
@@ -23,20 +23,20 @@
 
             <div class="clearfix"></div>
 
-            <div class="col-md-5">
+            <div class="col-md-5 col-sm-5">
               <label>Model 1:</label>
 
               <%= select("relations", "model_one_name", ::Localtower::Tools.models.collect {|p| [ p, p ] }, {include_blank: false}, class: "form-control") %>
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-2 col-sm-2">
               <div class="text-center">
                 <br>
                 <i class="pe-7s-loop" style="font-size: 3em;"></i>
               </div>
             </div>
 
-            <div class="col-md-5">
+            <div class="col-md-5 col-sm-5">
               <label>Model 2:</label>
               <%= select("relations", "model_two_name", ::Localtower::Tools.models.collect {|p| [ p, p ] }, {include_blank: false}, class: "form-control") %>
             </div>
