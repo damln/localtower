@@ -15,7 +15,7 @@
 
 ## INSTALL
 
-Add to your Gemfile:
+Add to your ./Gemfile:
 
     # In your Gemfile
 
@@ -23,11 +23,19 @@ Add to your Gemfile:
       gem "localtower"
     end
 
+If you want the latest master branch:
+
+    # In your Gemfile
+
+    group :development do
+      gem "localtower", github: "damln/localtower"
+    end
+
 In your terminal:
 
     bundle install
 
-Add to your routes:
+Add to your config/routes.rb:
 
     # in config/routes.rb
 
@@ -35,11 +43,11 @@ Add to your routes:
       mount Localtower::Engine, at: "localtower"
     end
 
-## USAGE
+## Usage
 
 Open your browser at: `http://localhost:3000/localtower`
 
-## TEST
+## RSpec
 
 Create a .env file inside the spec/dummy folder with the credentials to your PostgreSQL Database. It should look like this:
 
@@ -55,3 +63,7 @@ Run the spec:
 
 Notes:
 Tests are currently very slow because this is testing rails commands so it boots the rails for each test. Zeus or spring should be introced.
+
+## Contribute
+
+Thanks for reporting issues, I'll make my best.
