@@ -1,19 +1,19 @@
 /*!
-    
+
  =========================================================
  * Light Bootstrap Dashboard - v1.3.1.0
  =========================================================
- 
+
  * Product Page: http://www.creative-tim.com/product/light-bootstrap-dashboard
  * Copyright 2017 Creative Tim (http://www.creative-tim.com)
  * Licensed under MIT (https://github.com/creativetimofficial/light-bootstrap-dashboard/blob/master/LICENSE.md)
- 
+
  =========================================================
- 
+
  * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- 
+
  */
- 
+
 var searchVisible = 0;
 var transparent = true;
 
@@ -83,9 +83,6 @@ lbd = {
             $sidebar = $('.sidebar');
             sidebar_color = $sidebar.data('color');
 
-            $logo = $sidebar.find('.logo').first();
-            logo_content = $logo[0].outerHTML;
-
             ul_content = '';
 
             $navbar.attr('data-color',sidebar_color);
@@ -107,7 +104,7 @@ lbd = {
                             '</ul>' +
                           '</div>';
 
-            navbar_content = logo_content + ul_content;
+            navbar_content =  ul_content;
 
             $navbar.html(navbar_content);
 

@@ -68,9 +68,8 @@
           </ul>
         </div>
       </div>
-      <div class="tower-nav" data-color="blue">
-<!--           <ul class="t-nav" style="display: flex;">
- -->              <div class="<%= is_active_link?(dashboard_path, :inclusive) ? "active" : nil %>">
+      <div class="tower-nav">
+          <div class="<%= is_active_link?(dashboard_path, :inclusive) ? "active" : nil %>">
               <a class="tower-a" href="<%= dashboard_path %>">
                 <i class="pe-7s-home"></i>
                 <p>Schema</p>
@@ -98,17 +97,8 @@
                 <p>New Migration</p>
               </a>
             </div>
-            <!--
-            <li class="<%= is_active_link?(status_path, :inclusive) ? "active" : nil %>">
-              <a href="<%= status_path %>">
-                <i class=""></i>
-                <p>Status</p>
-              </a>
-            </li>
-            -->
+      </div>
 
-<!--           </ul>
- -->      </div>
       <div class="main-panel">
         <div class="content">
           <div class="container-fluid">
