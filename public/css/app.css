@@ -41,3 +41,13 @@
   width: 45%;
   margin: 2%;
 }
+
+.pointer:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.pointer:active {
+  position: relative;
+  top: 1px;
+}
