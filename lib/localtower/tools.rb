@@ -19,8 +19,11 @@ module Localtower
         all_folders = (app_folders + lib_folders).flatten
 
         all_folders.each do |file|
-          # load file
-          ActiveSupport::Dependencies.require_or_load(file)
+          begin
+            ActiveSupport::Dependencies.require_or_load(file)
+          rescue Exception => e
+            puts "Error loading: #{file}"
+          end
         end
       end
 
