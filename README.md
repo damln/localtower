@@ -73,4 +73,4 @@ Tests are currently very slow because this is testing rails commands so it boots
 
 Thanks for reporting issues, I'll do my best.
 
-[![Analytics](https://ga-beacon.appspot.com/UA-93841935-1/github-readme)](https://github.com/damln/localtower)
+[![Analytics](https://ga-beacon.appspot.com/UA-93841935-1/github-readme?pixel)](https://github.com/damln/localtower)
