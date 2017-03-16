@@ -1,4 +1,6 @@
-# Localtower
+<p align="center">
+<img src="https://raw.githubusercontent.com/damln/localtower/master/public/logo-localtower-white-300.png" alt="Localtower">
+</p>
 
 ### See the schema
 ![Schema](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/1_schema.png)
