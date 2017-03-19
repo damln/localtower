@@ -1,4 +1,6 @@
-# Localtower
+<p align="center">
+<img src="https://raw.githubusercontent.com/damln/localtower/master/public/logo-localtower-white-300.png" alt="Localtower">
+</p>
 
 ### See the schema
 ![Schema](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/1_schema.png)
@@ -70,3 +72,5 @@ Tests are currently very slow because this is testing rails commands so it boots
 ## Contribute
 
 Thanks for reporting issues, I'll do my best.
+
+[![Analytics](https://ga-beacon.appspot.com/UA-93841935-1/github-readme?pixel)](https://github.com/damln/localtower)

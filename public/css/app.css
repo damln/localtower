@@ -94,3 +94,7 @@
   position: relative;
   top: 1px;
 }
+
+.sidebar:after, body > .navbar-collapse:after {
+  background: #1E8FE1;
+}
