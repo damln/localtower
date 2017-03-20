@@ -4,7 +4,7 @@ describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
 
   let(:latest_migration) do
     Tempfile.new('foo').tap do |file|
-      file.puts base_file_structure_array
+      file.puts base_file_content
       file.rewind
     end
   end
@@ -18,23 +18,23 @@ describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
     ]
   }
 
-  let(:base_file_structure_array) {
-    [
-      "class CreateTests < ActiveRecord::Migration[5.0]\n",
-      "  def change\n",
-      "    create_table :tests do |t|\n",
-      "      t.string  :first\n",
-      "      t.integer :second\n",
-      "      t.string  :third\n",
-      "      t.string  :fourth\n",
-      "      t.integer :fifth\n",
-      "\n",
-      "      t.timestamps\n",
-      "    end\n",
-      "    add_index :tests, :first\n",
-      "  end\n",
-      "end\n"
-    ]
+  let(:base_file_content) {
+    <<-MIGRATION.strip_heredoc
+      class CreateTests < ActiveRecord::Migration[5.0]
+        def change
+          create_table :tests do |t|
+            t.string  :first
+            t.integer :second
+            t.string  :third
+            t.string  :fourth
+            t.integer :fifth
+
+            t.timestamps
+          end
+          add_index :tests, :first
+        end
+      end
+    MIGRATION
   }
 
   let(:expected_file_structure_array) {

@@ -21,13 +21,12 @@ module Localtower
               process_migration_file(attr_key, attr_value)
             end
           end
+          build_file(file_lines)
         end
 
         def process_migration_file(attr_key, attr_value)
           file_lines.map do |line|
             attach_default_value(line, attr_key, attr_value)
-          end.tap do |lines|
-            build_file(lines)
           end
         end
 
@@ -51,12 +50,12 @@ module Localtower
           @latest_migration ||= Dir["#{Rails.root}/db/migrate/*"].last
         end
 
-        def table_attribute_line?(line)
-          line.squish.start_with? "t."
+        def file_lines
+          @file_lines ||= File.readlines(latest_migration)
         end
 
-        def file_lines
-          File.readlines(latest_migration)
+        def table_attribute_line?(line)
+          line.squish.start_with? "t."
         end
 
       end
