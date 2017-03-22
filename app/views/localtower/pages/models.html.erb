@@ -38,7 +38,7 @@
                 <%= select_tag "models[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
               </td>
               <td>
-                <%= select_tag "models[attributes][][defaults]", options_for_select(::Localtower::Generators::Migration::DEFAULTS), class: "form-control" %>
+                <%= select_tag "models[attributes][][defaults]", options_for_select(::Localtower::Generators::Migration::DEFAULTS), include_blank: true, class: "form-control" %>
               </td>
               <td>
                 <input type="checkbox" value="true" name="models[attributes][][index]" class="form-control">
