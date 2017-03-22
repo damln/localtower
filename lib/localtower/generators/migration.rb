@@ -140,6 +140,10 @@ module Localtower
         'drop_table',
       ].freeze
 
+      DEFAULTS = [
+        "true", "false", "nil"
+      ]
+
       # @opts =
       def initialize(opts)
         @thor = ThorGeneratorMigration.new

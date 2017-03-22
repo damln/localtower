@@ -48,14 +48,14 @@ module Localtower
 
     def post_models
       use_generator(::Localtower::Generators::Model, params[:models])
-      redirect_to models_path
+      redirect_to relations_path
     end
 
     private
 
     def use_generator(generator_klass, options)
-      generator = generator_klass.new(options)
-      generator.run
+      generator_klass.new(options).run
     end
+
   end
 end

@@ -22,8 +22,9 @@
         <table class="table table-hover table-striped">
           <thead>
             <th>Field</th>
-            <th>Kind</th>
-            <th>index?</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Index?</th>
             <th>Can be null?</th>
             <th></th>
           </thead>
@@ -35,6 +36,9 @@
               </td>
               <td>
                 <%= select_tag "models[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
+              </td>
+              <td>
+                <%= select_tag "models[attributes][][defaults]", options_for_select(::Localtower::Generators::Migration::DEFAULTS), class: "form-control" %>
               </td>
               <td>
                 <input type="checkbox" value="true" name="models[attributes][][index]" class="form-control">
