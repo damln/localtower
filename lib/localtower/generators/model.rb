@@ -24,6 +24,10 @@ module Localtower
 
         ::Localtower::Tools.perform_cmd(cmd, false)
 
+        if defaults_present?
+          insert_default_values.call
+        end
+
         if @opts['run_migrate']
           ::Localtower::Tools.perform_cmd('rake db:migrate', false)
           # ::Localtower::Tools.perform_cmd('rake db:migrate RAILS_ENV=test', false)
@@ -31,6 +35,24 @@ module Localtower
 
         self
       end
+
+      private
+
+      def defaults_present?
+        return false unless @opts['attributes'].any? { |attr| attr["defaults"].present? }
+        true
+      end
+
+      def params_for_defaults
+        @opts['attributes'].each_with_object([]) do |attr, arr|
+          arr << Hash[ attr['attribute_name'], attr['defaults'] ] unless attr['defaults'].empty?
+        end
+      end
+
+      def insert_default_values
+        ::Localtower::Generators::ServiceObjects::InsertDefaults.new(params_for_defaults)
+      end
+
     end
   end
 end
