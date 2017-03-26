@@ -30,11 +30,8 @@ module Localtower
       def models
         self.force_reload!
 
-        klass_parent = defined?(ApplicationRecord) ? ApplicationRecord : ActiveRecord::Base
-
-        Dir["#{Rails.root}/app/models/\*.rb"].map { |f|
-          File.basename(f, '.*').camelize.constantize
-        }.select { |klass| klass != klass_parent }.select { |klass| klass.respond_to?(:columns_hash) }
+        root_klass = defined?(ApplicationRecord) ? ApplicationRecord : ActiveRecord::Base
+        root_klass.subclasses
       end
 
       def models_presented
