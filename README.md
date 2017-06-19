@@ -41,16 +41,24 @@ bundle install
 
 Add to your `config/routes.rb`:
 ```ruby
-if Rails.env.development?
-  mount Localtower::Engine, at: "localtower"
+MyApp::Application.routes.draw do
+  if Rails.env.development?
+    mount Localtower::Engine, at: "localtower"
+  end
+  
+  # Your other routes here:
+  # ...
 end
+
 ```
 
 ## Usage
 
 Open your browser at [http://localhost:3000/localtower](http://localhost:3000/localtower).
 
-## RSpec
+## RSpec and Contribute
+
+If you want to contribute to the gem:
 
 Create a `spec/dummy/.env` file with the credentials to your PostgreSQL Database. It should look like this:
 
