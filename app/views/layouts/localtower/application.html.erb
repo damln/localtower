@@ -55,6 +55,14 @@
                 <p>New Migration</p>
               </a>
             </li>
+
+            <li class="<%= is_active_link?(logs_path, :inclusive) ? "active" : nil %>">
+              <a href="<%= logs_path %>">
+                <i class="pe-7s-ticket"></i>
+                <p>Logs</p>
+              </a>
+            </li>
+
             <!--
             <li class="<%= is_active_link?(status_path, :inclusive) ? "active" : nil %>">
               <a href="<%= status_path %>">

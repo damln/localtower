@@ -1,0 +1,57 @@
+<style type="text/css">
+  .value {
+    border: 1px solid #cacaca;
+    line-height: 1.2em;
+    font: 12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+    padding: 10px;
+    overflow:auto;
+    -moz-background-clip: padding;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    background-color: #FAFAFB;
+    color: #393939;
+    margin: 0px;
+    max-width: 800px;
+    display: block;
+  }
+
+</style>
+<% content_for :title do %>Logs<% end %>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <h4 class="title"></h4>
+      </div>
+
+      <div class="content">
+        <table class="table table-hover table-striped">
+          <thead>
+            <th>Variable</th>
+            <th>Value</th>
+          </thead>
+
+          <tbody data-selector="tbody">
+            <% @logs.each do |item| %>
+
+            <%
+            variable = item[:variable]
+            value = item[:value]
+            %>
+
+              <tr data-selector="tr">
+                <td>
+                  <%= variable %>
+                </td>
+                <td>
+                <pre class="value"><%= value %></pre>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

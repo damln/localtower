@@ -12,6 +12,7 @@ Localtower::Engine.routes.draw do
   # get ':v/:asset', to: 'pages#asset_render', as: 'asset_render', :constraints => { :v => /[^\/]*/, :asset => /[^\/]*/ }
 
   get 'dashboard', to: 'pages#dashboard', as: 'dashboard'
+  get 'logs', to: 'pages#logs', as: 'logs'
 
   root :to => redirect('dashboard')
 end

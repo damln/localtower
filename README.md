@@ -50,6 +50,27 @@ end
 
 Open your browser at [http://localhost:3000/localtower](http://localhost:3000/localtower).
 
+## Logger Usage (Capture plugin)
+
+You can put this line anywhere in your code:
+
+    Localtower::Plugins::Capture.new(self, binding).save
+
+For example:
+
+    def my_method
+      user = User.find(1)
+      some_data = {foo: "bar"}
+
+      Localtower::Plugins::Capture.new(self, binding).save
+    end
+
+Then go to the Localtower intercave here: [http://localhost:3000/localtower/logs](http://localhost:3000/localtower/logs) and you will see the variables `user` and `some_data` in the UI.
+
+### Notes for the Capture plugin:
+
+The value for each variable will try to call `.to_json`. If you have a huge collection of models likes `@users` you will see all the collection as an Array.
+
 ## RSpec
 
 Create a `spec/dummy/.env` file with the credentials to your PostgreSQL Database. It should look like this:

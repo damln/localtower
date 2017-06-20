@@ -6,6 +6,10 @@ module Localtower
     def dashboard
     end
 
+    def logs
+      @logs = Localtower::Plugins::Capture.new.logs
+    end
+
     def status
       @data = ::Localtower::Status.new.run
     end
