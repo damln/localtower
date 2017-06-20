@@ -2,6 +2,7 @@
 # (add your specific files)
 pkg/
 coverage/
+*.gem
 
 # --- RAILS ---
 /.bundle
