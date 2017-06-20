@@ -41,8 +41,13 @@ bundle install
 
 Add to your `config/routes.rb`:
 ```ruby
-if Rails.env.development?
-  mount Localtower::Engine, at: "localtower"
+MyApp::Application.routes.draw do
+  if Rails.env.development?
+    mount Localtower::Engine, at: "localtower"
+  end
+
+  # Your other routes here:
+  # ...
 end
 ```
 
@@ -71,7 +76,9 @@ Then go to the Localtower intercave here: [http://localhost:3000/localtower/logs
 
 The value for each variable will try to call `.to_json`. If you have a huge collection of models likes `@users` you will see all the collection as an Array.
 
-## RSpec
+## RSpec and Contribute
+
+If you want to contribute to the gem:
 
 Create a `spec/dummy/.env` file with the credentials to your PostgreSQL Database. It should look like this:
 
