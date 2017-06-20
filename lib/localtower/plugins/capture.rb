@@ -47,8 +47,13 @@ module Localtower
       end
 
       def logs
-        content = File.open(LOG_FILE).read
-        return {"variables" => []} unless content.present?
+        if File.exist?(LOG_FILE)
+          content = File.open(LOG_FILE).read
+        else
+          content = nil
+        end
+
+        return {"variables" => []} if not content.present?
 
         data = JSON.parse(content)
       end
@@ -141,7 +146,10 @@ module Localtower
 
       def init
         # Clear the logs
-        File.open(LOG_FILE, 'w') { |f| f.write("") }
+        if File.exist?(LOG_FILE)
+          File.open(LOG_FILE, 'w') { |f| f.write("") }
+        end
+
         self
       end
 
