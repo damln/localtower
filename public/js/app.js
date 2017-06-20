@@ -2,10 +2,16 @@ window.MainApp = {};
 
 MainApp = {
   init: function() {
-
   },
 
   ready: function() {
+
+    $(".json").each(function() {
+      var $el = $(this);
+      var done = MainApp.syntaxHighlight($el.text());
+      $el.html(done);
+    });
+
     MainApp.whenActionOnElement("click", "duplicate", function(e) {
       e.preventDefault();
       MainApp.duplicateLine();
@@ -41,7 +47,28 @@ MainApp = {
     });
   },
 
-  // INSTANCE
+  // INSTANCE --------------------------------------------------
+
+  syntaxHighlight: function(json) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
+      var cls = 'number';
+      if (/^"/.test(match)) {
+        if (/:$/.test(match)) {
+          cls = 'key';
+        } else {
+          cls = 'string';
+        }
+      } else if (/true|false/.test(match)) {
+        cls = 'boolean';
+      } else if (/null/.test(match)) {
+        cls = 'null';
+      }
+      return '<span class="' + cls + '">' + match + '</span>';
+    });
+  },
+
+
 
   // This is a little bit dirty but it works well for the moment:
   // We dynamically show/hide fields
@@ -95,9 +122,10 @@ MainApp = {
 
           nullable_input,
           nullable_label,
-        ], function(i, el) {
-        el.hide();
-      });
+        ],
+        function(i, el) {
+          el.hide();
+        });
 
       var mapping = {
         add_column: [

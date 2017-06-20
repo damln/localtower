@@ -1,9 +1,18 @@
 <style type="text/css">
+  .string { color: green; }
+  .number { color: darkorange; }
+  .boolean { color: blue; }
+  .null { color: magenta; }
+  .key { color: red; }
+
+  .code {
+    font: 12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
+  }
+
   .value {
+    padding: 10px;
     border: 1px solid #cacaca;
     line-height: 1.2em;
-    font: 12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
-    padding: 10px;
     overflow:auto;
     -moz-background-clip: padding;
     -webkit-background-clip: padding-box;
@@ -16,6 +25,9 @@
   }
 
 </style>
+
+
+
 <% content_for :title do %>Logs<% end %>
 
 <div class="row">
@@ -26,26 +38,27 @@
       </div>
 
       <div class="content">
-        <table class="table table-hover table-striped">
+        <table class="table">
           <thead>
             <th>Variable</th>
             <th>Value</th>
+            <th>Value Type</th>
           </thead>
 
           <tbody data-selector="tbody">
-            <% @logs.each do |item| %>
-
-            <%
-            variable = item[:variable]
-            value = item[:value]
-            %>
+            <% @logs["variables"].each do |item| %>
 
               <tr data-selector="tr">
-                <td>
-                  <%= variable %>
+                <td class="code">
+                  <%= item["name"] %>
                 </td>
+
                 <td>
-                <pre class="value"><%= value %></pre>
+                  <pre class="value json code"><%= Localtower::Plugins::Capture.printable(item["value"]) %></pre>
+                </td>
+
+                <td>
+                  <pre class="code"><%= item["klass"] %></pre>
                 </td>
               </tr>
             <% end %>
