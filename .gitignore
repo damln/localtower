@@ -1,5 +1,6 @@
 # --- PROJECT ---
 # (add your specific files)
+spec/dummy/db/migrate/
 pkg/
 coverage/
 *.gem
