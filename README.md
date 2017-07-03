@@ -42,7 +42,7 @@ bundle install
 Add to your `config/routes.rb`:
 ```ruby
 MyApp::Application.routes.draw do
-  if Rails.env.development?
+  if Rails.env.development? and defined?(Localtower)
     mount Localtower::Engine, at: "localtower"
   end
 
