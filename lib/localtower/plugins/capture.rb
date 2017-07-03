@@ -1,7 +1,7 @@
 module Localtower
   module Plugins
     class Capture
-      LOG_FILE = "#{Rails.root}/log/localtower_capture.log"
+      LOG_FILE = lambda { "#{Rails.root}/log/localtower_capture.log" }
       EXCLUDE_INSTANCE_VARIABLES = [
         "@_action_has_layout",
         "@_routes",
@@ -42,13 +42,13 @@ module Localtower
       end
 
       def initialize(context = nil, context_binding = nil)
-        @context = context
-        @context_binding = context_binding
+        @context = context # self
+        @context_binding = context_binding # binding
       end
 
       def logs
-        if File.exist?(LOG_FILE)
-          content = File.open(LOG_FILE).read
+        if File.exist?(LOG_FILE.call)
+          content = File.open(LOG_FILE.call).read
         else
           content = nil
         end
@@ -59,7 +59,7 @@ module Localtower
       end
 
       def my_logger
-        @@my_logger ||= Logger.new(LOG_FILE)
+        @@my_logger ||= Logger.new(LOG_FILE.call)
         @@my_logger.formatter = proc do |severity, datetime, progname, msg|
           "#{msg}\n"
         end
@@ -146,19 +146,23 @@ module Localtower
 
       def init
         # Clear the logs
-        if File.exist?(LOG_FILE)
-          File.open(LOG_FILE, 'w') { |f| f.write("") }
-        end
-
-        self
+        File.open(LOG_FILE.call, 'w') { |f| f.write("{}") }
       end
 
       def save
         return nil if Rails.env.production?
 
         self.init
-        json = self.values.to_json
-        log "#{json}\n"
+
+        data = self.values
+        data.each do |value|
+          puts value
+        end
+
+        json = data.to_json
+
+        File.open(LOG_FILE.call, 'w') { |f| f.write(json) }
+        # log "#{json}\n"
       end
 
       def log(str)
