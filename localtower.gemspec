@@ -16,13 +16,14 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib,public}/**/*"] + ["Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "~> 5.0.0"
-  # s.add_dependency "rails", ">= 4.2.0"
+  # s.add_dependency "rails", "~> 5.0.0"
+  s.add_dependency "rails", ">= 4.2.0", " < 5.1.0"
   s.add_dependency "thor"
   s.add_dependency "active_link_to"
   s.add_dependency "rubyzip"
   s.add_dependency "pg"
   s.add_dependency "sqlite3"
+  s.add_dependency "require_reloader"
 
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "factory_girl_rails"

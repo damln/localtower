@@ -4,7 +4,8 @@ PATH
     localtower (0.2.2)
       active_link_to
       pg
-      rails (~> 5.0.0)
+      rails (>= 4.2.0, < 5.1.0)
+      require_reloader
       rubyzip
       sqlite3
       thor
@@ -142,6 +143,7 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    require_reloader (0.2.1)
     rspec (3.6.0)
       rspec-core (~> 3.6.0)
       rspec-expectations (~> 3.6.0)
