@@ -105,6 +105,6 @@ Thanks for reporting issues, I'll do my best.
 
 ## Deploy
 
-    rm *.gem | gem build localtower.gemspec | gem push localtower*.gem
+    rm *.gem | gem build localtower.gemspec && gem push localtower-*.gem
 
 
