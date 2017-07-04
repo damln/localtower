@@ -75,9 +75,12 @@ module Localtower
         a = a.split(Rails.root.to_s).last # events_controller.rb:57:in `new'
         a = a.split("\:")
 
+
         file = a[0].strip
         line_number = a[1].strip
         method = a[2].strip.gsub("in \`", "").gsub("\'", "")
+
+        sublime_path = "#{callers[1].split(":")[0]}:#{line_number}"
 
         hash["class"] = self.klass_name
         hash["file"] = "#{file}##{method}:#{line_number}"
@@ -108,7 +111,8 @@ module Localtower
               callers: callers,
               # table_name: data[:table_name],
               # sql: data[:sql],
-              file: file,
+              sublime_path: sublime_path,
+              file: hash["file"],
               line: line_number
             }
           }
@@ -137,7 +141,8 @@ module Localtower
               callers: callers,
               # table_name: data[:table_name],
               # sql: data[:sql],
-              file: file,
+              sublime_path: sublime_path,
+              file: hash["file"],
               line: line_number
             }
           }

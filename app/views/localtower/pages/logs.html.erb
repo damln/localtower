@@ -46,19 +46,29 @@
             <% @logs["variables"].each do |item| %>
               <tr>
                 <td>
-                  <%= item["type"] %>
+                  <span class="label label-success">
+                    <%= item["type"] %>
+                  </span>
                 </td>
                 <td>
-                  <%= item["meta"]["from_klass"]  %>
+                  <span>
+                    <a class="code" href="subl://open/?url=file://<%= item["meta"]["sublime_path"] %>">
+                      <%= item["meta"]["from_klass"] %>
+                    </a>
+                  </span>
                 </td>
                 <td>
-                  <%= item["meta"]["from_method"]  %>
+                  <span class="code">
+                    <%= item["meta"]["from_method"]  %>
+                  </span>
                 </td>
                 <td>
-                  <%= item["event_name"]  %>
+                  <span class="code">
+                    <%= item["event_name"]  %>
+                  </span>
                 </td>
                 <td>
-                  <pre><%= item["returned"].to_json.html_safe %></pre>
+                  <pre class="value json code"><%= Localtower::Plugins::Capture.printable(item["returned"]) %></pre>
                 </td>
               </tr>
             <% end %>
