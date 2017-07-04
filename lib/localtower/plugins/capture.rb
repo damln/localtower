@@ -70,7 +70,8 @@ module Localtower
       def values
         hash = {}
 
-        a = @context.send(:caller)[1] # xx/xx/app/controllers/clients/events_controller.rb:57:in `new'
+        callers = @context.send(:caller)
+        a = callers[1] # xx/xx/app/controllers/clients/events_controller.rb:57:in `new'
         a = a.split(Rails.root.to_s).last # events_controller.rb:57:in `new'
         a = a.split("\:")
 
@@ -79,7 +80,10 @@ module Localtower
         method = a[2].strip.gsub("in \`", "").gsub("\'", "")
 
         hash["class"] = self.klass_name
-        hash["method"] = "#{file}##{method}:#{line_number}"
+        hash["file"] = "#{file}##{method}:#{line_number}"
+        hash["method"] = method
+        hash["type"] = "CAPTURE_METHOD"
+        hash["time"] = Time.now.utc.strftime('%Y-%m-%d %H:%M:%S.%L')
 
         variables = []
 
@@ -89,19 +93,27 @@ module Localtower
           value = @context_binding.local_variable_get(var)
           klass = self.class.type_of(value)
 
-          variables << {
-            name: var,
-            value: value,
-            klass: klass
+          data = {
+            type: 'CAPTURE',
+            time: Time.now.utc.strftime('%Y-%m-%d %H:%M:%S.%L'),
+            event_name: var,
+            identifier: nil,
+            returned: value,
+            meta: {
+              from_klass: hash["class"],
+              from_method: hash["method"],
+              klass: klass.to_s,
+              method: method.to_s,
+              # arguments: data[:arguments],
+              callers: callers,
+              # table_name: data[:table_name],
+              # sql: data[:sql],
+              file: file,
+              line: line_number
+            }
           }
 
-          if value.is_a?(ActiveRecord::AssociationRelation) and value.respond_to?(:count)
-            variables << {
-              name: "#{var}_count",
-              value: value.count,
-              klass: nil
-            }
-          end
+          variables << data
         end
 
         @context.instance_variables.each do |var|
@@ -110,19 +122,35 @@ module Localtower
           value = @context.instance_variable_get(var.to_sym)
           klass = self.class.type_of(value)
 
-          variables << {
-            name: var,
-            value: value,
-            klass: klass
+          data = {
+            type: 'CAPTURE',
+            time: Time.now.utc.strftime('%Y-%m-%d %H:%M:%S.%L'),
+            event_name: var,
+            identifier: nil,
+            returned: value,
+            meta: {
+              from_klass: hash["class"],
+              from_method: hash["method"],
+              klass: klass.to_s,
+              method: method.to_s,
+              # arguments: data[:arguments],
+              callers: callers,
+              # table_name: data[:table_name],
+              # sql: data[:sql],
+              file: file,
+              line: line_number
+            }
           }
 
-          if value.is_a?(ActiveRecord::AssociationRelation) and value.respond_to?(:count)
-            variables << {
-              name: "#{var}_count",
-              value: value.count,
-              klass: nil
-            }
-          end
+          variables << data
+
+          # if value.is_a?(ActiveRecord::AssociationRelation) and value.respond_to?(:count)
+          #   variables << {
+          #     name: "#{var}_count",
+          #     value: value.count,
+          #     klass: nil
+          #   }
+          # end
         end
 
         hash["variables"] = variables
@@ -155,9 +183,9 @@ module Localtower
         self.init
 
         data = self.values
-        data.each do |value|
-          puts value
-        end
+        # data.each do |value|
+        #   puts value
+        # end
 
         json = data.to_json
 

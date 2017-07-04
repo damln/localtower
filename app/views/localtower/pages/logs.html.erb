@@ -23,42 +23,42 @@
     max-width: 800px;
     display: block;
   }
-
 </style>
-
-
-
 <% content_for :title do %>Logs<% end %>
-
 <div class="row">
   <div class="col-md-12">
     <div class="card">
       <div class="header">
-        <h4 class="title"><pre>Localtower::Plugins::Capture.new(self, binding).save</pre></h4>
+        <h4 class="title">
+          <pre>Localtower::Plugins::Capture.new(self, binding).save</pre>
+        </h4>
       </div>
-
       <div class="content">
         <table class="table">
           <thead>
-            <th>Variable</th>
-            <th>Value</th>
-            <th>Value Type</th>
+            <th>TYPE</th>
+            <th>IN CLASS</th>
+            <th>IN METHOD</th>
+            <th>VARIABLE</th>
+            <th>VALUE</th>
           </thead>
-
-          <tbody data-selector="tbody">
+          <tbody>
             <% @logs["variables"].each do |item| %>
-
-              <tr data-selector="tr">
-                <td class="code">
-                  <%= item["name"] %>
-                </td>
-
+              <tr>
                 <td>
-                  <pre class="value json code"><%= Localtower::Plugins::Capture.printable(item["value"]) %></pre>
+                  <%= item["type"] %>
                 </td>
-
                 <td>
-                  <pre class="code"><%= item["klass"] %></pre>
+                  <%= item["meta"]["from_klass"]  %>
+                </td>
+                <td>
+                  <%= item["meta"]["from_method"]  %>
+                </td>
+                <td>
+                  <%= item["event_name"]  %>
+                </td>
+                <td>
+                  <pre><%= item["returned"].to_json.html_safe %></pre>
                 </td>
               </tr>
             <% end %>
