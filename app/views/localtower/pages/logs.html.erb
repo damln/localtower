@@ -14,13 +14,14 @@
     border: 1px solid #cacaca;
     line-height: 1.2em;
     overflow:auto;
+    max-height: 800px;
+    max-width: 800px;
     -moz-background-clip: padding;
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     background-color: #FAFAFB;
     color: #393939;
     margin: 0px;
-    max-width: 800px;
     display: block;
   }
 </style>
@@ -43,34 +44,37 @@
             <th>VALUE</th>
           </thead>
           <tbody>
-            <% @logs["variables"].each do |item| %>
-              <tr>
-                <td>
-                  <span class="label label-success">
-                    <%= item["type"] %>
-                  </span>
-                </td>
-                <td>
-                  <span>
-                    <a class="code" href="subl://open/?url=file://<%= item["meta"]["sublime_path"] %>">
-                      <%= item["meta"]["from_klass"] %>
-                    </a>
-                  </span>
-                </td>
-                <td>
-                  <span class="code">
-                    <%= item["meta"]["from_method"]  %>
-                  </span>
-                </td>
-                <td>
-                  <span class="code">
-                    <%= item["event_name"]  %>
-                  </span>
-                </td>
-                <td>
-                  <pre class="value json code"><%= Localtower::Plugins::Capture.printable(item["returned"]) %></pre>
-                </td>
-              </tr>
+            <% @logs.each do |log| %>
+              <% log["variables"].each do |item| %>
+                <tr>
+                  <td>
+                    <span class="label label-success">
+                      <%= item["type"] %>
+                    </span>
+                  </td>
+                  <td>
+                    <span>
+                      <a class="code" href="subl://open/?url=file://<%= item["meta"]["sublime_path"] %>">
+                        <%= item["meta"]["from_klass"] %>
+                      </a>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="code">
+                      <%= item["meta"]["from_method"]  %>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="code">
+                      <%= item["event_name"]  %>
+                    </span>
+                  </td>
+                  <td>
+                  <a href="<%= log_var_path(log["md5"], item["event_name"]) %>">open</a>
+                    <pre class="value json code"><%= Localtower::Plugins::Capture.printable(item["returned"]) %></pre>
+                  </td>
+                </tr>
+              <% end %>
             <% end %>
           </tbody>
         </table>

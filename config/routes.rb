@@ -13,6 +13,8 @@ Localtower::Engine.routes.draw do
 
   get 'dashboard', to: 'pages#dashboard', as: 'dashboard'
   get 'logs', to: 'pages#logs', as: 'logs'
+  get 'logs/:md5', to: 'pages#log', as: 'log'
+  get 'logs/:md5/:var', to: 'pages#log_var', as: 'log_var'
 
   root :to => redirect('dashboard')
 end

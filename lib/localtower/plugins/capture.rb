@@ -2,6 +2,7 @@ module Localtower
   module Plugins
     class Capture
       LOG_FILE = lambda { "#{Rails.root}/log/localtower_capture.log" }
+      LOG_PATH = lambda { "#{Rails.root}/log" }
       EXCLUDE_INSTANCE_VARIABLES = [
         "@_action_has_layout",
         "@_routes",
@@ -47,15 +48,14 @@ module Localtower
       end
 
       def logs
-        if File.exist?(LOG_FILE.call)
-          content = File.open(LOG_FILE.call).read
-        else
-          content = nil
+        list = []
+
+        Dir["#{LOG_PATH.call}/localtower_capture_*.json"].each do |file|
+          json = JSON.parse(open(file).read)
+          list << json
         end
 
-        return {"variables" => []} if not content.present?
-
-        data = JSON.parse(content)
+        list
       end
 
       def my_logger
@@ -85,6 +85,7 @@ module Localtower
         hash["class"] = self.klass_name
         hash["file"] = "#{file}##{method}:#{line_number}"
         hash["method"] = method
+        hash["md5"] = Digest::MD5.hexdigest(hash["file"])
         hash["type"] = "CAPTURE_METHOD"
         hash["time"] = Time.now.utc.strftime('%Y-%m-%d %H:%M:%S.%L')
 
@@ -173,28 +174,23 @@ module Localtower
         value.to_s
       end
 
-      # def context_caller
-      #   @context.send(:caller)[0]
-      # end
+      def clear
+        Dir["#{LOG_PATH.call}/localtower_capture_*.json"].each do |file|
+          File.delete(file)
+        end
 
-      def init
-        # Clear the logs
-        File.open(LOG_FILE.call, 'w') { |f| f.write("{}") }
+        self
       end
 
       def save
         return nil if Rails.env.production?
-
-        self.init
+        self.clear
 
         data = self.values
-        # data.each do |value|
-        #   puts value
-        # end
-
         json = data.to_json
+        file = "#{LOG_PATH.call}/localtower_capture_#{data['md5']}.json"
 
-        File.open(LOG_FILE.call, 'w') { |f| f.write(json) }
+        File.open(file, 'w') { |f| f.write(json) }
         # log "#{json}\n"
       end
 

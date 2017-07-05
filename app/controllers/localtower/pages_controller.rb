@@ -10,6 +10,23 @@ module Localtower
       @logs = Localtower::Plugins::Capture.new.logs
     end
 
+    def log
+      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{params[:md5]}*"][0]
+
+      render json: JSON.parse(open(file).read)
+    end
+
+    def log_var
+      answer = {}
+
+      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{params[:md5]}*"][0]
+      data = JSON.parse(open(file).read)
+
+      answer = data["variables"].select {|i| i["event_name"] == params[:var] }[0]["returned"]
+
+      render json: answer
+    end
+
     def status
       @data = ::Localtower::Status.new.run
     end
