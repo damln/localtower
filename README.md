@@ -14,11 +14,12 @@
 ### Create a migration
 ![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/4_migrations.png)
 
+### Using the Capture plugin
+![Capture](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/5_capture.png)
 
 ## INSTALL
 
-Only tested with Rails 4.2 and Rails 5.1 (should work with any Rails 4.2+ application).
-Only tested with PostgreSQL.
+Only tested with Rails 4.2 and Rails 5.1 (should work with any Rails 4.2+ application). Only tested with PostgreSQL.
 
 Add to your `Gemfile` file:
 ```ruby
@@ -63,12 +64,14 @@ You can put this line anywhere in your code:
 
 For example:
 
-    def my_method
-      user = User.find(1)
-      some_data = {foo: "bar"}
+```ruby
+def my_method
+  user = User.find(1)
+  some_data = {foo: "bar"}
 
-      Localtower::Plugins::Capture.new(self, binding).save
-    end
+  Localtower::Plugins::Capture.new(self, binding).save
+end
+```
 
 Then go to the Localtower intercave here: [http://localhost:3000/localtower/logs](http://localhost:3000/localtower/logs) and you will see the variables `user` and `some_data` in the UI.
 
