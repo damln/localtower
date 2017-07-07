@@ -3,7 +3,6 @@ require 'spec_helper'
 module Localtower
   module Generators
     describe Relation do
-
       before(:all) do
         clean_files
       end
@@ -48,8 +47,12 @@ module Localtower
 
         expect(::Localtower::Tools.word_in_file?("#{Rails.root}/app/models/user_post.rb", /class UserPost/)).to eq(true)
         expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /create_table "user_posts"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.integer  "user_id"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.integer  "post_id"/)).to eq(true)
+
+        user_id = ::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.integer(.*)"user_id"/) || ::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.bigint(.*)"user_id"/)
+        post_id = ::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.integer(.*)"post_id"/) || ::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.bigint(.*)"post_id"/)
+
+        expect(user_id).to eq(true)
+        expect(post_id).to eq(true)
 
         expect(::Localtower::Tools.word_in_file?("#{Rails.root}/app/models/user.rb", /has_many :posts, through: :user_posts/)).to eq(true)
         expect(::Localtower::Tools.word_in_file?("#{Rails.root}/app/models/user.rb", /has_many :posts/)).to eq(true)
