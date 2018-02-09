@@ -154,7 +154,7 @@ module Localtower
       def perform_raw_cmd(cmd_str, standalone = false, root_dir = false)
         root_dir ||= ::Rails.root
 
-        cmd = standalone ? cmd_str : "cd '#{root_dir}' && #{cmd_str}"
+        cmd = standalone ? cmd_str : "cd \"#{root_dir}\" && #{cmd_str}"
         cmd = cmd.strip
 
         self.log("DOING...: #{cmd}")
