@@ -19,14 +19,6 @@ require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
 require 'factory_girl'
 
-# require 'simplecov'
-# Dir["#{File.join(File.dirname(__FILE__), '..')}/lib/**/*.rb"].each {|file| load file }
-
-# SimpleCov.start do
-#   add_group 'Lib', '../lib'
-#   add_group 'App', '../app'
-# end
-
 Rails.application.eager_load!
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -52,4 +44,3 @@ RSpec.configure do |config|
     clean_files
   end
 end
-
