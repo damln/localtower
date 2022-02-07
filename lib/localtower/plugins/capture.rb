@@ -22,7 +22,6 @@ module Localtower
       class << self
         def printable(content)
           if content.respond_to?(:to_json)
-            # content.to_json
             JSON.pretty_generate(content)
           else
             content.to_s
@@ -149,14 +148,6 @@ module Localtower
           }
 
           variables << data
-
-          # if value.is_a?(ActiveRecord::AssociationRelation) and value.respond_to?(:count)
-          #   variables << {
-          #     name: "#{var}_count",
-          #     value: value.count,
-          #     klass: nil
-          #   }
-          # end
         end
 
         hash["variables"] = variables
@@ -183,7 +174,9 @@ module Localtower
       end
 
       def save
+        # We don't want to save logs in production:
         return nil if Rails.env.production?
+
         self.clear
 
         data = self.values
@@ -191,7 +184,6 @@ module Localtower
         file = "#{LOG_PATH.call}/localtower_capture_#{data['md5']}.json"
 
         File.open(file, 'w') { |f| f.write(json) }
-        # log "#{json}\n"
       end
 
       def log(str)
