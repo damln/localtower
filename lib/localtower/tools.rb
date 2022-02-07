@@ -31,7 +31,7 @@ module Localtower
         self.force_reload!
 
         root_klass = defined?(ApplicationRecord) ? ApplicationRecord : ActiveRecord::Base
-        root_klass.subclasses
+        root_klass.subclasses - [ActiveRecord::SchemaMigration]
       end
 
       def models_presented
@@ -132,23 +132,12 @@ module Localtower
         self.perform_cmd("rails g migration #{str}", false)
 
         if not standalone
-          # self.perform_raw_cmd("z rake #{cmd_str}", standalone)
           self.perform_cmd('rake db:migrate')
-          # self.perform_cmd('rake db:migrate RAILS_ENV=test')
         end
       end
 
       def perform_cmd(cmd_str, standalone = true)
         self.perform_raw_cmd("bundle exec #{cmd_str}", standalone)
-
-        # if cmd_str["rake"]
-          # self.perform_raw_cmd("zeus #{cmd_str}", standalone)
-        # elsif cmd_str["rails g migration"]
-          # cmd = cmd_str.split("rails g migration")[1]
-          # self.perform_raw_cmd("zeus generate migration #{cmd}", standalone)
-        # else
-          # self.perform_raw_cmd("bundle exec #{cmd_str}", standalone)
-        # end
       end
 
       def perform_raw_cmd(cmd_str, standalone = false, root_dir = false)
