@@ -5,13 +5,11 @@ end
 require 'thor'
 require 'active_link_to'
 require 'zip'
-require 'pg'
-require 'sqlite3'
 
 begin
   require "pry"
 rescue Exception => e
-  puts "No Pry."
+  # Nothing
 end
 
 root = File.expand_path(File.dirname(__FILE__))
