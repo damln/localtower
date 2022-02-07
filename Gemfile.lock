@@ -64,11 +64,11 @@ GEM
     crass (1.0.6)
     diff-lcs (1.5.0)
     erubi (1.10.0)
-    factory_girl (4.9.0)
-      activesupport (>= 3.0.0)
-    factory_girl_rails (4.9.0)
-      factory_girl (~> 4.9.0)
-      railties (>= 3.0.0)
+    factory_bot (6.2.0)
+      activesupport (>= 5.0.0)
+    factory_bot_rails (6.2.0)
+      factory_bot (~> 6.2.0)
+      railties (>= 5.0.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     i18n (1.9.1)
@@ -163,7 +163,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  factory_girl_rails (>= 4.8.0)
+  factory_bot_rails (>= 6.2.0)
   localtower!
   rspec-rails (>= 3.6.0)
 

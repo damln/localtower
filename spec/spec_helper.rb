@@ -17,13 +17,13 @@ ENV['RAILS_ENV'] = 'test'
 
 require File.expand_path('../dummy/config/environment.rb',  __FILE__)
 require 'rspec/rails'
-require 'factory_girl'
+require 'factory_bot'
 
 Rails.application.eager_load!
 Rails.backtrace_cleaner.remove_silencers!
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.mock_with :rspec
   config.use_transactional_fixtures = false
@@ -33,7 +33,7 @@ RSpec.configure do |config|
   # config.order = 'random'
 
   config.before(:suite) do
-    FactoryGirl.find_definitions
+    FactoryBot.find_definitions
   end
 
   config.before(:all) do
