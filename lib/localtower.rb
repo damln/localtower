@@ -6,7 +6,6 @@ require 'thor'
 require 'active_link_to'
 require 'zip'
 require 'pg'
-require 'sqlite3'
 
 begin
   require "pry"
