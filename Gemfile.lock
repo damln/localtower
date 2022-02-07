@@ -3,7 +3,6 @@ PATH
   specs:
     localtower (0.4.0)
       active_link_to (>= 1.0.4)
-      pg (>= 0.21.0)
       rails (>= 5.2.0)
       rubyzip (>= 1.2.1)
       thor (>= 0.18.1)
@@ -163,6 +162,7 @@ PLATFORMS
 DEPENDENCIES
   factory_bot_rails (>= 6.2.0)
   localtower!
+  pg (>= 0.21.0)
   rspec-rails (>= 3.6.0)
 
 BUNDLED WITH
