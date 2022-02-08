@@ -1,7 +1,5 @@
 # --- PROJECT ---
 # (add your specific files)
-spec/dummy/db/migrate/
-spec/dummy/db/schema.rb
 pkg/
 coverage/
 *.gem
