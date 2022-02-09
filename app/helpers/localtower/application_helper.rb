@@ -7,7 +7,13 @@ module Localtower
       else
         str = name
       end
-      link_to str, "subl://open/?url=file://#{file}"
+
+      link_to str, file_link(file)
+    end
+
+    def file_link(file)
+      "vscode://file/#{file}"
+      # "vscode://open?url=file://#{file}&line=1"
     end
 
     def to_json_print(hash)
