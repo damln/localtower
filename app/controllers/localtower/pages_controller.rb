@@ -68,7 +68,7 @@ module Localtower
     end
 
     def post_tasks
-      ::Localtower::Tools.perform_cmd(clean_params["task"], false)
+      ::Localtower::Tools.perform_cmd(clean_params["task"]["name"], false)
 
       redirect_to tasks_path
     end
