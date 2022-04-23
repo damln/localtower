@@ -64,6 +64,15 @@ module Localtower
       redirect_to relations_path
     end
 
+    def tasks
+    end
+
+    def post_tasks
+      ::Localtower::Tools.perform_cmd(clean_params["task"], false)
+
+      redirect_to tasks_path
+    end
+
     def models
     end
 
