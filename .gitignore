@@ -3,6 +3,7 @@
 pkg/
 coverage/
 *.gem
+*api_token_rubygems*
 
 # --- RAILS ---
 /.bundle
