@@ -20,13 +20,13 @@
                   </thead>
 
                   <tbody data-selector="tbody">
-                      <% ['rake db:migrate RAILS_ENV=test'].each do |task_str| %>
+                      <% @tasks.each do |task_str| %>
                       <tr data-selector="tr">
                         <td>
                           <code>
                             <%=task_str%>
                           </code>
-                          <input type="hidden" name="task[name]" value="<%=task_str%>" class="form-control">
+                          <input type="hidden" name="task[name]" value="<%= task_str %>" class="form-control">
                         </td>
                         <td>
                           <button name="" type="submit" class="btn btn-success" data-selector="submit">

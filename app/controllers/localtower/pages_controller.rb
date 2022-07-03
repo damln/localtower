@@ -65,6 +65,7 @@ module Localtower
     end
 
     def tasks
+      @tasks = ['rake db:migrate RAILS_ENV=test']
     end
 
     def post_tasks
