@@ -87,5 +87,45 @@
         <% end %>
       </div>
     </div>
+
+    <div class="card">
+      <div class="header">
+        <h4 class="title">Migrations</h4>
+      </div>
+
+      <div class="content">
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+
+          </thead>
+          <tbody>
+            <% @migrations.each do |entry| %>
+            <%
+            klass = (entry["status"] == :done) ? "success" : "danger"
+            %>
+            <tr class="<%= klass %>">
+              <td>
+                <%= entry["name"] %>
+              </td>
+
+              <td>
+                <%= entry["time"] %>
+              </td>
+
+              <td>
+                <%= entry["status"] == :done ? 'done' : 'not executed' %>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
   </div>
 </div>

@@ -8,10 +8,9 @@ Localtower::Engine.routes.draw do
   get "relations", to: "pages#relations", as: :relations
   post "relations", to: "pages#post_relations"
 
-  get "tasks", to: "pages#tasks", as: :tasks
-  post "tasks", to: "pages#post_tasks"
+  # get "tasks", to: "pages#tasks", as: :tasks
+  # post "tasks", to: "pages#post_tasks"
 
-  # get "status", to: "pages#status", as: :status
   # get ':v/:asset', to: 'pages#asset_render', as: 'asset_render', :constraints => { :v => /[^\/]*/, :asset => /[^\/]*/ }
 
   get 'dashboard', to: 'pages#dashboard', as: 'dashboard'

@@ -11,27 +11,20 @@ module Localtower
     end
 
     def log
-      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{clean_params["md5"]}*"][0]
+      file_content = Localtower::Plugins::Capture.log_from_md5(clean_params['md5'])
 
-      render json: JSON.parse(open(file).read)
+      render json: file_content
     end
 
     def log_var
-      # answer = {}
+      file_content = Localtower::Plugins::Capture.log_from_md5(clean_params['md5'])
+      returned = file_content["variables"].select {|i| i["event_name"] == clean_params[:var] }[0]["returned"]
 
-      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{clean_params[:md5]}*"][0]
-      data = JSON.parse(open(file).read)
-
-      answer = data["variables"].select {|i| i["event_name"] == clean_params[:var] }[0]["returned"]
-
-      render json: answer
-    end
-
-    def status
-      @data = ::Localtower::Status.new.run
+      render json: returned
     end
 
     def migrations
+      @migrations = ::Localtower::Status.new.run
     end
 
     def post_migrations
@@ -57,6 +50,7 @@ module Localtower
     end
 
     def relations
+      @need_models = ::Localtower::Tools.enought_models_for_relation?
     end
 
     def post_relations
@@ -64,15 +58,15 @@ module Localtower
       redirect_to relations_path
     end
 
-    def tasks
-      @tasks = ['rake db:migrate RAILS_ENV=test']
-    end
+    # def tasks
+    #   @tasks = ['rake db:migrate RAILS_ENV=test']
+    # end
 
-    def post_tasks
-      ::Localtower::Tools.perform_cmd(clean_params["task"]["name"], false)
+    # def post_tasks
+    #   ::Localtower::Tools.perform_cmd(clean_params["task"]["name"], false)
 
-      redirect_to tasks_path
-    end
+    #   redirect_to tasks_path
+    # end
 
     def models
     end

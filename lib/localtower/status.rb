@@ -7,24 +7,18 @@ module Localtower
         file_full_path.split("/")[-1]
       end
 
-      results = []
+      db_migrations = ActiveRecord::Base.connection.execute("select * from schema_migrations;").map { |e| e["version"].to_s }.sort.reverse
 
-      migrations = ActiveRecord::Base.connection.execute("select * from schema_migrations;").map { |e| e["version"].to_s }.sort.reverse
+      names.map do |name|
+        time = name.split("_")[0]
+        status = db_migrations.include?(time) ? :done : :todo
 
-      names.each do |name|
-        number = name.split("_")[0]
-
-        status = migrations.include?(number) ? 1 : 0
-
-        data = {
+        {
           "name" => name,
+          "time" => time,
           "status" => status,
         }
-
-        results << data
       end
-
-      results
     end
   end
 end

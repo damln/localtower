@@ -28,6 +28,11 @@ module Localtower
           end
         end
 
+        def log_from_md5(md5)
+          file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{md5}*"][0]
+          JSON.parse(open(file).read)
+        end
+
         def type_of(value)
           if value.instance_of?(Float); return Float.to_s; end;
           if value.instance_of?(Integer); return Integer.to_s; end;

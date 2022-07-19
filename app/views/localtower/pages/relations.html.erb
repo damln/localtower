@@ -5,6 +5,12 @@
     <div class="card">
       <div class="header">
         <h4 class="title"></h4>
+
+        <% if not ::Localtower::Tools.enought_models_for_relation? %>
+        <div class="alert alert-danger text-center" role="alert">
+          <a href="#" class="alert-link">You need at least 2 models to create a relation.</a>
+        </div>
+        <% end %>
       </div>
 
       <div class="content">
@@ -15,7 +21,7 @@
             <div class="col-md-offset-4 col-sm-offset-3 col-md-4 col-sm-6">
               <div class="form-group">
                 <div class="text-center">
-                  <label>Name of the Model (optional)</label>
+                  <label>Name of the relation (optional, will use Rails conventions by default)</label>
                 </div>
                 <input type="text" name="relations[model_name]" class="form-control">
               </div>
