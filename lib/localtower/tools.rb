@@ -33,6 +33,10 @@ module Localtower
         root_klass.subclasses - [ActiveRecord::SchemaMigration]
       end
 
+      def enought_models_for_relation?
+        models.size >= 2
+      end
+
       def models_presented
         self.force_reload!
 
@@ -121,10 +125,6 @@ module Localtower
           cmd = "DROP TABLE if exists #{table.upcase} cascade;"
           ::ActiveRecord::Base.connection.execute(cmd)
         end
-      end
-
-      def rails_project
-        Rails.root.to_s.split("/").last
       end
 
       def perform_migration(str, standalone = false)
