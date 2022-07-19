@@ -54,14 +54,14 @@
                   </td>
                   <td>
                     <span>
-                      <a class="code" href="subl://open/?url=file://<%= item["meta"]["sublime_path"] %>">
+                      <a class="code" href="<%= file_link(item["meta"]["sublime_path"]) %>">
                         <%= item["meta"]["from_klass"] %>
                       </a>
                     </span>
                   </td>
                   <td>
                     <span class="code">
-                      <%= item["meta"]["from_method"]  %>
+                      def <%= item["meta"]["from_method"] %>()
                     </span>
                   </td>
                   <td>

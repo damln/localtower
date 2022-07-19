@@ -82,7 +82,9 @@ module Localtower
         sublime_path = "#{callers[1].split(":")[0]}:#{line_number}"
 
         hash["class"] = self.klass_name
+        hash["file_name"] = file
         hash["file"] = "#{file}##{method}:#{line_number}"
+        hash["line_number"] = line_number
         hash["method"] = method
         hash["md5"] = Digest::MD5.hexdigest(hash["file"])
         hash["type"] = "CAPTURE_METHOD"
@@ -107,10 +109,7 @@ module Localtower
               from_method: hash["method"],
               klass: klass.to_s,
               method: method.to_s,
-              # arguments: data[:arguments],
               callers: callers,
-              # table_name: data[:table_name],
-              # sql: data[:sql],
               sublime_path: sublime_path,
               file: hash["file"],
               line: line_number
@@ -180,10 +179,9 @@ module Localtower
         self.clear
 
         data = self.values
-        json = data.to_json
         file = "#{LOG_PATH.call}/localtower_capture_#{data['md5']}.json"
 
-        File.open(file, 'w') { |f| f.write(json) }
+        File.open(file, 'w') { |f| f.write(data.to_json) }
       end
 
       def log(str)

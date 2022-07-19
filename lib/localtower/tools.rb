@@ -14,15 +14,13 @@ module Localtower
     class << self
       def force_reload!
         app_folders = Dir["#{Rails.root}/app/models/**/*.rb"]
-        lib_folders = Dir["#{Rails.root}/lib/**/*.rb"]
-
-        all_folders = (app_folders + lib_folders).flatten
+        all_folders = (app_folders).flatten
 
         all_folders.each do |file|
           begin
-            ActiveSupport::Dependencies.require_or_load(file)
+            require file
           rescue Exception => e
-            puts "Error loading: #{file}"
+            puts "Error loading: #{file}, #{e.message}"
           end
         end
       end
@@ -31,6 +29,7 @@ module Localtower
         self.force_reload!
 
         root_klass = defined?(ApplicationRecord) ? ApplicationRecord : ActiveRecord::Base
+
         root_klass.subclasses - [ActiveRecord::SchemaMigration]
       end
 

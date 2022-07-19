@@ -11,18 +11,18 @@ module Localtower
     end
 
     def log
-      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{params[:md5]}*"][0]
+      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{clean_params["md5"]}*"][0]
 
       render json: JSON.parse(open(file).read)
     end
 
     def log_var
-      answer = {}
+      # answer = {}
 
-      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{params[:md5]}*"][0]
+      file = Dir["#{Localtower::Plugins::Capture::LOG_PATH.call}/localtower*#{clean_params[:md5]}*"][0]
       data = JSON.parse(open(file).read)
 
-      answer = data["variables"].select {|i| i["event_name"] == params[:var] }[0]["returned"]
+      answer = data["variables"].select {|i| i["event_name"] == clean_params[:var] }[0]["returned"]
 
       render json: answer
     end
@@ -36,7 +36,7 @@ module Localtower
 
     def post_migrations
       # Because we have a list or a field, take the item from the list in priority
-      params[:migrations][:migrations] = params[:migrations][:migrations].map do |action_line|
+      clean_params["migrations"]["migrations"] = clean_params["migrations"]["migrations"].map do |action_line|
         action_line["new_column_type"] = action_line["column_type"]
 
         if action_line["column"].present?
@@ -52,7 +52,7 @@ module Localtower
         action_line
       end
 
-      use_generator(::Localtower::Generators::Migration, params[:migrations])
+      use_generator(::Localtower::Generators::Migration, clean_params["migrations"])
       redirect_to migrations_path
     end
 
@@ -60,15 +60,25 @@ module Localtower
     end
 
     def post_relations
-      use_generator(::Localtower::Generators::Relation, params[:relations])
+      use_generator(::Localtower::Generators::Relation, clean_params["relations"])
       redirect_to relations_path
+    end
+
+    def tasks
+      @tasks = ['rake db:migrate RAILS_ENV=test']
+    end
+
+    def post_tasks
+      ::Localtower::Tools.perform_cmd(clean_params["task"]["name"], false)
+
+      redirect_to tasks_path
     end
 
     def models
     end
 
     def post_models
-      use_generator(::Localtower::Generators::Model, params[:models])
+      use_generator(::Localtower::Generators::Model, clean_params["models"])
       redirect_to relations_path
     end
 
@@ -78,5 +88,8 @@ module Localtower
       generator_klass.new(options).run
     end
 
+    def clean_params
+      params.permit!.to_hash.with_indifferent_access
+    end
   end
 end
