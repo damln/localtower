@@ -110,7 +110,7 @@ bundle exec rspec spec/
 
 Thanks for reporting issues, I'll do my best 💪
 
-[![Analytics](https://ga-beacon.appspot.com/UA-93841935-1/github-readme?pixel)](https://github.com/damln/localtower)
+![ga](https://www.google-analytics.com/collect?v=1&tid=G-1XG3EBE2DZ&cid=555&aip=1&t=event&ec=github&ea=visit&dp=readme&dt=gem)
 
 
 ## Deploy
@@ -124,4 +124,3 @@ Do not hesitate to open issues if you have troubles using the gem.
 
 - By Damian Le Nouaille Diez: https://damln.com
 - Link on RubyGems: https://rubygems.org/gems/localtower
-
