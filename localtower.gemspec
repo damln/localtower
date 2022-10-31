@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", ">= 5.2.0"
   s.add_dependency "thor", ">= 0.18.1"
   s.add_dependency "active_link_to", ">= 1.0.4"
-  s.add_dependency "rubyzip", ">= 1.2.1"
 
   s.add_development_dependency "pg", ">= 0.21.0"
   s.add_development_dependency "rspec-rails", ">= 3.6.0"

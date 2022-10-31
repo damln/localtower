@@ -58,16 +58,6 @@ module Localtower
       redirect_to relations_path
     end
 
-    # def tasks
-    #   @tasks = ['rake db:migrate RAILS_ENV=test']
-    # end
-
-    # def post_tasks
-    #   ::Localtower::Tools.perform_cmd(clean_params["task"]["name"], false)
-
-    #   redirect_to tasks_path
-    # end
-
     def models
     end
 

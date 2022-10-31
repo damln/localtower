@@ -134,9 +134,7 @@ module Localtower
         'change_column_type',
         'add_index_to_column',
         'belongs_to',
-        # 'add_index_to_column_combined',
         'remove_index_to_column',
-        # 'create_table',
         'drop_table',
       ].freeze
 
@@ -188,7 +186,6 @@ end
             'change_column_type' => -> { change_column_type(action_line) },
             'add_index_to_column' => -> { add_index_to_column(action_line) },
             'belongs_to' => -> { belongs_to(action_line) },
-            # 'add_index_to_column_combined' => -> { add_index_to_column_combined(action_line) },
             'remove_index_to_column' => -> { remove_index_to_column(action_line) },
             'create_table' => -> { create_table(action_line) },
             'drop_table' => -> { drop_table(action_line) }
@@ -266,10 +263,6 @@ end
 
         @thor.migration_belongs_to(data)
       end
-
-      # def add_index_to_column_combined(data)
-      #   @thor.migration_add_index_to_column_combined(data)
-      # end
 
       def remove_index_to_column(data)
         if not data["table_name"].present? \

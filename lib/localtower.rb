@@ -4,7 +4,6 @@ end
 # EXTERNAL GEM
 require 'thor'
 require 'active_link_to'
-require 'zip'
 
 begin
   require "pry"
