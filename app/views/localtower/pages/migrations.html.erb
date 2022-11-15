@@ -76,11 +76,10 @@
 
         <hr>
 
-        <!-- multiple lines: -->
         <div class="row">
           <div class="col-md-12 text-center">
-            <button name="migrations[run_migrate]" type="submit" value="true" class="btn btn-success" data-selector="submit">
-            Create the migration and <b>migrate</b>
+            <button type="submit" value="true" class="btn btn-success" data-selector="submit">
+            Create the migration
             </button>
           </div>
         </div>
@@ -88,44 +87,6 @@
       </div>
     </div>
 
-    <div class="card">
-      <div class="header">
-        <h4 class="title">Migrations</h4>
-      </div>
-
-      <div class="content">
-        <table class="table">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Date</th>
-            <th>Status</th>
-          </tr>
-
-          </thead>
-          <tbody>
-            <% @migrations.each do |entry| %>
-            <%
-            klass = (entry["status"] == :done) ? "success" : "danger"
-            %>
-            <tr class="<%= klass %>">
-              <td>
-                <%= entry["name"] %>
-              </td>
-
-              <td>
-                <%= entry["time"] %>
-              </td>
-
-              <td>
-                <%= entry["status"] == :done ? 'done' : 'not executed' %>
-              </td>
-            </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
+    <%= render partial: "migrations", locals: { migrations: @migrations } %>
   </div>
 </div>

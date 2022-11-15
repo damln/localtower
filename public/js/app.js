@@ -5,11 +5,10 @@ MainApp = {
   },
 
   ready: function() {
-
-    $(".json").each(function() {
-      var $el = $(this);
-      var done = MainApp.syntaxHighlight($el.text());
-      $el.html(done);
+    $('.grid').masonry({
+      itemSelector: '.grid-item',
+      percentPosition: true,
+      columnWidth: '.grid-sizer',
     });
 
     MainApp.whenActionOnElement("click", "duplicate", function(e) {
@@ -39,33 +38,18 @@ MainApp = {
     });
 
     MainApp.adaptLines();
+    MainApp.sanitizeInputs();
 
-    $('.grid').masonry({
-      itemSelector: '.grid-item',
-      percentPosition: true,
-      columnWidth: '.grid-sizer',
-    });
+    hljs.highlightAll();
   },
 
   // INSTANCE --------------------------------------------------
-
-  syntaxHighlight: function(json) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function(match) {
-      var cls = 'number';
-      if (/^"/.test(match)) {
-        if (/:$/.test(match)) {
-          cls = 'key';
-        } else {
-          cls = 'string';
-        }
-      } else if (/true|false/.test(match)) {
-        cls = 'boolean';
-      } else if (/null/.test(match)) {
-        cls = 'null';
-      }
-      return '<span class="' + cls + '">' + match + '</span>';
-    });
+  sanitizeInputs: function() {
+    $('[data-sain]').keyup(function(el) {
+      var currentInputValue = $(el.currentTarget).val();
+      var cleanInputValue = currentInputValue.replace(/[^a-zA-Z0-9]/g, '');
+      $(el.currentTarget).val(cleanInputValue);
+    })
   },
 
 
@@ -180,8 +164,9 @@ MainApp = {
   },
 
   duplicateLine: function() {
-    var tr = MainApp.bySelector("tbody").find("tr").first().clone();
+    var tr = MainApp.bySelector("tbody").find("tr").last().clone();
     MainApp.bySelector("tbody").append(tr);
+    MainApp.bySelector("tbody").find("tr").last().find('[name="models[attributes][][attribute_name]"]').val('').focus();
   },
 
   removeLine: function(target) {

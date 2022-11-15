@@ -12,7 +12,7 @@ development:
 
 test:
   <<: *default
-  database: localtower_dummy # use same database as development, easier to debug.
+  database: localtower_dummy_test
 
 production:
   <<: *default

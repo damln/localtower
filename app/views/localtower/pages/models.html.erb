@@ -14,7 +14,7 @@
           <div class="col-md-6">
             <div class="form-group">
               <label>Name of the Model</label>
-              <input type="text" name="models[model_name]" class="form-control">
+              <input type="text" data-sain name="models[model_name]" class="form-control">
             </div>
           </div>
         </div>
@@ -66,13 +66,15 @@
         <!-- multiple lines: -->
         <div class="row">
           <div class="col-md-12 text-center">
-            <button name="models[run_migrate]" type="submit" value="true" class="btn btn-success" data-selector="submit">
-            Create the model and <b>migrate</b>
+            <button type="submit" value="true" class="btn btn-success" data-selector="submit">
+            Create the model Only
             </button>
           </div>
         </div>
         <% end %>
       </div>
     </div>
+
+    <%= render partial: "migrations", locals: { migrations: @migrations } %>
   </div>
 </div>

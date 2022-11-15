@@ -1,6 +1,21 @@
 def clean_files
-  ::Localtower::Tools.sql_drop_all_tables
-  ::Localtower::Generators::Migration.new({}).remove_all_migrations
+  ::ActiveRecord::Base.connection.tables.each do |table|
+    cmd = "DROP TABLE if exists #{table.upcase} cascade;"
+    ::ActiveRecord::Base.connection.execute(cmd)
+  end
+
+  # remove Schema:
+  Dir["#{Rails.root}/db/migrate/*"].each { |migration_file| File.delete(migration_file) }
+
+  content_schema = """
+ActiveRecord::Schema.define(version: 0) do
+end
+  """
+
+  File.open("#{Rails.root}/db/schema.rb", "w") do |f|
+    f.write(content_schema)
+  end
+
   Dir["#{Rails.root}/app/models/**/*.*"].each { |model_file| File.delete(model_file) }
 end
 

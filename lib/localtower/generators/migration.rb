@@ -5,9 +5,11 @@ module Localtower
       include Thor::Actions
 
       no_commands do
+        # data = {last_migration_file: "", column_type: "", table_name: "", column: "", nullable: true, index: true}
         def migration_add_column(data)
           file = data["last_migration_file"]
 
+          # Special case for array
           if %w(array).include?(data["column_type"])
             line  = "    add_column :#{data['table_name']}, :#{data['column']}, :text"
             line << ", default: []"
@@ -139,7 +141,7 @@ module Localtower
       ].freeze
 
       DEFAULTS = [
-        "true", "false", "nil"
+        "true", "false", "nil", "0"
       ]
 
       # @opts =
@@ -148,21 +150,12 @@ module Localtower
         @opts = JSON[opts.to_json]
       end
 
-      def remove_all_migrations
-        Dir["#{Rails.root}/db/migrate/*"].each { |migration_file| File.delete(migration_file) }
-
-        content_schema = """
-ActiveRecord::Schema.define(version: 0) do
-end
-        """
-
-        File.open("#{Rails.root}/db/schema.rb", "w") do |f|
-          f.write(content_schema)
-        end
-      end
-
+      # @opts['migrations'] = []
+      # @opts['run_migrate'] = true
       def run
-        cmd = "ChangeTheModel#{@opts['migration_name']}AtTime#{Time.now.to_i}"
+        model_names = @opts['migrations'].map { |line| line['table_name'].camelize }.join
+
+        cmd = "Change#{model_names}#{@opts['migration_name']}At#{Time.now.to_i}"
         ::Localtower::Tools.perform_migration(cmd, true)
 
         @opts['migrations'].each do |action_line|
@@ -206,58 +199,26 @@ end
       private
 
       def add_column(data)
-        if not data["table_name"].present? \
-          or not data["column"].present? \
-          or not data["column_type"].present?
-          return nil
-        end
-
         @thor.migration_add_column(data)
       end
 
       def remove_column(data)
-        if not data["table_name"].present? \
-          or not data["column"].present?
-          return nil
-        end
-
         @thor.migration_remove_column(data)
       end
 
       def rename_column(data)
-        if not data["table_name"].present? \
-          or not data["column"].present? \
-          or not data["new_column_name"].present?
-          return nil
-        end
-
         @thor.migration_rename_column(data)
       end
 
       def change_column_type(data)
-        if not data["table_name"].present? \
-          or not data["column"].present? \
-          or not data["new_column_type"].present?
-          return nil
-        end
-
         @thor.migration_change_column_type(data)
       end
 
       def add_index_to_column(data)
-        if not data["table_name"].present? \
-          or not data["column"].present?
-          return nil
-        end
-
         @thor.migration_add_index_to_column(data)
       end
 
       def belongs_to(data)
-        if not data["table_name"].present? and data["belongs_to"].present?
-          return nil
-        end
-
         data["column"] = data["belongs_to"].underscore.singularize
         data['column_type'] = "references"
 
@@ -265,27 +226,14 @@ end
       end
 
       def remove_index_to_column(data)
-        if not data["table_name"].present? \
-          or not data["column"].present?
-          return nil
-        end
-
         @thor.migration_remove_index_to_column(data)
       end
 
       def create_table(data)
-        if not data["table_name"].present?
-          return nil
-        end
-
         @thor.migration_create_table(data)
       end
 
       def drop_table(data)
-        if not data["table_name"].present?
-          return nil
-        end
-
         @thor.migration_drop_table(data)
       end
 

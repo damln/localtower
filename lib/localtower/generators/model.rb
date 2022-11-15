@@ -2,13 +2,13 @@ module Localtower
   module Generators
     class Model
       def initialize(opts)
-        @opts = JSON[opts.to_json]
+        @opts = JSON[opts.to_json] # stringify keys
       end
 
+      # data = {attributes: "", model_name: ""}
       def run
-        if not @opts['attributes'] or not @opts['model_name'].present?
-          return nil
-        end
+        return nil if @opts['attributes'].blank?
+        return nil if @opts['model_name'].blank?
 
         attributes_list = []
 
@@ -30,7 +30,6 @@ module Localtower
 
         if @opts['run_migrate']
           ::Localtower::Tools.perform_cmd('rake db:migrate', false)
-          # ::Localtower::Tools.perform_cmd('rake db:migrate RAILS_ENV=test', false)
         end
 
         self
@@ -39,8 +38,7 @@ module Localtower
       private
 
       def defaults_present?
-        return false unless @opts['attributes'].any? { |attr| attr["defaults"].present? }
-        true
+        @opts['attributes'].any? { |attr| attr["defaults"].present? }
       end
 
       def params_for_defaults
@@ -52,7 +50,6 @@ module Localtower
       def insert_default_values
         ::Localtower::Generators::ServiceObjects::InsertDefaults.new(params_for_defaults)
       end
-
     end
   end
 end

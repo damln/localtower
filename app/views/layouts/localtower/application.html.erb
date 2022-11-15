@@ -12,10 +12,10 @@
     <link rel="stylesheet" type="text/css" href="/light-bootstrap-dashboard-master/assets/css/light-bootstrap-dashboard.css">
 
     <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="/vendor/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/light-bootstrap-dashboard-master/assets/css/pe-icon-7-stroke.css">
 
+    <link rel="stylesheet" type="text/css" href="/vendor/highlight-js-default.min.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
 
     <%= csrf_meta_tags %>
@@ -28,8 +28,8 @@
 
         <div class="sidebar-wrapper">
           <ul class="nav">
-            <li class="<%= is_active_link?(dashboard_path, :inclusive) ? "active" : nil %>">
-              <a href="<%= dashboard_path %>">
+            <li class="<%= is_active_link?(schema_path, :inclusive) ? "active" : nil %>">
+              <a href="<%= schema_path %>">
                 <i class="pe-7s-home"></i>
                 <p>Schema</p>
               </a>
@@ -42,59 +42,16 @@
               </a>
             </li>
 
-            <li class="<%= is_active_link?(relations_path, :inclusive) ? "active" : nil %>">
-              <a href="<%= relations_path %>">
-                <i class="pe-7s-shuffle"></i>
-                <p>New Relation</p>
-              </a>
-            </li>
-
             <li class="<%= is_active_link?(migrations_path, :inclusive) ? "active" : nil %>">
               <a href="<%= migrations_path %>">
                 <i class="pe-7s-edit"></i>
                 <p>New Migration</p>
               </a>
             </li>
-
-            <li class="<%= is_active_link?(logs_path, :inclusive) ? "active" : nil %>">
-              <a href="<%= logs_path %>">
-                <i class="pe-7s-ticket"></i>
-                <p>Logs</p>
-              </a>
-            </li>
           </ul>
         </div>
       </div>
-      <div class="tower-nav">
-          <div class="<%= is_active_link?(dashboard_path, :inclusive) ? "active" : nil %>">
-              <a class="tower-a" href="<%= dashboard_path %>">
-                <i class="pe-7s-home"></i>
-                <p>Schema</p>
-              </a>
-            </div>
 
-
-            <div class="<%= is_active_link?(models_path, :inclusive) ? "active" : nil %>">
-              <a class="tower-a" href="<%= models_path %>">
-                <i class="pe-7s-server"></i>
-                <p>New Model</p>
-              </a>
-            </div>
-
-            <div class="<%= is_active_link?(relations_path, :inclusive) ? "active" : nil %>">
-              <a class="tower-a" href="<%= relations_path %>">
-                <i class="pe-7s-shuffle"></i>
-                <p>New Relation</p>
-              </a>
-            </div>
-
-            <div class="<%= is_active_link?(migrations_path, :inclusive) ? "active" : nil %>">
-              <a class="tower-a" href="<%= migrations_path %>">
-                <i class="pe-7s-edit"></i>
-                <p>New Migration</p>
-              </a>
-            </div>
-      </div>
 
       <div class="main-panel">
         <div class="content">
@@ -134,7 +91,8 @@
 
     <!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
     <script src="/light-bootstrap-dashboard-master/assets/js/light-bootstrap-dashboard.js"></script>
-    <script src="/js/masonry.pkgd.min.js"></script>
+    <script src="/vendor/highlight.min.js"></script>
+    <script src="/vendor/masonry.pkgd.min.js"></script>
     <script src="/js/app.js"></script>
   </body>
 </html>

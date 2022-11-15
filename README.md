@@ -22,24 +22,15 @@ Compatibility:
 ### Create a migration
 ![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/4_migrations.png)
 
-### Using the Capture plugin
-![Capture](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v0.1.6/5_capture.png)
-
 ## INSTALL
 
-Only tested with Rails 4.2 and Rails 5.1 (should work with any Rails 4.2+ application). Only tested with PostgreSQL.
+Should work with any Rails 4.2+ application.
+Only tested with PostgreSQL.
 
 Add to your `Gemfile` file:
 ```ruby
 group :development do
-  gem "localtower", ">= 0.4.1"
-end
-```
-
-If you want the latest master branch, add to your `Gemfile` file following:
-```ruby
-group :development do
-  gem "localtower", github: "damln/localtower"
+  gem "localtower"
 end
 ```
 
@@ -60,34 +51,27 @@ MyApp::Application.routes.draw do
 end
 ```
 
+/!\ IMPORTANT /!\
+Change your config/environments/development.rb:
+
+```ruby
+Rails.application.configure do
+  # ...
+
+  # This is the default:
+  # config.active_record.migration_error = :page_load
+
+  # Change it to:
+  config.active_record.migration_error = false if defined?(Localtower)
+
+  # ...
+end
+```
+
 ## Usage
 
 Open your browser at [http://localhost:3000/localtower](http://localhost:3000/localtower).
 
-## Logger Usage (Capture plugin)
-
-You can put this line anywhere in your code:
-
-```ruby
-Localtower::Plugins::Capture.new(self, binding).save
-```
-
-For example:
-
-```ruby
-def my_method
-  user = User.find(1)
-  some_data = {foo: "bar"}
-
-  Localtower::Plugins::Capture.new(self, binding).save
-end
-```
-
-Then go to the Localtower intercave here: [http://localhost:3000/localtower/logs](http://localhost:3000/localtower/logs) and you will see the variables `user` and `some_data` in the UI.
-
-### Notes for the Capture plugin:
-
-The value for each variable will try to call `.to_json`. If you have a huge collection of models likes `@users` you will see all the collection as an Array.
 
 ## Run test
 

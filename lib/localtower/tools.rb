@@ -45,7 +45,14 @@ module Localtower
         self.models.each do |model|
           attributes_list = []
 
-          model.columns_hash.each do |_k, v|
+          # Using this trick because the model might exist but not migrated yet
+          columns_hash = begin
+            model.columns_hash
+          rescue
+            []
+          end
+
+          columns_hash.each do |_k, v|
 
             belongs_to = nil
 
@@ -117,14 +124,15 @@ module Localtower
       end
 
       def all_columns
-        models.map { |model| model.columns.map { |column| column.name }.flatten }.flatten.uniq.sort
-      end
+        models.map do |model|
+          columns = begin
+            model.columns
+          rescue
+            []
+          end
 
-      def sql_drop_all_tables
-        ::ActiveRecord::Base.connection.tables.each do |table|
-          cmd = "DROP TABLE if exists #{table.upcase} cascade;"
-          ::ActiveRecord::Base.connection.execute(cmd)
-        end
+          columns.map { |column| column.name }.flatten
+        end.flatten.uniq.sort
       end
 
       def perform_migration(str, standalone = false)

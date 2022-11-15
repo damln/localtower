@@ -1,19 +1,13 @@
 Localtower::Engine.routes.draw do
-  get "migrations", to: "pages#migrations", as: :migrations
-  post "migrations", to: "pages#post_migrations"
+  get 'migrations', to: 'pages#migrations', as: :migrations
+  post 'migrations', to: 'pages#post_migrations'
 
-  get "models", to: "pages#models", as: :models
-  post "models", to: "pages#post_models"
-
-  get "relations", to: "pages#relations", as: :relations
-  post "relations", to: "pages#post_relations"
+  get 'models', to: 'pages#models', as: :models
+  post 'models', to: 'pages#post_models'
 
   # get ':v/:asset', to: 'pages#asset_render', as: 'asset_render', :constraints => { :v => /[^\/]*/, :asset => /[^\/]*/ }
+  get 'schema', to: 'pages#schema', as: 'schema'
+  post 'actions', to: 'pages#post_actions', as: 'actions'
 
-  get 'dashboard', to: 'pages#dashboard', as: 'dashboard'
-  get 'logs', to: 'pages#logs', as: 'logs'
-  get 'logs/:md5', to: 'pages#log', as: 'log'
-  get 'logs/:md5/:var', to: 'pages#log_var', as: 'log_var'
-
-  root :to => redirect('dashboard')
+  root :to => redirect('models')
 end

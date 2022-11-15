@@ -1,0 +1,57 @@
+<div class="card">
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-6"><h4 class="title">Pending migrations</h4></div>
+        <div class="col-md-6">
+          <div class="pull-right">
+          <% if migrations.any? %>
+          <%= form_tag actions_path, class: "form" do %>
+            <button name="cmd" type="submit" value="rails db:migrate" class="btn btn-warning" data-selector="submit">
+              Run Pending Migrations (<code>bundle exec rails db:migrate</code>)
+            </button>
+          <% end %>
+          <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+  <% if migrations.any? %>
+    <% migrations.each do |entry| %>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+            <h5 style="color: <%= entry['status'] == :todo ? 'red' : 'green' %>;">
+              <% if entry['status'] == :todo %>
+                <button type="button" class="btn btn-danger btn-xs">PENDING</button>
+              <% end %>
+
+              <a href="<%= file_link(entry['file_full_path']) %>"><%= entry['name'] %></a>
+            </h5>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+        <% if entry['status'] == :todo %>
+          <pre><code class="language-ruby"><%= entry['content'] %></code></pre>
+        <% end %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+
+  <% else %>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-8">
+          No pending migrations.
+        </div>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

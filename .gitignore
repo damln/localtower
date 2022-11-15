@@ -3,6 +3,9 @@
 pkg/
 coverage/
 *.gem
+spec/dummy/db/migrate/*.rb
+spec/dummy/db/schema.rb
+spec/dummy/app/models/*.rb
 *api_token_rubygems*
 
 # --- RAILS ---
