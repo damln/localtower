@@ -1,3 +1,3 @@
 module Localtower
-  VERSION = '0.5.0'.freeze
+  VERSION = '1.0.0'.freeze
 end
