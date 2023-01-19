@@ -1,80 +1,63 @@
 <% content_for :title do %>Models<% end %>
-
 <div class="row">
   <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <h4 class="title"></h4>
-      </div>
-
-      <div class="content">
-        <%= form_tag models_path, class: "form" do %>
-
-        <div class="row">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>Name of the Model</label>
-              <input type="text" data-sain name="models[model_name]" class="form-control">
+    <div class="content">
+      <div class="">
+        <div class="card">
+          <div class="">
+            <% if @models.empty? %>
+              <%= render partial: 'alert_no_models' %>
+            <% end %>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="grid-sizer"></div>
+          <% @models.each do |model| %>
+            <div class="grid-item text-small card">
+              <div class="text-center">
+                <h5><%= model[:name] %></h5>
+              </div>
+              <table class="table table-hover table-striped table-condensed">
+                <thead>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Belongs To</th>
+                  <th>Index?</th>
+                </thead>
+                <tbody>
+                  <% model[:attributes_list].each do |attribute_data| %>
+                    <tr>
+                      <td>
+                        <code>
+                          <%= attribute_data["name"] %>
+                        </code>
+                      </td>
+                      <td>
+                        <%= attribute_data["type_clean"] %>
+                      </td>
+                      <td>
+                        <% if attribute_data["belongs_to"] %>
+                          <span class="label label-primary">
+                            <%= attribute_data["belongs_to"] %>
+                          </span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <% if attribute_data["index"].any? %>
+                          <span class="label label-success">Yes</span>
+                        <% else %>
+                          <span class="label label-default">No</span>
+                        <% end %>
+                      </td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
             </div>
-          </div>
+          <% end %>
+          <div class="clearfix"></div>
         </div>
-
-        <table class="table table-hover table-striped">
-          <thead>
-            <th>Column Name</th>
-            <th>Type</th>
-            <th>Default</th>
-            <th>Index?</th>
-            <th>Can be null?</th>
-            <th></th>
-          </thead>
-
-          <tbody data-selector="tbody">
-            <tr data-selector="tr">
-              <td>
-                <input type="text" name="models[attributes][][attribute_name]" class="form-control">
-              </td>
-              <td>
-                <%= select_tag "models[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
-              </td>
-              <td>
-                <%= select_tag "models[attributes][][defaults]", options_for_select(::Localtower::Generators::Migration::DEFAULTS), include_blank: true, class: "form-control" %>
-              </td>
-              <td>
-                <input type="checkbox" value="true" name="models[attributes][][index]" class="form-control">
-              </td>
-              <td>
-                <input type="checkbox" value="true" name="models[attributes][][nullable]" class="form-control" checked>
-              </td>
-              <td>
-                <div class="pull-right">
-                  <button class="btn btn-danger btn-xs pointer" data-selector="remove">Remove</button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <i class="pe-7s-plus pointer" data-selector="duplicate" style="font-size: 3em;"></i>
-          </div>
-        </div>
-
-        <hr>
-
-        <!-- multiple lines: -->
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <button type="submit" value="true" class="btn btn-success" data-selector="submit">
-            Create the model Only
-            </button>
-          </div>
-        </div>
-        <% end %>
       </div>
     </div>
-
-    <%= render partial: "migrations", locals: { migrations: @migrations } %>
   </div>
 </div>

@@ -1,28 +1,4 @@
 FactoryBot.define do
-  factory :create_table, class: "Hash" do
-    migration_name { "Post" }
-    migrations do
-      [
-        {
-          action: "create_table",
-          table_name: "posts"
-        }
-      ]
-    end
-  end
-
-  factory :create_table_two, class: "Hash" do
-    migration_name { "User" }
-    migrations do
-      [
-        {
-          action: "create_table",
-          table_name: "users"
-        }
-      ]
-    end
-  end
-
   factory :add_column, class: "Hash" do
     migration_name { "Post" }
     migrations do
@@ -32,7 +8,6 @@ FactoryBot.define do
           table_name: "posts",
           column: "title",
           column_type: "string",
-          index: true,
           nullable: true,
         },
         {
@@ -40,7 +15,6 @@ FactoryBot.define do
           table_name: "posts",
           column: "content",
           column_type: "text",
-          index: false,
           nullable: true,
         },
         {
@@ -59,20 +33,6 @@ FactoryBot.define do
           column_type: "array",
           index: true,
           nullable: true,
-        }
-      ]
-    end
-  end
-
-  factory :add_column_fail, class: "Hash" do
-    migration_name { "Post" }
-    migrations do
-      [
-        {
-          action: "add_column",
-          table_name: "posts",
-          column: "title",
-          # column_type: "string",
         }
       ]
     end
@@ -135,9 +95,33 @@ FactoryBot.define do
     migrations do
       [
         {
+          action: "add_column",
+          table_name: "posts",
+          column: "content",
+          column_type: "text",
+        },
+        {
           action: "add_index_to_column",
           table_name: "posts",
-          column: "content_new",
+          column: "content",
+        },
+        {
+          action: "add_index_to_column",
+          table_name: "posts",
+          column: "content_second",
+          index: {
+            using: 'default',
+            unique: true,
+          }
+        },
+        {
+          action: "add_index_to_column",
+          table_name: "posts",
+          column: "content_third",
+          index: {
+            using: 'gin',
+            algorithm: 'concurrently',
+          }
         }
       ]
     end

@@ -3,40 +3,49 @@ require 'spec_helper'
 module Localtower
   module Generators
     describe Model do
-      before(:all) do
-        clean_files
-      end
+      context 'model 1' do
+        let(:expected_migration) do
+          <<-TEXT_MULTILINE.strip_heredoc
+          class CreatePosts < ActiveRecord::Migration[5.2]
+            disable_ddl_transaction!
 
-      after(:all) do
-      end
+            def change
+              create_table :posts do |t|
+                t.string :title
+                t.string :tags, array: true, default: [], null: false
+                t.text :content, null: false
+                t.integer :likes_count, default: 0
+                t.float :score
+                t.jsonb :metadata, default: {}, null: false
 
-      it 'create a post' do
-        data = attributes_for(:post_one)
-        data["run_migrate"] = true
+                t.timestamps
+              end
+              add_index :posts, :title, unique: true
+              add_index :posts, :tags, using: :gin, unique: true, algorithm: :concurrently
+              add_index :posts, :content, using: :gist
+              add_index :posts, :likes_count
+              add_index :posts, :score
+              add_index :posts, :metadata
+            end
+          end
+          TEXT_MULTILINE
+        end
 
-        ::Localtower::Generators::Model.new(data).run
+        let(:expected_model) do
+          <<-TEXT_MULTILINE.strip_heredoc
+          class Post < ApplicationRecord
+          end
+          TEXT_MULTILINE
+        end
 
-        expect(File.exist?("#{Rails.root}/app/models/post.rb")).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/app/models/post.rb", /class Post/)).to eq(true)
+        let(:attributes) { attributes_for(:post_one).deep_stringify_keys }
 
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /create_table "posts"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.string(.*)"title"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.text(.*)"content"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.index(.*)\["title"\], name: "index_posts_on_title"/)).to eq(true)
-      end
+        it 'create a post' do
+          ::Localtower::Generators::Model.new(attributes).run
 
-      it 'create a user' do
-        data = attributes_for(:user_one)
-        data["run_migrate"] = true
-
-        ::Localtower::Generators::Model.new(data).run
-
-        expect(File.exist?("#{Rails.root}/app/models/user.rb")).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/app/models/user.rb", /class User/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /create_table "users"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.string(.*)"name"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.jsonb(.*)"metadata"/)).to eq(true)
-        expect(::Localtower::Tools.word_in_file?("#{Rails.root}/db/schema.rb", /t.index(.*)\["name"\], name: "index_users_on_name"/)).to eq(true)
+          expect(File.read("#{Rails.root}/app/models/post.rb")).to eq(expected_model)
+          expect(File.read(last_migration)).to eq(expected_migration)
+        end
       end
     end
   end

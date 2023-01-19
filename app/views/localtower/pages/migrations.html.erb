@@ -1,92 +1,61 @@
 <% content_for :title do %>Migrations<% end %>
-
 <div class="row">
   <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <h4 class="title"></h4>
-      </div>
-
-      <div class="content">
-        <%= form_tag migrations_path, class: "form" do %>
-
-        <table class="table table-hover table-striped">
-          <thead>
-            <th> <span data-selector=''>On Model</span></th>
-            <th> <span data-selector=''>Action</span></th>
-            <th> <span data-selector='belongs_to_label'>Belongs To</span></th>
-            <th> <span data-selector='column_label'>Column</span></th>
-            <th> <span data-selector='new_column_name_label'>New Column Name</span></th>
-            <th> <span data-selector='column_type_label'>Type</span></th>
-            <th> <span data-selector='index_label'>Index?</span></th>
-            <th> <span data-selector='nullable_label'>Can be null?</span></th>
-            <th> <span data-selector=''></span></th>
-          </thead>
-
-          <tbody data-selector="tbody">
-            <tr data-selector="tr">
-              <td>
-                <%= select_tag "migrations[migrations][][table_name]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control" %>
-              </td>
-
-              <td>
-                <%= select_tag "migrations[migrations][][action]", options_for_select(::Localtower::Generators::Migration::ACTIONS), class: "form-control", "data-selector" => "action" %>
-              </td>
-
-              <td>
-                <%= select_tag "migrations[migrations][][belongs_to]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control", "data-selector" => "belongs_to" %>
-              </td>
-
-              <td class="text-center">
-                <input type="text" name="migrations[migrations][][column]" class="form-control" data-selector="column_text">
-
-                <%= select_tag "migrations[migrations][][column_list]", options_for_select(::Localtower::Tools.all_columns), class: "form-control", include_blank: true, "data-selector" => "column_list", style: "display:none;" %>
-              </td>
-
-              <td>
-                <input type="text" name="migrations[migrations][][new_column_name]" class="form-control" data-selector="new_column_name">
-              </td>
-
-              <td>
-                <%= select_tag "migrations[migrations][][column_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control", "data-selector" => "column_type" %>
-              </td>
-
-              <td>
-                <input type="checkbox" name="migrations[migrations][][index]" class="form-control" data-selector="index">
-              </td>
-
-              <td>
-                <input type="checkbox" name="migrations[migrations][][nullable]" class="form-control" checked="" data-selector="nullable">
-              </td>
-
-              <td>
-                <div class="pull-right">
-                  <button class="btn btn-danger btn-xs pointer" data-selector="remove">Remove</button>
+    <div class="content">
+      <% if flash[:notice] %>
+        <div class="alert alert-info">
+          <span><%= flash[:notice] %></span>
+        </div>
+      <% end %>
+      <div class="card">
+        <div class="header">
+          <% if @migrations.select {|i| i['status'] == :todo}.any? %>
+            <%= form_tag actions_path, class: "form" do %>
+              <button name="cmd" type="submit" value="rails db:migrate" class="btn btn-warning btn-fill" data-selector="submit">
+                Migrate Pending Migrations <code>bundle exec rails db:migrate</code>
+              </button>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="content">
+          <% if @migrations.any? %>
+            <% @migrations.each do |entry| %>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5 style="color: <%= entry['status'] == :todo ? 'red' : 'green' %>;">
+                      <% if entry['status'] == :todo %>
+                        <button type="button" class="btn btn-danger btn-xs">PENDING</button>
+                        <a href="<%= file_link(entry['file_full_path']) %>"><%= entry['name'] %></a>
+                      <% else %>
+                        <%= form_tag actions_path, class: "form" do %>
+                          <button name="cmd" title="rake db:migrate:down VERSION=<%= entry['time'] %>" type="submit" value="rake db:migrate:down VERSION=<%= entry['time'] %>" class="btn btn-info btn-xs btn-fill">
+                            ROLLBACK
+                          </button>
+                          <a href="<%= file_link(entry['file_full_path']) %>"><%= entry['name'] %></a>
+                        <% end %>
+                      <% end %>
+                    </h5>
+                  </div>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <i class="pe-7s-plus pointer" data-selector="duplicate" style="font-size: 3em;"></i>
-          </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <pre><code class="language-ruby"><%= entry['content'] %></code></pre>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="card">
+              <div class="">
+              </div>
+              <div class="alert alert-info">
+                <span>No migrations found</span>
+              </div>
+            </div>
+          <% end %>
         </div>
-
-        <hr>
-
-        <div class="row">
-          <div class="col-md-12 text-center">
-            <button type="submit" value="true" class="btn btn-success" data-selector="submit">
-            Create the migration
-            </button>
-          </div>
-        </div>
-        <% end %>
       </div>
     </div>
-
-    <%= render partial: "migrations", locals: { migrations: @migrations } %>
   </div>
 </div>

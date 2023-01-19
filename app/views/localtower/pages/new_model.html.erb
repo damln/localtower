@@ -1,0 +1,87 @@
+<% content_for :title do %>New Model<% end %>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="header">
+        <div class="alert alert-warning">
+          <span>Remember, you can always edit your migration files manually before running "rails db:migrate"</span>
+        </div>
+      </div>
+      <div class="content">
+        <%= form_tag models_path, class: "form" do %>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Name of the Model</label>
+                <input type="text" data-selector="modelName" name="model[model_name]" class="form-control">
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <table class="table table-hover table-striped">
+              <thead>
+                <th>Type</th>
+                <th>Column Name</th>
+                <th>Default</th>
+                <th>Index Options</th>
+                <th>Can be null?</th>
+                <th></th>
+              </thead>
+              <tbody data-selector="tbody">
+                <tr data-selector="tr">
+                  <td>
+                    <%= select_tag "model[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
+                  </td>
+                  <td>
+                    <input type="text" data-selector="attributeName" name="model[attributes][][attribute_name]" class="form-control">
+                  </td>
+                  <td>
+                    <%= select_tag "model[attributes][][default]", options_for_select(::Localtower::Generators::ServiceObjects::InsertDefaults::DEFAULTS), class: "form-control" %>
+                  </td>
+                  <td style='min-width: 240px'>
+                    <div class="row">
+                      <div class="col-md-4">
+                        index: <br>
+                        <%= select_tag "model[attributes][][index][using]", options_for_select(::Localtower::Generators::ServiceObjects::InsertIndexes::USING), class: "form-control" %>
+                      </div>
+                      <div class="col-md-4">
+                        unique:
+                        <br>
+                        <%= select_tag "model[attributes][][index][unique]", options_for_select(::Localtower::Generators::ServiceObjects::InsertIndexes::UNIQUE), class: "form-control" %>
+                      </div>
+                      <div class="col-md-4">
+                        algorithm
+                        <br>
+                        <%= select_tag "model[attributes][][index][algorithm]", options_for_select(::Localtower::Generators::ServiceObjects::InsertIndexes::ALGO), class: "form-control" %>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input type="checkbox" value="true" name="model[attributes][][nullable]" class="form-control" checked>
+                  </td>
+                  <td>
+                    <div class="pull-right">
+                      <button class="btn btn-danger btn-xs pointer" data-selector="removeLineModel">Remove line</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <i class="pe-7s-plus pointer" data-selector="duplicateLineNewModel" style="font-size: 3em;"></i>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12 text-right">
+              <button type="submit" value="true" class="btn btn-success btn-fill" data-selector="submitNewModel">
+                Generate the migration (and the model)
+              </button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

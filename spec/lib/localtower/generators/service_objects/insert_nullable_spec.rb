@@ -1,15 +1,13 @@
 require 'spec_helper'
 
-describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
+describe ::Localtower::Generators::ServiceObjects::InsertNullable do
   let(:service) { described_class.new(attributes) }
 
   let(:attributes) {
     [
-      { 'first'  => "true" },
-      { 'third'  => "nil" },
-      { 'fourth' => "false" },
-      { 'foo' => "{}" },
-      { 'fifth'  => "0" }
+      'first',
+      'third',
+      'fourth'
     ]
   }
 
@@ -21,8 +19,7 @@ describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
             t.string  :first
             t.integer :second
             t.string  :third
-            t.string  :fourth
-            t.jsonb  :foo
+            t.string  :fourth, default: 'foo'
             t.integer :fifth
 
             t.timestamps
@@ -38,12 +35,11 @@ describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
       class CreateTests < ActiveRecord::Migration[7.0]
         def change
           create_table :tests do |t|
-            t.string  :first, default: true
+            t.string  :first, null: false
             t.integer :second
-            t.string  :third, default: nil
-            t.string  :fourth, default: false
-            t.jsonb  :foo, default: {}
-            t.integer :fifth, default: 0
+            t.string  :third, null: false
+            t.string  :fourth, null: false, default: 'foo'
+            t.integer :fifth
 
             t.timestamps
           end

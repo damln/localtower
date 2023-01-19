@@ -8,7 +8,7 @@ module Localtower
         []
       end
 
-      db_migrations = db_migrations.map { |e| e["version"].to_s }.sort.reverse
+      db_migrations = db_migrations.map { |e| e["version"].to_s }
 
       files.map do |file_full_path|
         name = file_full_path.split("/")[-1] # add_email_to_user.rb

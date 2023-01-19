@@ -3,8 +3,6 @@ source 'https://rubygems.org'
 gem "rails", "~> 7.0.1"
 gem 'pg'
 gem 'puma'
-gem 'jquery-rails'
-gem 'turbolinks', '~> 5'
 
 group :development, :test do
   localtower_path = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))

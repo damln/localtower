@@ -1,16 +1,10 @@
 require 'spec_helper'
 
-describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
+describe ::Localtower::Generators::ServiceObjects::InsertArray do
   let(:service) { described_class.new(attributes) }
 
   let(:attributes) {
-    [
-      { 'first'  => "true" },
-      { 'third'  => "nil" },
-      { 'fourth' => "false" },
-      { 'foo' => "{}" },
-      { 'fifth'  => "0" }
-    ]
+    ['tags']
   }
 
   let(:base_file_content) {
@@ -18,16 +12,10 @@ describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
       class CreateTests < ActiveRecord::Migration[7.0]
         def change
           create_table :tests do |t|
-            t.string  :first
-            t.integer :second
-            t.string  :third
-            t.string  :fourth
-            t.jsonb  :foo
-            t.integer :fifth
+            t.string :tags
 
             t.timestamps
           end
-          add_index :tests, :first
         end
       end
     MIGRATION
@@ -38,16 +26,10 @@ describe ::Localtower::Generators::ServiceObjects::InsertDefaults do
       class CreateTests < ActiveRecord::Migration[7.0]
         def change
           create_table :tests do |t|
-            t.string  :first, default: true
-            t.integer :second
-            t.string  :third, default: nil
-            t.string  :fourth, default: false
-            t.jsonb  :foo, default: {}
-            t.integer :fifth, default: 0
+            t.string :tags, array: true
 
             t.timestamps
           end
-          add_index :tests, :first
         end
       end
     MIGRATION

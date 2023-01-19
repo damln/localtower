@@ -135,22 +135,18 @@ module Localtower
         end.flatten.uniq.sort
       end
 
-      def perform_migration(str, standalone = false)
-        self.perform_cmd("rails g migration #{str}", false)
-
-        if not standalone
-          self.perform_cmd('rake db:migrate')
-        end
+      def perform_migration(str)
+        self.perform_cmd("rails g migration #{str}")
       end
 
-      def perform_cmd(cmd_str, standalone = true)
-        self.perform_raw_cmd("bundle exec #{cmd_str}", standalone)
+      def perform_cmd(cmd_str)
+        self.perform_raw_cmd("bundle exec #{cmd_str}")
       end
 
-      def perform_raw_cmd(cmd_str, standalone = false, root_dir = false)
-        root_dir ||= ::Rails.root
+      def perform_raw_cmd(cmd_str)
+        root_dir = ::Rails.root
 
-        cmd = standalone ? cmd_str : "cd \"#{root_dir}\" && #{cmd_str}"
+        cmd = "cd \"#{root_dir}\" && #{cmd_str}"
         cmd = cmd.strip
 
         self.log("DOING...: #{cmd}")
@@ -174,17 +170,18 @@ module Localtower
       end
 
       def log_file
-        Rails.root.join('log', 'localtower.log')
+        @log_file ||= Rails.root.join('log', 'localtower.log')
+      end
+
+      def last_migration
+        Dir["#{Rails.root}/db/migrate/*.rb"].sort.last
       end
 
       # PRIVATE ==============
       def create_log
         return nil if File.exist?(self.log_file)
-        File.open(self.log_file, 'w') { |f| f.write('') }
-      end
 
-      def word_in_file?(file, word_or_exp)
-        File.readlines(file).grep(word_or_exp).size > 0
+        File.open(self.log_file, 'w') { |f| f.write('') }
       end
     end
   end

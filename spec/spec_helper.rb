@@ -16,7 +16,9 @@ end
     f.write(content_schema)
   end
 
-  Dir["#{Rails.root}/app/models/**/*.*"].each { |model_file| File.delete(model_file) }
+  Dir["#{Rails.root}/app/models/**/*.*"]
+  .reject { |file_name| file_name['application_record.rb']}
+  .each { |model_file| File.delete(model_file) }
 end
 
 def migration_files
@@ -25,6 +27,10 @@ end
 
 def last_migration
   migration_files.sort.last
+end
+
+def word_in_file?(file, word_or_exp)
+  File.readlines(file).grep(word_or_exp).size > 0
 end
 
 #============================
@@ -45,13 +51,12 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = true
 
   config.order = 123
-  # config.order = 'random'
 
   config.before(:suite) do
     FactoryBot.find_definitions
   end
 
-  config.before(:all) do
+  config.before(:each) do
     clean_files
   end
 

@@ -3,52 +3,76 @@ module Localtower
     class Model
       def initialize(opts)
         @opts = JSON[opts.to_json] # stringify keys
+        @model_name = @opts['model_name']
+        @attributes = @opts['attributes']
+
+        raise "No model_name provided" if @model_name.blank?
+        raise "No attributes provided" if @attributes.blank?
       end
 
-      # data = {attributes: "", model_name: ""}
       def run
-        return nil if @opts['attributes'].blank?
-        return nil if @opts['model_name'].blank?
+        attributes_str = parse_attributes.join(" ")
+        cmd = "rails generate model #{model_name.camelize} #{attributes_str}"
 
-        attributes_list = []
+        ::Localtower::Tools.perform_cmd(cmd)
 
-        @opts['attributes'].each do |attribute_data|
-          str = "#{attribute_data["attribute_name"]}:#{attribute_data["attribute_type"]}"
-          str << ":index" if attribute_data["index"]
-
-          attributes_list << str
-        end
-
-        attributes_str = attributes_list.join(" ")
-        cmd = "rails g model #{@opts['model_name'].camelize} #{attributes_str}"
-
-        ::Localtower::Tools.perform_cmd(cmd, false)
-
-        if defaults_present?
-          insert_default_values.call
-        end
-
-        if @opts['run_migrate']
-          ::Localtower::Tools.perform_cmd('rake db:migrate', false)
-        end
-
-        self
+        insert_non_nullable_values
+        insert_default_values
+        insert_array
+        insert_indexes
       end
 
       private
 
-      def defaults_present?
-        @opts['attributes'].any? { |attr| attr["defaults"].present? }
-      end
+      attr_reader :model_name
+      attr_reader :attributes
 
-      def params_for_defaults
-        @opts['attributes'].each_with_object([]) do |attr, arr|
-          arr << Hash[ attr['attribute_name'], attr['defaults'] ] unless attr['defaults'].empty?
+      def parse_attributes
+        attributes.map do |attr_hash|
+          [
+            attr_hash['attribute_name'],
+            (attr_hash['attribute_type'] == 'array' ? 'string' : attr_hash['attribute_type']), # we need this transformation of "array"
+            (attr_hash.dig('index', 'using') != 'none') ? 'index' : nil
+          ].compact.join(':')
         end
       end
 
+      def insert_array
+        params = attributes
+          .select { |attr| attr['attribute_type'] == 'array' }
+          .map { |attr| attr['attribute_name'] }
+
+        Localtower::Generators::ServiceObjects::InsertArray.new(params).call
+      end
+
       def insert_default_values
-        ::Localtower::Generators::ServiceObjects::InsertDefaults.new(params_for_defaults)
+        params = attributes
+          .reject { |attr| attr['default'] == nil }
+          .reject { |attr| attr['default'] == '' }
+          .each_with_object([]) do |attr, arr|
+          arr << Hash[attr['attribute_name'], attr['default']]
+        end
+
+        Localtower::Generators::ServiceObjects::InsertDefaults.new(params).call
+      end
+
+      def insert_non_nullable_values
+        params = attributes
+          .select { |attr| attr['nullable'] == false }
+          .map{ |attr| attr['attribute_name'] }
+
+        ::Localtower::Generators::ServiceObjects::InsertNullable.new(params).call
+      end
+
+      def insert_indexes
+        params = attributes
+          .select { |attr| attr.dig('index', 'using').present? }
+          .reject { |attr| attr.dig('index', 'using') == 'none' }
+          .each_with_object([]) do |attr, arr|
+            arr << Hash[attr['attribute_name'], attr['index']]
+          end
+
+        ::Localtower::Generators::ServiceObjects::InsertIndexes.new(params).call
       end
     end
   end
