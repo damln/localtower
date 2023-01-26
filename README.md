@@ -1,4 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/localtower.svg)](https://badge.fury.io/rb/localtower) ![Gem](https://img.shields.io/gem/dt/localtower?label=gem%20downloads)
+![Gem](https://img.shields.io/gem/v/localtower) ![Gem](https://img.shields.io/gem/dt/localtower?label=gem%20downloads)
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/damln/localtower/master/public/twitter-cover-1.png" alt="Localtower">
