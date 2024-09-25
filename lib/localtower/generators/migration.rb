@@ -102,7 +102,7 @@ module Localtower
     end
 
     class Migration
-      TYPES = %w[string datetime date text uuid integer float json jsonb decimal binary boolean array references].freeze
+      TYPES = %w[string datetime date text uuid integer bigint float json jsonb decimal binary boolean array references].freeze
       ACTIONS = %w[
         add_column
         add_index_to_column
