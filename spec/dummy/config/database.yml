@@ -1,18 +1,16 @@
 default: &default
   host: localhost
   adapter: postgresql
-  database: localtower_dummy
   pool: 5
   timeout: 5000
+  username: <%= ENV["LOCALTOWER_PG_USERNAME"] || "user" %>
+  password: <%= ENV["LOCALTOWER_PG_PASSWORD"] || "pass" %>
+  port: <%= ENV["LOCALTOWER_PG_PORT"] || 7343 %>
 
 development:
   <<: *default
-  username: <%= ENV["LOCALTOWER_PG_USERNAME"] %>
-  password: <%= ENV["LOCALTOWER_PG_PASSWORD"] %>
+  database: localtower_dummy
 
 test:
   <<: *default
   database: localtower_dummy_test
-
-production:
-  <<: *default
