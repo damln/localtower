@@ -30,7 +30,7 @@
               <tbody data-selector="tbody">
                 <tr data-selector="tr">
                   <td>
-                    <%= select_tag "model[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control" %>
+                    <%= select_tag "model[attributes][][attribute_type]", options_for_select(::Localtower::Generators::Migration::TYPES.map { |i| i[:name] }), class: "form-control" %>
                   </td>
                   <td>
                     <input type="text" data-selector="attributeName" name="model[attributes][][attribute_name]" class="form-control">

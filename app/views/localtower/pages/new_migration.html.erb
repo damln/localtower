@@ -33,7 +33,7 @@
                       <%= select_tag "migrations[][table_name]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control" %>
                     </td>
                     <td style='width: 220px;'>
-                      <%= select_tag "migrations[][action]", options_for_select(::Localtower::Generators::Migration::ACTIONS), class: "form-control", "data-selector" => "action" %>
+                      <%= select_tag "migrations[][action]", options_for_select(::Localtower::Generators::Migration::ACTIONS.map { |i| i[:name] }), class: "form-control", "data-selector" => "action" %>
                     </td>
                     <td>
                       <%= select_tag "migrations[][belongs_to]", options_for_select(Localtower::Tools.models.collect {|p| [ p, p.table_name ] }), class: "form-control", "data-selector" => "belongs_to" %>
@@ -49,7 +49,7 @@
                       <input type="text" name="migrations[][new_column_name]" class="form-control" data-selector="new_column_name">
                     </td>
                     <td>
-                      <%= select_tag "migrations[][column_type]", options_for_select(::Localtower::Generators::Migration::TYPES), class: "form-control", "data-selector" => "column_type" %>
+                      <%= select_tag "migrations[][column_type]", options_for_select(::Localtower::Generators::Migration::TYPES.map { |i| i[:name] }), class: "form-control", "data-selector" => "column_type" %>
                     </td>
                     <td>
                       <div data-selector="index_options">

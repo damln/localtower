@@ -102,16 +102,98 @@ module Localtower
     end
 
     class Migration
-      TYPES = %w[string datetime date text uuid integer bigint float json jsonb decimal binary boolean array references].freeze
-      ACTIONS = %w[
-        add_column
-        add_index_to_column
-        remove_index_to_column
-        belongs_to
-        remove_column
-        change_column_type
-        rename_column
-        drop_table
+      TYPES = [
+        {
+          name: "string",
+          example: "'foo'",
+        },
+        {
+          name: "text",
+          example: "'long foo'",
+        },
+        {
+          name: "datetime",
+          example: "2024-07-22 12:28:31.487318",
+        },
+        {
+          name: "date",
+          example: "2024-09-24",
+        },
+        {
+          name: "uuid",
+          example: "'860f5e00-0000-0000-0000-000000000000'",
+        },
+        {
+          name: "integer",
+          example: "1",
+        },
+        {
+          name: "bigint",
+          example: "1",
+        },
+        {
+          name: "float",
+          example: "1.1",
+        },
+        {
+          name: "json",
+          example: "{\"foo\": \"bar\"}",
+        },
+        {
+          name: "jsonb",
+          example: "{\"foo\": \"bar\"}",
+        },
+        {
+          name: "decimal",
+          example: "1.1",
+        },
+        {
+          name: "binary",
+          example: "01010101",
+        },
+        {
+          name: "boolean",
+          example: "true/false",
+        },
+        {
+          name: "array",
+          example: "[1, 2, 3]",
+        }
+      ].freeze
+
+      ACTIONS = [
+        {
+          name: "add_column",
+          example: "add_column :users, :name, :string",
+        },
+        {
+          name: "add_index_to_column",
+          example: "add_index :users, :name",
+        },
+        {
+          name: "remove_index_to_column",
+          example: "remove_index :users, :name",
+        },
+        {
+          name: "belongs_to",
+          example: "add_reference :posts, :user, foreign_key: true, index: true",
+        },
+        {
+          name: "remove_column",
+          example: "remove_column :users, :name",
+        },
+        {
+          name: "change_column_type",
+          example: "change_column :users, :name, :string",
+        },
+        {
+          name: "rename_column",
+          example: "rename_column :users, :name, :new_name",
+        },
+        {
+          name: "drop_table",
+          example: "drop_table :users",
+        }
       ].freeze
 
       # @opts =
