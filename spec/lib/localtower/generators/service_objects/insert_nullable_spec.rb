@@ -38,7 +38,7 @@ describe ::Localtower::Generators::ServiceObjects::InsertNullable do
             t.string  :first, null: false
             t.integer :second
             t.string  :third, null: false
-            t.string  :fourth, null: false, default: 'foo'
+            t.string  :fourth, default: 'foo', null: false
             t.integer :fifth
 
             t.timestamps

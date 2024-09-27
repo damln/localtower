@@ -1,3 +1,8 @@
+#
+# @see https://github.com/rails/rails/blob/main/activerecord/lib/active_record/migration.rb
+# @see https://github.com/rails/rails/blob/main/activerecord/lib/active_record/migration/command_recorder.rb
+# @see https://api.rubyonrails.org/v7.2.1/classes/ActiveRecord/ConnectionAdapters/SchemaStatements.html
+#
 module Localtower
   module Generators
     class ThorGeneratorMigration < Thor
@@ -136,16 +141,20 @@ module Localtower
           example: "1.1",
         },
         {
+          name: "numeric",
+          example: "1.1",
+        },
+        {
+          name: "decimal",
+          example: "1.1",
+        },
+        {
           name: "json",
           example: "{\"foo\": \"bar\"}",
         },
         {
           name: "jsonb",
           example: "{\"foo\": \"bar\"}",
-        },
-        {
-          name: "decimal",
-          example: "1.1",
         },
         {
           name: "binary",
@@ -158,8 +167,16 @@ module Localtower
         {
           name: "array",
           example: "[1, 2, 3]",
+        },
+        {
+          name: "blob",
+          example: "",
+        },
+        {
+          name: "references",
+          example: "",
         }
-      ].freeze
+      ]
 
       ACTIONS = [
         {
@@ -194,7 +211,7 @@ module Localtower
           name: "drop_table",
           example: "drop_table :users",
         }
-      ].freeze
+      ]
 
       # @opts =
       def initialize(migrations)

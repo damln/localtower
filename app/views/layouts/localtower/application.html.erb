@@ -14,6 +14,14 @@
     <link rel="stylesheet" type="text/css" href="/vendor/highlight-js-default.min.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
     <%= csrf_meta_tags %>
+    <script>
+      window.COLUMN_TYPES = <%= ::Localtower::Generators::Migration::TYPES.to_json.html_safe %>;
+      window.COLUMN_ACTIONS = <%= ::Localtower::Generators::Migration::ACTIONS.to_json.html_safe %>;
+      window.COLUMN_INDEXES = <%= ::Localtower::Generators::ServiceObjects::InsertIndexes::USING.to_json.html_safe %>;
+      window.COLUMN_INDEXES_ALGORITHMS = <%= ::Localtower::Generators::ServiceObjects::InsertIndexes::ALGO.to_json.html_safe %>;
+      window.COLUMN_DEFAULTS = <%= ::Localtower::Generators::ServiceObjects::InsertDefaults::DEFAULTS_BY_TYPE.to_json.html_safe %>;
+      window.APP_MODELS = <%= ::Localtower::Tools.models_presented.to_json.html_safe %>;
+    </script>
   </head>
   <body>
     <div class="wrapper">
@@ -77,5 +85,7 @@
     <script src="/vendor/highlight.min.js"></script>
     <script src="/vendor/masonry.pkgd.min.js"></script>
     <script src="/js/app.js"></script>
+
+    <script src="/react_page.js"></script>
   </body>
 </html>

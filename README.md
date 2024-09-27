@@ -139,6 +139,14 @@ LOCALTOWER_PG_USERNAME="admin"
 LOCALTOWER_PG_PASSWORD="root_or_smething"
 ```
 
+drop / create database:
+```bash
+cd spec/dummy
+bundle exec rails db:drop
+bundle exec rails db:create
+rm app/models/*.rb
+```
+
 Run the spec:
 ```bash
 bundle install

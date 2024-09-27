@@ -49,6 +49,7 @@ RSpec.configure do |config|
   config.mock_with :rspec
   config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = true
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   config.before(:suite) do
     FactoryBot.find_definitions

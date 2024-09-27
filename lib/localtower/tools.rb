@@ -72,6 +72,7 @@ module Localtower
 
           list << {
             name: model.name,
+            underscore: model.name.underscore,
             table_name: model.table_name,
             attributes_list: attributes_list,
           }
@@ -175,6 +176,10 @@ module Localtower
 
       def last_migration
         Dir["#{Rails.root}/db/migrate/*.rb"].sort.last
+      end
+
+      def line_for_attribute(attribute)
+        (File.read(last_migration).match(/^\s*t\.(.*)\s*:#{attribute}.*$/) || [])
       end
 
       # PRIVATE ==============
