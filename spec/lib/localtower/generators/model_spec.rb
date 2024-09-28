@@ -6,7 +6,7 @@ module Localtower
       context 'model 1' do
         let(:expected_migration) do
           <<-TEXT_MULTILINE.strip_heredoc
-          class CreatePosts < ActiveRecord::Migration[5.2]
+          class CreatePosts < ActiveRecord::Migration[7.2]
             disable_ddl_transaction!
 
             def change

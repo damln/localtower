@@ -50,8 +50,6 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = true
 
-  config.order = 123
-
   config.before(:suite) do
     FactoryBot.find_definitions
   end
