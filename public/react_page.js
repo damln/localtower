@@ -23657,7 +23657,7 @@
       }
     };
     const addToForm = () => {
-      $("#form_attributes").val(JSON.stringify(formRows));
+      document.getElementById("form_attributes").value = JSON.stringify(formRows);
     };
     return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("table", null, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", null, "Column Name"), /* @__PURE__ */ import_react.default.createElement("th", null, "Column Type"), /* @__PURE__ */ import_react.default.createElement("th", null, "Default Value"), /* @__PURE__ */ import_react.default.createElement("th", null, "Options"), /* @__PURE__ */ import_react.default.createElement("th", null, "Index"), /* @__PURE__ */ import_react.default.createElement("th", null))), /* @__PURE__ */ import_react.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react.default.createElement("tr", { key: index }, row.attribute_type === "references" ? /* @__PURE__ */ import_react.default.createElement("td", null, /* @__PURE__ */ import_react.default.createElement(
       "select",
@@ -23746,30 +23746,34 @@
     const COLUMN_INDEXES_ALGORITHMS = window.COLUMN_INDEXES_ALGORITHMS;
     const COLUMN_DEFAULTS = window.COLUMN_DEFAULTS;
     const MODELS = window.APP_MODELS.map((model) => ({ value: model.underscore, label: model.name }));
+    const MODELS_FULL = window.APP_MODELS;
     const COLUMN_ACTIONS = window.COLUMN_ACTIONS.map((model) => ({ value: model.name, label: model.name }));
     const VISIBLE_FIELDS = {
-      add_column: ["model_name", "action_name", "column_name", "column_type", "default", "nullable", "index", "index_algorithm", "foreign_key"],
-      remove_column: ["model_name", "action_name", "column_name"],
-      rename_column: ["model_name", "action_name", "column_name", "new_column_name"],
-      change_column_type: ["model_name", "action_name", "column_name", "new_column_type"],
-      belongs_to: ["model_name", "action_name", "column_name", "foreign_key"],
-      add_index_to_column: ["model_name", "action_name", "column_name", "index", "index_algorithm"],
-      remove_index_to_column: ["model_name", "action_name", "column_name"],
+      add_column: ["model_name", "action_name", "attribute_name", "attribute_type", "default", "nullable", "unique", "index", "index_algorithm", "foreign_key"],
+      remove_column: ["model_name", "action_name", "list_attributes"],
+      rename_column: ["model_name", "action_name", "list_attributes", "new_attribute_name"],
+      change_column_type: ["model_name", "action_name", "list_attributes", "new_attribute_type"],
+      belongs_to: ["model_name", "action_name", "list_models", "foreign_key"],
+      add_index_to_column: ["model_name", "action_name", "list_attributes", "index", "index_algorithm"],
+      remove_index_to_column: ["model_name", "action_name", "list_indexes"],
       drop_table: ["model_name", "action_name"]
     };
     const snakeCase = (str) => {
       return str.replace(/\ /g, "_").replace(/[^a-zA-Z0-9\_]/g, "").replace(/\_\_/g, "_").toLowerCase();
     };
     const DEFAULT_LINE = {
-      model_name: "",
+      model_name: MODELS[0] ? MODELS[0].value : "",
       action_name: "add_column",
       attribute_type: "string",
       attribute_name: "",
+      new_attribute_name: "",
+      new_attribute_type: "",
       default: "",
       unique: false,
       foreign_key: false,
       index: "",
       index_algorithm: "default",
+      index_name: "",
       nullable: true
     };
     const [formRows, setFormRows] = (0, import_react2.useState)([DEFAULT_LINE]);
@@ -23836,16 +23840,37 @@
       setFormRows(updatedRows);
       addToForm();
     };
+    const filterModels = (row) => {
+      return MODELS.filter((model) => model.value !== row.model_name);
+    };
+    const filterAttributes = (row) => {
+      let model = MODELS_FULL.find((model2) => model2.underscore === row.model_name);
+      if (model) {
+        return model.attributes_list;
+      } else {
+        return [];
+      }
+    };
+    const filterIndexes = (row) => {
+      let model = MODELS_FULL.find((model2) => model2.underscore === row.model_name);
+      let indexes = [];
+      if (model) {
+        let attributes_with_index = model.attributes_list.filter((attribute) => attribute.index.length > 0);
+        attributes_with_index.map((attribute) => {
+          attribute.index.map((index) => {
+            let label = [index.columns.map((column) => column).join(", "), `(${index.name})`].join(" ");
+            indexes.push({ value: index.name, label });
+          });
+        });
+      }
+      return indexes;
+    };
     const handleOptionClick = (index, option) => {
       const updatedRows = [...formRows];
       updatedRows[index].default = option.value;
       setFormRows(updatedRows);
       setShowOptions({ [index]: false });
-      if (updatedRows[index].default !== "") {
-        updatedRows[index].nullable = false;
-      } else {
-        updatedRows[index].nullable = true;
-      }
+      updatedRows[index].nullable = updatedRows[index].default !== "";
       addToForm();
     };
     const handleShowOptions = (index, event) => {
@@ -23857,9 +23882,9 @@
       }
     };
     const addToForm = () => {
-      $("#form_attributes").val(JSON.stringify(formRows));
+      document.getElementById("form_attributes").value = JSON.stringify(formRows);
     };
-    return /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("table", null, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", null, "Model Name"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Action"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Column Name"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Column Type"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Default Value"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Options"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Index"), /* @__PURE__ */ import_react2.default.createElement("th", null))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: index }, /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement(
+    return /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("table", null, /* @__PURE__ */ import_react2.default.createElement("thead", null, /* @__PURE__ */ import_react2.default.createElement("tr", null, /* @__PURE__ */ import_react2.default.createElement("th", null, "Model Name"), /* @__PURE__ */ import_react2.default.createElement("th", null, "Action"), /* @__PURE__ */ import_react2.default.createElement("th", null), /* @__PURE__ */ import_react2.default.createElement("th", null))), /* @__PURE__ */ import_react2.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react2.default.createElement("tr", { key: index }, /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
         name: "model_name",
@@ -23875,15 +23900,23 @@
         onChange: (event) => handleInputChange(index, event)
       },
       COLUMN_ACTIONS.map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: model.value }, model.label))
-    )), row.attribute_type === "references" ? /* @__PURE__ */ import_react2.default.createElement("td", { style: { display: shouldBeVisible(row, "column_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "list_models") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
         name: "attribute_name",
         value: row.attribute_name,
         onChange: (event) => handleInputChange(index, event)
       },
-      MODELS.map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: model.value }, model.label))
-    )) : /* @__PURE__ */ import_react2.default.createElement("td", { style: { display: shouldBeVisible(row, "column_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+      filterModels(row).map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: model.value }, model.label))
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "list_attributes") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+      "select",
+      {
+        name: "attribute_name",
+        value: row.attribute_name,
+        onChange: (event) => handleInputChange(index, event)
+      },
+      filterAttributes(row).map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.name, key: model.name }, model.name, " (", model.type_clean, ")"))
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "attribute_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "text",
@@ -23891,7 +23924,15 @@
         value: row.attribute_name,
         onChange: (event) => handleInputChange(index, event)
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("td", { style: { display: shouldBeVisible(row, "column_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "new_attribute_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+      "input",
+      {
+        type: "text",
+        name: "new_attribute_name",
+        value: row.new_attribute_name,
+        onChange: (event) => handleInputChange(index, event)
+      }
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "attribute_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
         name: "attribute_type",
@@ -23899,7 +23940,15 @@
         onChange: (event) => handleInputChange(index, event)
       },
       COLUMN_TYPES.map((type) => /* @__PURE__ */ import_react2.default.createElement("option", { value: type.name, key: type.name }, type.name))
-    )), /* @__PURE__ */ import_react2.default.createElement("td", { style: { display: shouldBeVisible(row, "default") ? "block" : "none" } }, row.attribute_type !== "references" && /* @__PURE__ */ import_react2.default.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "new_attribute_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+      "select",
+      {
+        name: "new_attribute_type",
+        value: row.new_attribute_type,
+        onChange: (event) => handleInputChange(index, event)
+      },
+      COLUMN_TYPES.map((type) => /* @__PURE__ */ import_react2.default.createElement("option", { value: type.name, key: type.name }, type.name))
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "default") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "text",
@@ -23908,7 +23957,7 @@
         placeholder: "NULL",
         onChange: (event) => handleInputChange(index, event)
       }
-    ), COLUMN_DEFAULTS[row.attribute_type] && /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleShowOptions(index, event) }, "Options"), COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && /* @__PURE__ */ import_react2.default.createElement("div", { className: "options-popup", style: { display: showOptions[index] ? "block" : "none", position: "absolute", top: "100%", left: "0", right: "0" } }, COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => /* @__PURE__ */ import_react2.default.createElement("div", { key: option.value, onClick: () => handleOptionClick(index, option) }, option.label))))), /* @__PURE__ */ import_react2.default.createElement("td", null, row.attribute_type !== "references" && /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "nullable") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Can be null:"), /* @__PURE__ */ import_react2.default.createElement(
+    ), COLUMN_DEFAULTS[row.attribute_type] && /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleShowOptions(index, event) }, "Options"), COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && /* @__PURE__ */ import_react2.default.createElement("div", { className: "options-popup", style: { display: showOptions[index] ? "block" : "none", position: "absolute", top: "100%", left: "0", right: "0" } }, COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => /* @__PURE__ */ import_react2.default.createElement("div", { key: option.value, onClick: () => handleOptionClick(index, option) }, option.label))))), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "nullable") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Can be null:"), /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -23916,7 +23965,7 @@
         checked: row.nullable,
         onChange: (event) => handleCheckboxChange(index, event)
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Unique:"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "unique") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Unique:"), /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -23924,7 +23973,7 @@
         checked: row.unique,
         onChange: (event) => handleCheckboxChange(index, event)
       }
-    ))), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "foreign_key") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Foreign Key:"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "foreign_key") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Foreign Key:"), /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -23932,7 +23981,15 @@
         checked: row.foreign_key,
         onChange: (event) => handleCheckboxChange(index, event)
       }
-    ))), /* @__PURE__ */ import_react2.default.createElement("td", null, row.attribute_type !== "references" && /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("label", null, "Index:"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "list_indexes") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Indexes:"), /* @__PURE__ */ import_react2.default.createElement(
+      "select",
+      {
+        name: "index_name",
+        value: row.index_name,
+        onChange: (event) => handleInputChange(index, event)
+      },
+      filterIndexes(row).map((model, i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.name, key: i }, model.label))
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Index:"), /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
         name: "index",
@@ -23941,7 +23998,7 @@
       },
       /* @__PURE__ */ import_react2.default.createElement("option", { value: "" }, "(none)"),
       COLUMN_INDEXES.map((i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: i, key: i }, i))
-    )), row.index && /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
         name: "index_algorithm",
@@ -23950,7 +24007,7 @@
       },
       /* @__PURE__ */ import_react2.default.createElement("option", { value: "default" }, "default"),
       COLUMN_INDEXES_ALGORITHMS.map((i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: i, key: i }, i))
-    )))), /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleDeleteRow(index, event), disabled: formRows.length === 1 }, "Delete")))))), /* @__PURE__ */ import_react2.default.createElement("button", { onClick: handleAddRow, disabled: formRows.at(-1).name === "" }, "Add"));
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "") ? "block" : "none" } })), /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleDeleteRow(index, event), disabled: formRows.length === 1 }, "Delete")))))), /* @__PURE__ */ import_react2.default.createElement("button", { onClick: handleAddRow, disabled: formRows.at(-1).name === "" }, "Add"));
   };
   var NewMigrationForm_default = NewMigrationForm;
 

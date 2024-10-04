@@ -6,15 +6,16 @@ const NewMigrationForm = () => {
   const COLUMN_INDEXES_ALGORITHMS = window.COLUMN_INDEXES_ALGORITHMS;
   const COLUMN_DEFAULTS = window.COLUMN_DEFAULTS;
   const MODELS = window.APP_MODELS.map((model) => ({ value: model.underscore, label: model.name }));
+  const MODELS_FULL = window.APP_MODELS;
   const COLUMN_ACTIONS = window.COLUMN_ACTIONS.map((model) => ({ value: model.name, label: model.name }));
   const VISIBLE_FIELDS = {
-    add_column: ['model_name', 'action_name', 'column_name', 'column_type', 'default', 'nullable', 'index', 'index_algorithm', 'foreign_key'],
-    remove_column: ['model_name', 'action_name', 'column_name'],
-    rename_column: ['model_name', 'action_name', 'column_name', 'new_column_name'],
-    change_column_type: ['model_name', 'action_name', 'column_name', 'new_column_type'],
-    belongs_to: ['model_name', 'action_name', 'column_name', 'foreign_key'],
-    add_index_to_column: ['model_name', 'action_name', 'column_name', 'index', 'index_algorithm'],
-    remove_index_to_column: ['model_name', 'action_name', 'column_name'],
+    add_column: ['model_name', 'action_name', 'attribute_name', 'attribute_type', 'default', 'nullable', 'unique', 'index', 'index_algorithm', 'foreign_key'],
+    remove_column: ['model_name', 'action_name', 'list_attributes'],
+    rename_column: ['model_name', 'action_name', 'list_attributes', 'new_attribute_name'],
+    change_column_type: ['model_name', 'action_name', 'list_attributes', 'new_attribute_type'],
+    belongs_to: ['model_name', 'action_name', 'list_models', 'foreign_key'],
+    add_index_to_column: ['model_name', 'action_name', 'list_attributes', 'index', 'index_algorithm'],
+    remove_index_to_column: ['model_name', 'action_name', 'list_indexes'],
     drop_table: ['model_name', 'action_name'],
   }
 
@@ -27,15 +28,18 @@ const NewMigrationForm = () => {
   }
 
   const DEFAULT_LINE = {
-    model_name: '',
+    model_name: MODELS[0] ? MODELS[0].value : '',
     action_name: 'add_column',
     attribute_type: 'string',
     attribute_name: '',
+    new_attribute_name: '',
+    new_attribute_type: '',
     default: '',
     unique: false,
     foreign_key: false,
     index: '',
     index_algorithm: 'default',
+    index_name: '',
     nullable: true
   };
 
@@ -138,17 +142,46 @@ const NewMigrationForm = () => {
     addToForm();
   };
 
+  const filterModels = (row) => {
+    return MODELS.filter((model) => model.value !== row.model_name);
+  }
+
+  const filterAttributes = (row) => {
+    let model = MODELS_FULL.find((model) => model.underscore === row.model_name);
+
+    if (model) {
+      return model.attributes_list;
+    } else {
+      return [];
+    }
+  }
+
+  const filterIndexes = (row) => {
+    let model = MODELS_FULL.find((model) => model.underscore === row.model_name);
+
+    let indexes = [];
+
+    if (model) {
+      let attributes_with_index = model.attributes_list.filter((attribute) => attribute.index.length > 0);
+
+      attributes_with_index.map((attribute) => {
+        attribute.index.map((index) => {
+          let label = [index.columns.map((column) => column).join(', '), `(${index.name})`].join(' ');
+          indexes.push({ value: index.name, label: label });
+        });
+      });
+    }
+
+    return indexes;
+  }
+
   const handleOptionClick = (index, option) => {
     const updatedRows = [...formRows];
     updatedRows[index].default = option.value;
     setFormRows(updatedRows);
     setShowOptions({ [index]: false });
 
-    if (updatedRows[index].default !== '') {
-      updatedRows[index].nullable = false;
-    } else {
-      updatedRows[index].nullable = true;
-    }
+    updatedRows[index].nullable = (updatedRows[index].default !== '')
 
     addToForm();
   };
@@ -165,7 +198,7 @@ const NewMigrationForm = () => {
 
   const addToForm = () => {
     // Add the form to the hidden input:
-    $("#form_attributes").val(JSON.stringify(formRows));
+    document.getElementById("form_attributes").value = JSON.stringify(formRows);
   };
 
   return (
@@ -175,11 +208,7 @@ const NewMigrationForm = () => {
           <tr>
             <th>Model Name</th>
             <th>Action</th>
-            <th>Column Name</th>
-            <th>Column Type</th>
-            <th>Default Value</th>
-            <th>Options</th>
-            <th>Index</th>
+            <th></th>
             <th></th>
           </tr>
         </thead>
@@ -208,70 +237,93 @@ const NewMigrationForm = () => {
                   ))}
                 </select>
               </td>
-
-              { row.attribute_type === 'references' ? (
-                  <td style={{ display: shouldBeVisible(row, 'column_name') ? 'block' : 'none' }}>
-                    <select
-                      name="attribute_name"
-                      value={row.attribute_name}
-                      onChange={(event) => handleInputChange(index, event)}
-                    >
-                      { MODELS.map((model) => (
-                        <option value={model.value} key={model.value}>{model.label}</option>
-                      ))}
-                    </select>
-                  </td>
-                ) : (
-                  <td style={{ display: shouldBeVisible(row, 'column_name') ? 'block' : 'none' }}>
-                    <input
-                      type="text"
-                      name="attribute_name"
-                      value={row.attribute_name}
-                      onChange={(event) => handleInputChange(index, event)}
-                    />
-                  </td>
-                )
-              }
-              <td style={{ display: shouldBeVisible(row, 'column_type') ? 'block' : 'none' }}>
-                <select
-                  name="attribute_type"
-                  value={row.attribute_type}
-                  onChange={(event) => handleInputChange(index, event)}
-                >
-                  { COLUMN_TYPES.map((type) => (
-                    <option value={type.name} key={type.name}>{type.name}</option>
-                  ))}
-                </select>
-              </td>
-              <td style={{ display: shouldBeVisible(row, 'default') ? 'block' : 'none' }}>
-              { (row.attribute_type !== 'references') && (
-                <div style={{ position: 'relative' }}>
+              <td>
+                <div style={{ display: shouldBeVisible(row, 'list_models') ? 'block' : 'none' }}>
+                  <select
+                    name="attribute_name"
+                    value={row.attribute_name}
+                    onChange={(event) => handleInputChange(index, event)}
+                  >
+                    { filterModels(row).map((model) => (
+                      <option value={model.value} key={model.value}>{model.label}</option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'list_attributes') ? 'block' : 'none' }}>
+                  <select
+                    name="attribute_name"
+                    value={row.attribute_name}
+                    onChange={(event) => handleInputChange(index, event)}
+                  >
+                    { filterAttributes(row).map((model) => (
+                      <option value={model.name} key={model.name}>{model.name} ({model.type_clean})</option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'attribute_name') ? 'block' : 'none' }}>
                   <input
                     type="text"
-                    name="default"
-                    value={row.default}
-                    placeholder="NULL"
-                    onChange={( event) => handleInputChange(index, event)}
+                    name="attribute_name"
+                    value={row.attribute_name}
+                    onChange={(event) => handleInputChange(index, event)}
                   />
-                  {COLUMN_DEFAULTS[row.attribute_type] && (
-                    <button onClick={(event) => handleShowOptions(index, event)}>Options</button>
-                  )}
-                  {COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && (
-                    <div className="options-popup" style={{ display: showOptions[index] ? 'block' : 'none', position: 'absolute', top: '100%', left: '0', right: '0' }}>
-                      {COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => (
-                        <div key={option.value} onClick={() => handleOptionClick(index, option)}>
-                          {option.label}
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
-              )}
-              </td>
-              <td>
-                { (row.attribute_type !== 'references') && (
-                  <div>
-                    <div style={{ display: shouldBeVisible(row, 'nullable') ? 'block' : 'none' }}>
+                <div style={{ display: shouldBeVisible(row, 'new_attribute_name') ? 'block' : 'none' }}>
+                  <input
+                    type="text"
+                    name="new_attribute_name"
+                    value={row.new_attribute_name}
+                    onChange={(event) => handleInputChange(index, event)}
+                  />
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'attribute_type') ? 'block' : 'none' }}>
+                  <select
+                    name="attribute_type"
+                    value={row.attribute_type}
+                    onChange={(event) => handleInputChange(index, event)}
+                  >
+                    { COLUMN_TYPES.map((type) => (
+                      <option value={type.name} key={type.name}>{type.name}</option>
+                    ))}
+                  </select>
+
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'new_attribute_type') ? 'block' : 'none' }}>
+                  <select
+                    name="new_attribute_type"
+                    value={row.new_attribute_type}
+                    onChange={(event) => handleInputChange(index, event)}
+                  >
+                    { COLUMN_TYPES.map((type) => (
+                      <option value={type.name} key={type.name}>{type.name}</option>
+                    ))}
+                  </select>
+
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'default') ? 'block' : 'none' }}>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type="text"
+                      name="default"
+                      value={row.default}
+                      placeholder="NULL"
+                      onChange={( event) => handleInputChange(index, event)}
+                    />
+                    {COLUMN_DEFAULTS[row.attribute_type] && (
+                      <button onClick={(event) => handleShowOptions(index, event)}>Options</button>
+                    )}
+                    {COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && (
+                      <div className="options-popup" style={{ display: showOptions[index] ? 'block' : 'none', position: 'absolute', top: '100%', left: '0', right: '0' }}>
+                        {COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => (
+                          <div key={option.value} onClick={() => handleOptionClick(index, option)}>
+                            {option.label}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'nullable') ? 'block' : 'none' }}>
                       <label>Can be null:</label>
                       <input
                         type="checkbox"
@@ -279,18 +331,16 @@ const NewMigrationForm = () => {
                         checked={row.nullable}
                         onChange={(event) => handleCheckboxChange(index, event)}
                         />
-                    </div>
-                    <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
-                      <label>Unique:</label>
-                      <input
-                        type="checkbox"
-                        name="unique"
-                        checked={row.unique}
-                        onChange={(event) => handleCheckboxChange(index, event)}
-                      />
-                    </div>
-                  </div>
-                )}
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'unique') ? 'block' : 'none' }}>
+                  <label>Unique:</label>
+                  <input
+                    type="checkbox"
+                    name="unique"
+                    checked={row.unique}
+                    onChange={(event) => handleCheckboxChange(index, event)}
+                  />
+                </div>
                 <div style={{ display: shouldBeVisible(row, 'foreign_key') ? 'block' : 'none' }}>
                   <label>Foreign Key:</label>
                   <input
@@ -300,40 +350,48 @@ const NewMigrationForm = () => {
                     onChange={(event) => handleCheckboxChange(index, event)}
                   />
                 </div>
-              </td>
-              <td>
-              { (row.attribute_type !== 'references') && (
-                <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
-                  <div>
-                    <label>Index:</label>
-                    <select
-                      name="index"
-                      value={row.index}
-                      onChange={(event) => handleInputChange(index, event)}
-                      >
-                      <option value="">(none)</option>
-                      { COLUMN_INDEXES.map((i) => (
-                        <option value={i} key={i}>{i}</option>
-                      ))}
-                    </select>
-                  </div>
-                  { row.index && (
-                  <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
-                    <label>Index Algorithm:</label>
-                    <select
-                      name="index_algorithm"
-                      value={row.index_algorithm}
-                      onChange={(event) => handleInputChange(index, event)}
-                    >
-                      <option value="default">default</option>
-                      { COLUMN_INDEXES_ALGORITHMS.map((i) => (
-                        <option value={i} key={i}>{i}</option>
-                      ))}
-                    </select>
-                  </div>
-                  )}
+                <div style={{ display: shouldBeVisible(row, 'list_indexes') ? 'block' : 'none' }}>
+                  <label>Indexes:</label>
+                  <select
+                    name="index_name"
+                    value={row.index_name}
+                    onChange={(event) => handleInputChange(index, event)}
+                  >
+                    { filterIndexes(row).map((model, i) => (
+                      <option value={model.name} key={i}>{model.label}</option>
+                    ))}
+                  </select>
                 </div>
-              )}
+                <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
+                  <label>Index:</label>
+                  <select
+                    name="index"
+                    value={row.index}
+                    onChange={(event) => handleInputChange(index, event)}
+                    >
+                    <option value="">(none)</option>
+                    { COLUMN_INDEXES.map((i) => (
+                      <option value={i} key={i}>{i}</option>
+                    ))}
+                  </select>
+                </div>
+                <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
+                  <label>Index Algorithm:</label>
+                  <select
+                    name="index_algorithm"
+                    value={row.index_algorithm}
+                    onChange={(event) => handleInputChange(index, event)}
+                  >
+                    <option value="default">default</option>
+                    { COLUMN_INDEXES_ALGORITHMS.map((i) => (
+                      <option value={i} key={i}>{i}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div style={{ display: shouldBeVisible(row, '') ? 'block' : 'none' }}>
+
+                </div>
               </td>
               <td>
                 <button onClick={(event) => handleDeleteRow(index, event)} disabled={formRows.length === 1}>Delete</button>

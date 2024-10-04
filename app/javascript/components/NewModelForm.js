@@ -145,7 +145,7 @@ const NewModelForm = () => {
 
   const addToForm = () => {
     // Add the form to the hidden input:
-    $("#form_attributes").val(JSON.stringify(formRows));
+    document.getElementById("form_attributes").value = JSON.stringify(formRows);
   };
 
   return (

@@ -13,6 +13,7 @@
       <div id="react-container-new-migration"></div>
       <div class="content">
         <%= form_tag migrations_path, class: "form" do %>
+          <input type="hidden" id="form_attributes" name="migrations">
           <div class="row">
             <div class="container-table" data-selector="table">
               <table class="table table-hover table-striped">
