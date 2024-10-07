@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const NewMigrationForm = () => {
   const COLUMN_TYPES = window.COLUMN_TYPES;
@@ -222,206 +223,234 @@ const NewMigrationForm = () => {
     document.getElementById("form_attributes").value = JSON.stringify(formRows);
   };
 
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const items = Array.from(formRows);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    console.table(items);
+
+    // setFormRows(items);
+    // addToForm();
+  };
+
   return (
     <div>
-      <table>
-        <thead>
-          <tr>
-            <th>Model Name</th>
-            <th>Action</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {formRows.map((row, index) => (
-            <tr key={index}>
-              <td>
-                <select
-                  name="model_name"
-                  value={row.column_name}
-                  onChange={(event) => handleInputChange(index, event)}
-                >
-                  { MODELS.map((model, index) => (
-                    <option value={model.value} key={index}>{model.name}</option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <select
-                  name="action_name"
-                  value={row.action_name}
-                  onChange={(event) => handleInputChange(index, event)}
-                >
-                  { COLUMN_ACTIONS.map((model, index) => (
-                    <option value={model.value} key={index}>{model.label}</option>
-                  ))}
-                </select>
-              </td>
-              <td>
-                <div style={{ display: shouldBeVisible(row, 'list_models') ? 'block' : 'none' }}>
-                  <select
-                    name="column_name"
-                    value={row.column_name}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    { filterModels(row).map((model, index) => (
-                      <option value={model.underscore} key={index}>{model.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'list_attributes') ? 'block' : 'none' }}>
-                  <select
-                    name="column_name"
-                    value={row.column_name}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    { filterAttributes(row).map((model, index) => (
-                      <option value={model.name} key={index}>{model.name} ({model.type_clean})</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'column_name') ? 'block' : 'none' }}>
-                  <input
-                    type="text"
-                    name="column_name"
-                    value={row.column_name}
-                    onChange={(event) => handleInputChange(index, event)}
-                  />
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'new_column_name') ? 'block' : 'none' }}>
-                  <input
-                    type="text"
-                    name="new_column_name"
-                    value={row.new_column_name}
-                    onChange={(event) => handleInputChange(index, event)}
-                  />
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'column_type') ? 'block' : 'none' }}>
-                  <select
-                    name="column_type"
-                    value={row.column_type}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    { COLUMN_TYPES.map((type, index) => (
-                      <option value={type.name} key={index}>{type.name}</option>
-                    ))}
-                  </select>
-
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'new_column_type') ? 'block' : 'none' }}>
-                  <select
-                    name="new_column_type"
-                    value={row.new_column_type}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    { COLUMN_TYPES.map((type, index) => (
-                      <option value={type.name} key={index}>{type.name}</option>
-                    ))}
-                  </select>
-
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'default') ? 'block' : 'none' }}>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type="text"
-                      name="default"
-                      value={row.default}
-                      placeholder="NULL"
-                      onChange={( event) => handleInputChange(index, event)}
-                    />
-                    {COLUMN_DEFAULTS[row.column_type] && (
-                      <button onClick={(event) => handleShowOptions(index, event)}>Options</button>
-                    )}
-                    {COLUMN_DEFAULTS[row.column_type] && showOptions[index] && (
-                      <div className="options-popup" style={{ display: showOptions[index] ? 'block' : 'none', position: 'absolute', top: '100%', left: '0', right: '0' }}>
-                        {COLUMN_DEFAULTS[row.column_type] && COLUMN_DEFAULTS[row.column_type].map((option) => (
-                          <div key={option.value} onClick={() => handleOptionClick(index, option)}>
-                            {option.label}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="formRows">
+          {(provided) => (
+            <table {...provided.droppableProps} ref={provided.innerRef}>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Model Name</th>
+                  <th>Action</th>
+                  <th></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {formRows.map((row, index) => (
+                  <Draggable key={index} draggableId={`row-${index}`} index={index}>
+                    {(provided) => (
+                      <tr ref={provided.innerRef} {...provided.draggableProps}>
+                        <td>
+                          <div {...provided.dragHandleProps} style={{ cursor: 'move' }}>
+                            &#8942;
                           </div>
-                        ))}
-                      </div>
+                        </td>
+                        <td>
+                          <select
+                            name="model_name"
+                            value={row.column_name}
+                            onChange={(event) => handleInputChange(index, event)}
+                          >
+                            { MODELS.map((model, index) => (
+                              <option value={model.value} key={index}>{model.name}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td>
+                          <select
+                            name="action_name"
+                            value={row.action_name}
+                            onChange={(event) => handleInputChange(index, event)}
+                          >
+                            { COLUMN_ACTIONS.map((model, index) => (
+                              <option value={model.value} key={index}>{model.label}</option>
+                            ))}
+                          </select>
+                        </td>
+                        <td>
+                          <div style={{ display: shouldBeVisible(row, 'list_models') ? 'block' : 'none' }}>
+                            <select
+                              name="column_name"
+                              value={row.column_name}
+                              onChange={(event) => handleInputChange(index, event)}
+                            >
+                              { filterModels(row).map((model, index) => (
+                                <option value={model.underscore} key={index}>{model.name}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'list_attributes') ? 'block' : 'none' }}>
+                            <select
+                              name="column_name"
+                              value={row.column_name}
+                              onChange={(event) => handleInputChange(index, event)}
+                            >
+                              { filterAttributes(row).map((model, index) => (
+                                <option value={model.name} key={index}>{model.name} ({model.type_clean})</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'column_name') ? 'block' : 'none' }}>
+                            <input
+                              type="text"
+                              name="column_name"
+                              value={row.column_name}
+                              onChange={(event) => handleInputChange(index, event)}
+                            />
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'new_column_name') ? 'block' : 'none' }}>
+                            <input
+                              type="text"
+                              name="new_column_name"
+                              value={row.new_column_name}
+                              onChange={(event) => handleInputChange(index, event)}
+                            />
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'column_type') ? 'block' : 'none' }}>
+                            <select
+                              name="column_type"
+                              value={row.column_type}
+                              onChange={(event) => handleInputChange(index, event)}
+                            >
+                              { COLUMN_TYPES.map((type, index) => (
+                                <option value={type.name} key={index}>{type.name}</option>
+                              ))}
+                            </select>
+
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'new_column_type') ? 'block' : 'none' }}>
+                            <select
+                              name="new_column_type"
+                              value={row.new_column_type}
+                              onChange={(event) => handleInputChange(index, event)}
+                            >
+                              { COLUMN_TYPES.map((type, index) => (
+                                <option value={type.name} key={index}>{type.name}</option>
+                              ))}
+                            </select>
+
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'default') ? 'block' : 'none' }}>
+                            <div style={{ position: 'relative' }}>
+                              <input
+                                type="text"
+                                name="default"
+                                value={row.default}
+                                placeholder="NULL"
+                                onChange={( event) => handleInputChange(index, event)}
+                              />
+                              {COLUMN_DEFAULTS[row.column_type] && (
+                                <button onClick={(event) => handleShowOptions(index, event)}>Options</button>
+                              )}
+                              {COLUMN_DEFAULTS[row.column_type] && showOptions[index] && (
+                                <div className="options-popup" style={{ display: showOptions[index] ? 'block' : 'none', position: 'absolute', top: '100%', left: '0', right: '0' }}>
+                                  {COLUMN_DEFAULTS[row.column_type] && COLUMN_DEFAULTS[row.column_type].map((option) => (
+                                    <div key={option.value} onClick={() => handleOptionClick(index, option)}>
+                                      {option.label}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'nullable') ? 'block' : 'none' }}>
+                                <label>Can be null:</label>
+                                <input
+                                  type="checkbox"
+                                  name="nullable"
+                                  checked={row.nullable}
+                                  onChange={(event) => handleCheckboxChange(index, event)}
+                                  />
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'unique') ? 'block' : 'none' }}>
+                            <label>Unique:</label>
+                            <input
+                              type="checkbox"
+                              name="unique"
+                              checked={row.unique}
+                              onChange={(event) => handleCheckboxChange(index, event)}
+                            />
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'foreign_key') ? 'block' : 'none' }}>
+                            <label>Foreign Key:</label>
+                            <input
+                              type="checkbox"
+                              name="foreign_key"
+                              checked={row.foreign_key}
+                              onChange={(event) => handleCheckboxChange(index, event)}
+                            />
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'list_indexes') ? 'block' : 'none' }}>
+                            <label>Indexes:</label>
+                            <select
+                              name="index_name"
+                              value={row.index_name}
+                              onChange={(event) => handleInputChange(index, event)}
+                            >
+                              <option value="">-</option>
+                              { filterIndexes(row).map((model, i) => (
+                                <option value={model.value} key={i}>{model.label}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
+                            <label>Index:</label>
+                            <select
+                              name="index"
+                              value={row.index}
+                              onChange={(event) => handleInputChange(index, event)}
+                              >
+                              <option value="">(none)</option>
+                              { COLUMN_INDEXES.map((i, index) => (
+                                <option value={i} key={index}>{i}</option>
+                              ))}
+                            </select>
+                          </div>
+                          <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
+                            <label>Index Algorithm:</label>
+                            <select
+                              name="index_algorithm"
+                              value={row.index_algorithm}
+                              onChange={(event) => handleInputChange(index, event)}
+                            >
+                              <option value="default">default</option>
+                              { COLUMN_INDEXES_ALGORITHMS.map((i, index) => (
+                                <option value={i} key={index}>{i}</option>
+                              ))}
+                            </select>
+                          </div>
+                        </td>
+                        <td>
+                          <button onClick={(event) => handleDeleteRow(index, event)} disabled={formRows.length === 1}>Delete</button>
+                        </td>
+                      </tr>
                     )}
-                  </div>
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'nullable') ? 'block' : 'none' }}>
-                      <label>Can be null:</label>
-                      <input
-                        type="checkbox"
-                        name="nullable"
-                        checked={row.nullable}
-                        onChange={(event) => handleCheckboxChange(index, event)}
-                        />
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'unique') ? 'block' : 'none' }}>
-                  <label>Unique:</label>
-                  <input
-                    type="checkbox"
-                    name="unique"
-                    checked={row.unique}
-                    onChange={(event) => handleCheckboxChange(index, event)}
-                  />
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'foreign_key') ? 'block' : 'none' }}>
-                  <label>Foreign Key:</label>
-                  <input
-                    type="checkbox"
-                    name="foreign_key"
-                    checked={row.foreign_key}
-                    onChange={(event) => handleCheckboxChange(index, event)}
-                  />
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'list_indexes') ? 'block' : 'none' }}>
-                  <label>Indexes:</label>
-                  <select
-                    name="index_name"
-                    value={row.index_name}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    <option value="">-</option>
-                    { filterIndexes(row).map((model, i) => (
-                      <option value={model.value} key={i}>{model.label}</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
-                  <label>Index:</label>
-                  <select
-                    name="index"
-                    value={row.index}
-                    onChange={(event) => handleInputChange(index, event)}
-                    >
-                    <option value="">(none)</option>
-                    { COLUMN_INDEXES.map((i, index) => (
-                      <option value={i} key={index}>{i}</option>
-                    ))}
-                  </select>
-                </div>
-                <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
-                  <label>Index Algorithm:</label>
-                  <select
-                    name="index_algorithm"
-                    value={row.index_algorithm}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    <option value="default">default</option>
-                    { COLUMN_INDEXES_ALGORITHMS.map((i, index) => (
-                      <option value={i} key={index}>{i}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div style={{ display: shouldBeVisible(row, '') ? 'block' : 'none' }}>
-
-                </div>
-              </td>
-              <td>
-                <button onClick={(event) => handleDeleteRow(index, event)} disabled={formRows.length === 1}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </tbody>
+            </table>
+          )}
+        </Droppable>
+      </DragDropContext>
       <button onClick={handleAddRow} disabled={formRows.at(-1).name === ''}>Add</button>
     </div>
   );
