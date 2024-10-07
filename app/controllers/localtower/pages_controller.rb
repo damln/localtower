@@ -3,6 +3,7 @@ require_dependency 'localtower/application_controller'
 module Localtower
   class PagesController < ApplicationController
     def new_migration
+      @migrations = ::Localtower::Status.new.run.select { |i| i["status"] == :todo }
       @models = ::Localtower::Tools.models_presented
     end
 
@@ -11,18 +12,7 @@ module Localtower
     end
 
     def post_migrations
-      # Because we have a list or a field, take the item from the list in priority
-      migrations = clean_params["migrations"].map do |action_line|
-        # This is used for "rename_column" action:
-        action_line["new_column_type"] = action_line["column_type"]
-
-        action_line["column"] = action_line["column_list"] if action_line["column_list"].present?
-
-        action_line.delete("column_list")
-        # / This is used for "rename_column" action
-
-        action_line
-      end
+      migrations = JSON.parse(clean_params['migrations'])
 
       use_generator(::Localtower::Generators::Migration, migrations)
 

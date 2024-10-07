@@ -23566,8 +23566,8 @@
       return str.replace(/\ /g, "_").replace(/[^a-zA-Z0-9\_]/g, "").replace(/\_\_/g, "_").toLowerCase();
     };
     const DEFAULT_LINE = {
-      attribute_type: "string",
-      attribute_name: "",
+      column_type: "string",
+      column_name: "",
       default: "",
       unique: false,
       foreign_key: false,
@@ -23579,7 +23579,7 @@
     const [showOptions, setShowOptions] = (0, import_react.useState)({});
     const handleAddRow = (event) => {
       event.preventDefault();
-      if (formRows.at(-1).attribute_name === "") {
+      if (formRows.at(-1).column_name === "") {
         return;
       }
       setFormRows([...formRows, DEFAULT_LINE]);
@@ -23597,12 +23597,12 @@
       const { name, value } = event.target;
       const updatedRows = [...formRows];
       let newValue = value;
-      if (name === "attribute_name") {
+      if (name === "column_name") {
         newValue = snakeCase(newValue);
         newValue = newValue.trim();
       }
       updatedRows[index][name] = newValue;
-      if (name === "attribute_type") {
+      if (name === "column_type") {
         updatedRows[index].index = "";
         updatedRows[index].default = "";
         setShowOptions({ [index]: false });
@@ -23610,11 +23610,11 @@
       if (name === "default" && newValue !== "") {
         updatedRows[index].nullable = false;
       }
-      if (name === "attribute_type" && value === "references" && APP_MODELS[0]) {
-        updatedRows[index].attribute_name = APP_MODELS[0].name;
+      if (name === "column_type" && value === "references" && APP_MODELS[0]) {
+        updatedRows[index].column_name = APP_MODELS[0].name;
         updatedRows[index].foreign_key = true;
       }
-      if (updatedRows[index].attribute_type !== "references" && updatedRows[index].foreign_key === true) {
+      if (updatedRows[index].column_type !== "references" && updatedRows[index].foreign_key === true) {
         updatedRows[index].foreign_key = false;
       }
       if (name === "index" && newValue === "" && updatedRows[index].unique === true) {
@@ -23659,11 +23659,11 @@
     const addToForm = () => {
       document.getElementById("form_attributes").value = JSON.stringify(formRows);
     };
-    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("table", null, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", null, "Column Name"), /* @__PURE__ */ import_react.default.createElement("th", null, "Column Type"), /* @__PURE__ */ import_react.default.createElement("th", null, "Default Value"), /* @__PURE__ */ import_react.default.createElement("th", null, "Options"), /* @__PURE__ */ import_react.default.createElement("th", null, "Index"), /* @__PURE__ */ import_react.default.createElement("th", null))), /* @__PURE__ */ import_react.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react.default.createElement("tr", { key: index }, row.attribute_type === "references" ? /* @__PURE__ */ import_react.default.createElement("td", null, /* @__PURE__ */ import_react.default.createElement(
+    return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("table", null, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", null, "Column Name"), /* @__PURE__ */ import_react.default.createElement("th", null, "Column Type"), /* @__PURE__ */ import_react.default.createElement("th", null, "Default Value"), /* @__PURE__ */ import_react.default.createElement("th", null, "Options"), /* @__PURE__ */ import_react.default.createElement("th", null, "Index"), /* @__PURE__ */ import_react.default.createElement("th", null))), /* @__PURE__ */ import_react.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react.default.createElement("tr", { key: index }, row.column_type === "references" ? /* @__PURE__ */ import_react.default.createElement("td", null, /* @__PURE__ */ import_react.default.createElement(
       "select",
       {
-        name: "attribute_name",
-        value: row.attribute_name,
+        name: "column_name",
+        value: row.column_name,
         onChange: (event) => handleInputChange(index, event)
       },
       MODELS.map((model) => /* @__PURE__ */ import_react.default.createElement("option", { value: model.value, key: model.value }, model.label))
@@ -23671,19 +23671,19 @@
       "input",
       {
         type: "text",
-        name: "attribute_name",
-        value: row.attribute_name,
+        name: "column_name",
+        value: row.column_name,
         onChange: (event) => handleInputChange(index, event)
       }
     )), /* @__PURE__ */ import_react.default.createElement("td", null, /* @__PURE__ */ import_react.default.createElement(
       "select",
       {
-        name: "attribute_type",
-        value: row.attribute_type,
+        name: "column_type",
+        value: row.column_type,
         onChange: (event) => handleInputChange(index, event)
       },
       COLUMN_TYPES.map((type) => /* @__PURE__ */ import_react.default.createElement("option", { value: type.name, key: type.name }, type.name))
-    )), /* @__PURE__ */ import_react.default.createElement("td", null, row.attribute_type !== "references" && /* @__PURE__ */ import_react.default.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ import_react.default.createElement(
+    )), /* @__PURE__ */ import_react.default.createElement("td", null, row.column_type !== "references" && /* @__PURE__ */ import_react.default.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ import_react.default.createElement(
       "input",
       {
         type: "text",
@@ -23692,7 +23692,7 @@
         placeholder: "NULL",
         onChange: (event) => handleInputChange(index, event)
       }
-    ), COLUMN_DEFAULTS[row.attribute_type] && /* @__PURE__ */ import_react.default.createElement("button", { onClick: (event) => handleShowOptions(index, event) }, "Options"), COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && /* @__PURE__ */ import_react.default.createElement("div", { className: "options-popup", style: { display: showOptions[index] ? "block" : "none", position: "absolute", top: "100%", left: "0", right: "0" } }, COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => /* @__PURE__ */ import_react.default.createElement("div", { key: option.value, onClick: () => handleOptionClick(index, option) }, option.label))))), /* @__PURE__ */ import_react.default.createElement("td", null, row.attribute_type !== "references" && /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("label", null, "Can be null:"), /* @__PURE__ */ import_react.default.createElement(
+    ), COLUMN_DEFAULTS[row.column_type] && /* @__PURE__ */ import_react.default.createElement("button", { onClick: (event) => handleShowOptions(index, event) }, "Options"), COLUMN_DEFAULTS[row.column_type] && showOptions[index] && /* @__PURE__ */ import_react.default.createElement("div", { className: "options-popup", style: { display: showOptions[index] ? "block" : "none", position: "absolute", top: "100%", left: "0", right: "0" } }, COLUMN_DEFAULTS[row.column_type] && COLUMN_DEFAULTS[row.column_type].map((option) => /* @__PURE__ */ import_react.default.createElement("div", { key: option.value, onClick: () => handleOptionClick(index, option) }, option.label))))), /* @__PURE__ */ import_react.default.createElement("td", null, row.column_type !== "references" && /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("label", null, "Can be null:"), /* @__PURE__ */ import_react.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -23716,7 +23716,7 @@
         checked: row.foreign_key,
         onChange: (event) => handleCheckboxChange(index, event)
       }
-    ))), /* @__PURE__ */ import_react.default.createElement("td", null, row.attribute_type !== "references" && /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("label", null, "Index:"), /* @__PURE__ */ import_react.default.createElement(
+    ))), /* @__PURE__ */ import_react.default.createElement("td", null, row.column_type !== "references" && /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("label", null, "Index:"), /* @__PURE__ */ import_react.default.createElement(
       "select",
       {
         name: "index",
@@ -23745,16 +23745,15 @@
     const COLUMN_INDEXES = window.COLUMN_INDEXES;
     const COLUMN_INDEXES_ALGORITHMS = window.COLUMN_INDEXES_ALGORITHMS;
     const COLUMN_DEFAULTS = window.COLUMN_DEFAULTS;
-    const MODELS = window.APP_MODELS.map((model) => ({ value: model.underscore, label: model.name }));
-    const MODELS_FULL = window.APP_MODELS;
-    const COLUMN_ACTIONS = window.COLUMN_ACTIONS.map((model) => ({ value: model.name, label: model.name }));
+    const MODELS = window.APP_MODELS;
+    const COLUMN_ACTIONS = window.COLUMN_ACTIONS.map((i) => ({ value: i.name, label: i.name }));
     const VISIBLE_FIELDS = {
-      add_column: ["model_name", "action_name", "attribute_name", "attribute_type", "default", "nullable", "unique", "index", "index_algorithm", "foreign_key"],
+      add_column: ["model_name", "action_name", "column_name", "column_type", "default", "nullable", "unique", "index", "index_algorithm", "foreign_key"],
       remove_column: ["model_name", "action_name", "list_attributes"],
-      rename_column: ["model_name", "action_name", "list_attributes", "new_attribute_name"],
-      change_column_type: ["model_name", "action_name", "list_attributes", "new_attribute_type"],
+      rename_column: ["model_name", "action_name", "list_attributes", "new_column_name"],
+      change_column_type: ["model_name", "action_name", "list_attributes", "new_column_type"],
       belongs_to: ["model_name", "action_name", "list_models", "foreign_key"],
-      add_index_to_column: ["model_name", "action_name", "list_attributes", "index", "index_algorithm"],
+      add_index_to_column: ["model_name", "action_name", "list_attributes", "unique", "index", "index_algorithm"],
       remove_index_to_column: ["model_name", "action_name", "list_indexes"],
       drop_table: ["model_name", "action_name"]
     };
@@ -23762,12 +23761,14 @@
       return str.replace(/\ /g, "_").replace(/[^a-zA-Z0-9\_]/g, "").replace(/\_\_/g, "_").toLowerCase();
     };
     const DEFAULT_LINE = {
-      model_name: MODELS[0] ? MODELS[0].value : "",
+      model_name: MODELS[0] ? MODELS[0].name : "",
+      model_underscore: MODELS[0] ? MODELS[0].underscore : "",
+      table_name: MODELS[0] ? MODELS[0].table_name : "",
       action_name: "add_column",
-      attribute_type: "string",
-      attribute_name: "",
-      new_attribute_name: "",
-      new_attribute_type: "",
+      column_type: "string",
+      column_name: "",
+      new_column_name: "",
+      new_column_type: "",
       default: "",
       unique: false,
       foreign_key: false,
@@ -23801,24 +23802,39 @@
       const { name, value } = event.target;
       const updatedRows = [...formRows];
       let newValue = value;
-      if (name === "attribute_name") {
+      if (name === "column_name") {
         newValue = snakeCase(newValue);
         newValue = newValue.trim();
       }
       updatedRows[index][name] = newValue;
-      if (name === "attribute_type") {
+      if (name === "column_type") {
+        updatedRows[index].foreign_key = false;
+        updatedRows[index].unique = false;
         updatedRows[index].index = "";
         updatedRows[index].default = "";
         setShowOptions({ [index]: false });
       }
+      if (name === "action_name" && newValue === "belongs_to") {
+        let current = filterModels(updatedRows[index])[0] || {};
+        if (current.underscore) {
+          updatedRows[index].column_name = current.underscore;
+        }
+      }
+      if (name === "model_name" && newValue !== "") {
+        MODELS.map((model) => {
+          if (index && model.name === newValue) {
+            updatedRows[index].table_name = model.table_name;
+          }
+        });
+      }
       if (name === "default" && newValue !== "") {
         updatedRows[index].nullable = false;
       }
-      if (name === "attribute_type" && value === "references" && APP_MODELS[0]) {
-        updatedRows[index].attribute_name = APP_MODELS[0].name;
+      if (name === "column_type" && value === "references" && MODELS[0]) {
+        updatedRows[index].column_name = MODELS[0].name;
         updatedRows[index].foreign_key = true;
       }
-      if (updatedRows[index].attribute_type !== "references" && updatedRows[index].foreign_key === true) {
+      if (updatedRows[index].column_type !== "references" && updatedRows[index].foreign_key === true) {
         updatedRows[index].foreign_key = false;
       }
       if (name === "index" && newValue === "" && updatedRows[index].unique === true) {
@@ -23841,10 +23857,10 @@
       addToForm();
     };
     const filterModels = (row) => {
-      return MODELS.filter((model) => model.value !== row.model_name);
+      return MODELS.filter((model) => model.table_name !== row.table_name);
     };
     const filterAttributes = (row) => {
-      let model = MODELS_FULL.find((model2) => model2.underscore === row.model_name);
+      let model = MODELS.find((model2) => model2.table_name === row.table_name);
       if (model) {
         return model.attributes_list;
       } else {
@@ -23852,7 +23868,7 @@
       }
     };
     const filterIndexes = (row) => {
-      let model = MODELS_FULL.find((model2) => model2.underscore === row.model_name);
+      let model = MODELS.find((model2) => model2.table_name === row.table_name);
       let indexes = [];
       if (model) {
         let attributes_with_index = model.attributes_list.filter((attribute) => attribute.index.length > 0);
@@ -23870,7 +23886,7 @@
       updatedRows[index].default = option.value;
       setFormRows(updatedRows);
       setShowOptions({ [index]: false });
-      updatedRows[index].nullable = updatedRows[index].default !== "";
+      updatedRows[index].nullable = !(updatedRows[index].default !== "");
       addToForm();
     };
     const handleShowOptions = (index, event) => {
@@ -23888,10 +23904,10 @@
       "select",
       {
         name: "model_name",
-        value: row.attribute_name,
+        value: row.column_name,
         onChange: (event) => handleInputChange(index, event)
       },
-      MODELS.map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: model.value }, model.label))
+      MODELS.map((model, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: index2 }, model.name))
     )), /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
@@ -23899,55 +23915,55 @@
         value: row.action_name,
         onChange: (event) => handleInputChange(index, event)
       },
-      COLUMN_ACTIONS.map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: model.value }, model.label))
+      COLUMN_ACTIONS.map((model, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: index2 }, model.label))
     )), /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "list_models") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
-        name: "attribute_name",
-        value: row.attribute_name,
+        name: "column_name",
+        value: row.column_name,
         onChange: (event) => handleInputChange(index, event)
       },
-      filterModels(row).map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: model.value }, model.label))
+      filterModels(row).map((model, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.underscore, key: index2 }, model.name))
     )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "list_attributes") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
-        name: "attribute_name",
-        value: row.attribute_name,
+        name: "column_name",
+        value: row.column_name,
         onChange: (event) => handleInputChange(index, event)
       },
-      filterAttributes(row).map((model) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.name, key: model.name }, model.name, " (", model.type_clean, ")"))
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "attribute_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+      filterAttributes(row).map((model, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.name, key: index2 }, model.name, " (", model.type_clean, ")"))
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "column_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "text",
-        name: "attribute_name",
-        value: row.attribute_name,
+        name: "column_name",
+        value: row.column_name,
         onChange: (event) => handleInputChange(index, event)
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "new_attribute_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "new_column_name") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "text",
-        name: "new_attribute_name",
-        value: row.new_attribute_name,
+        name: "new_column_name",
+        value: row.new_column_name,
         onChange: (event) => handleInputChange(index, event)
       }
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "attribute_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "column_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
-        name: "attribute_type",
-        value: row.attribute_type,
+        name: "column_type",
+        value: row.column_type,
         onChange: (event) => handleInputChange(index, event)
       },
-      COLUMN_TYPES.map((type) => /* @__PURE__ */ import_react2.default.createElement("option", { value: type.name, key: type.name }, type.name))
-    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "new_attribute_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
+      COLUMN_TYPES.map((type, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: type.name, key: index2 }, type.name))
+    )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "new_column_type") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
-        name: "new_attribute_type",
-        value: row.new_attribute_type,
+        name: "new_column_type",
+        value: row.new_column_type,
         onChange: (event) => handleInputChange(index, event)
       },
-      COLUMN_TYPES.map((type) => /* @__PURE__ */ import_react2.default.createElement("option", { value: type.name, key: type.name }, type.name))
+      COLUMN_TYPES.map((type, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: type.name, key: index2 }, type.name))
     )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "default") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("div", { style: { position: "relative" } }, /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
@@ -23957,7 +23973,7 @@
         placeholder: "NULL",
         onChange: (event) => handleInputChange(index, event)
       }
-    ), COLUMN_DEFAULTS[row.attribute_type] && /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleShowOptions(index, event) }, "Options"), COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && /* @__PURE__ */ import_react2.default.createElement("div", { className: "options-popup", style: { display: showOptions[index] ? "block" : "none", position: "absolute", top: "100%", left: "0", right: "0" } }, COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => /* @__PURE__ */ import_react2.default.createElement("div", { key: option.value, onClick: () => handleOptionClick(index, option) }, option.label))))), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "nullable") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Can be null:"), /* @__PURE__ */ import_react2.default.createElement(
+    ), COLUMN_DEFAULTS[row.column_type] && /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleShowOptions(index, event) }, "Options"), COLUMN_DEFAULTS[row.column_type] && showOptions[index] && /* @__PURE__ */ import_react2.default.createElement("div", { className: "options-popup", style: { display: showOptions[index] ? "block" : "none", position: "absolute", top: "100%", left: "0", right: "0" } }, COLUMN_DEFAULTS[row.column_type] && COLUMN_DEFAULTS[row.column_type].map((option) => /* @__PURE__ */ import_react2.default.createElement("div", { key: option.value, onClick: () => handleOptionClick(index, option) }, option.label))))), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "nullable") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Can be null:"), /* @__PURE__ */ import_react2.default.createElement(
       "input",
       {
         type: "checkbox",
@@ -23988,7 +24004,8 @@
         value: row.index_name,
         onChange: (event) => handleInputChange(index, event)
       },
-      filterIndexes(row).map((model, i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.name, key: i }, model.label))
+      /* @__PURE__ */ import_react2.default.createElement("option", { value: "" }, "-"),
+      filterIndexes(row).map((model, i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: model.value, key: i }, model.label))
     )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Index:"), /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
@@ -23997,7 +24014,7 @@
         onChange: (event) => handleInputChange(index, event)
       },
       /* @__PURE__ */ import_react2.default.createElement("option", { value: "" }, "(none)"),
-      COLUMN_INDEXES.map((i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: i, key: i }, i))
+      COLUMN_INDEXES.map((i, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: i, key: index2 }, i))
     )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react2.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react2.default.createElement(
       "select",
       {
@@ -24006,7 +24023,7 @@
         onChange: (event) => handleInputChange(index, event)
       },
       /* @__PURE__ */ import_react2.default.createElement("option", { value: "default" }, "default"),
-      COLUMN_INDEXES_ALGORITHMS.map((i) => /* @__PURE__ */ import_react2.default.createElement("option", { value: i, key: i }, i))
+      COLUMN_INDEXES_ALGORITHMS.map((i, index2) => /* @__PURE__ */ import_react2.default.createElement("option", { value: i, key: index2 }, i))
     )), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: shouldBeVisible(row, "") ? "block" : "none" } })), /* @__PURE__ */ import_react2.default.createElement("td", null, /* @__PURE__ */ import_react2.default.createElement("button", { onClick: (event) => handleDeleteRow(index, event), disabled: formRows.length === 1 }, "Delete")))))), /* @__PURE__ */ import_react2.default.createElement("button", { onClick: handleAddRow, disabled: formRows.at(-1).name === "" }, "Add"));
   };
   var NewMigrationForm_default = NewMigrationForm;

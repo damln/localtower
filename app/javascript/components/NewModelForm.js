@@ -16,8 +16,8 @@ const NewModelForm = () => {
   }
 
   const DEFAULT_LINE = {
-    attribute_type: 'string',
-    attribute_name: '',
+    column_type: 'string',
+    column_name: '',
     default: '',
     unique: false,
     foreign_key: false,
@@ -33,7 +33,7 @@ const NewModelForm = () => {
     event.preventDefault();
 
     // Don't add if the name is empty:
-    if (formRows.at(-1).attribute_name === '') { return; }
+    if (formRows.at(-1).column_name === '') { return; }
 
     setFormRows([...formRows, DEFAULT_LINE]);
 
@@ -58,7 +58,7 @@ const NewModelForm = () => {
     let newValue = value;
 
     // Sanitise default input:
-    if (name === "attribute_name") {
+    if (name === "column_name") {
       newValue = snakeCase(newValue);
       newValue = newValue.trim();
     }
@@ -66,7 +66,7 @@ const NewModelForm = () => {
     updatedRows[index][name] = newValue;
 
     // Reset default if change.
-    if (name === 'attribute_type') {
+    if (name === 'column_type') {
       // result index:
       // result default:
       updatedRows[index].index = '';
@@ -80,12 +80,12 @@ const NewModelForm = () => {
     }
 
     // For the selector of the referenced model:
-    if (name === 'attribute_type' && value === 'references' && APP_MODELS[0]) {
-      updatedRows[index].attribute_name = APP_MODELS[0].name;
+    if (name === 'column_type' && value === 'references' && APP_MODELS[0]) {
+      updatedRows[index].column_name = APP_MODELS[0].name;
       updatedRows[index].foreign_key = true;
     }
 
-    if (updatedRows[index].attribute_type !== 'references' && updatedRows[index].foreign_key === true) {
+    if (updatedRows[index].column_type !== 'references' && updatedRows[index].foreign_key === true) {
       updatedRows[index].foreign_key = false;
     }
 
@@ -164,11 +164,11 @@ const NewModelForm = () => {
         <tbody>
           {formRows.map((row, index) => (
             <tr key={index}>
-              { row.attribute_type === 'references' ? (
+              { row.column_type === 'references' ? (
                   <td>
                     <select
-                      name="attribute_name"
-                      value={row.attribute_name}
+                      name="column_name"
+                      value={row.column_name}
                       onChange={(event) => handleInputChange(index, event)}
                     >
                       { MODELS.map((model) => (
@@ -180,8 +180,8 @@ const NewModelForm = () => {
                   <td>
                     <input
                       type="text"
-                      name="attribute_name"
-                      value={row.attribute_name}
+                      name="column_name"
+                      value={row.column_name}
                       onChange={(event) => handleInputChange(index, event)}
                     />
                   </td>
@@ -189,8 +189,8 @@ const NewModelForm = () => {
               }
               <td>
                 <select
-                  name="attribute_type"
-                  value={row.attribute_type}
+                  name="column_type"
+                  value={row.column_type}
                   onChange={(event) => handleInputChange(index, event)}
                 >
                   { COLUMN_TYPES.map((type) => (
@@ -199,7 +199,7 @@ const NewModelForm = () => {
                 </select>
               </td>
               <td>
-              { (row.attribute_type !== 'references') && (
+              { (row.column_type !== 'references') && (
                 <div style={{ position: 'relative' }}>
                   <input
                     type="text"
@@ -208,12 +208,12 @@ const NewModelForm = () => {
                     placeholder="NULL"
                     onChange={( event) => handleInputChange(index, event)}
                   />
-                  {COLUMN_DEFAULTS[row.attribute_type] && (
+                  {COLUMN_DEFAULTS[row.column_type] && (
                     <button onClick={(event) => handleShowOptions(index, event)}>Options</button>
                   )}
-                  {COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && (
+                  {COLUMN_DEFAULTS[row.column_type] && showOptions[index] && (
                     <div className="options-popup" style={{ display: showOptions[index] ? 'block' : 'none', position: 'absolute', top: '100%', left: '0', right: '0' }}>
-                      {COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => (
+                      {COLUMN_DEFAULTS[row.column_type] && COLUMN_DEFAULTS[row.column_type].map((option) => (
                         <div key={option.value} onClick={() => handleOptionClick(index, option)}>
                           {option.label}
                         </div>
@@ -224,7 +224,7 @@ const NewModelForm = () => {
               )}
               </td>
               <td>
-                { (row.attribute_type !== 'references') && (
+                { (row.column_type !== 'references') && (
                   <div>
                     <div>
                       <label>Can be null:</label>
@@ -257,7 +257,7 @@ const NewModelForm = () => {
                 </div>
               </td>
               <td>
-              { (row.attribute_type !== 'references') && (
+              { (row.column_type !== 'references') && (
                 <div>
                 <div>
                   <label>Index:</label>

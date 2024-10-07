@@ -5,16 +5,16 @@ const NewMigrationForm = () => {
   const COLUMN_INDEXES = window.COLUMN_INDEXES;
   const COLUMN_INDEXES_ALGORITHMS = window.COLUMN_INDEXES_ALGORITHMS;
   const COLUMN_DEFAULTS = window.COLUMN_DEFAULTS;
-  const MODELS = window.APP_MODELS.map((model) => ({ value: model.underscore, label: model.name }));
-  const MODELS_FULL = window.APP_MODELS;
-  const COLUMN_ACTIONS = window.COLUMN_ACTIONS.map((model) => ({ value: model.name, label: model.name }));
+  const MODELS = window.APP_MODELS;
+  const COLUMN_ACTIONS = window.COLUMN_ACTIONS.map((i) => ({ value: i.name, label: i.name }));
+
   const VISIBLE_FIELDS = {
-    add_column: ['model_name', 'action_name', 'attribute_name', 'attribute_type', 'default', 'nullable', 'unique', 'index', 'index_algorithm', 'foreign_key'],
+    add_column: ['model_name', 'action_name', 'column_name', 'column_type', 'default', 'nullable', 'unique', 'index', 'index_algorithm', 'foreign_key'],
     remove_column: ['model_name', 'action_name', 'list_attributes'],
-    rename_column: ['model_name', 'action_name', 'list_attributes', 'new_attribute_name'],
-    change_column_type: ['model_name', 'action_name', 'list_attributes', 'new_attribute_type'],
+    rename_column: ['model_name', 'action_name', 'list_attributes', 'new_column_name'],
+    change_column_type: ['model_name', 'action_name', 'list_attributes', 'new_column_type'],
     belongs_to: ['model_name', 'action_name', 'list_models', 'foreign_key'],
-    add_index_to_column: ['model_name', 'action_name', 'list_attributes', 'index', 'index_algorithm'],
+    add_index_to_column: ['model_name', 'action_name', 'list_attributes', 'unique', 'index', 'index_algorithm'],
     remove_index_to_column: ['model_name', 'action_name', 'list_indexes'],
     drop_table: ['model_name', 'action_name'],
   }
@@ -28,12 +28,14 @@ const NewMigrationForm = () => {
   }
 
   const DEFAULT_LINE = {
-    model_name: MODELS[0] ? MODELS[0].value : '',
+    model_name: MODELS[0] ? MODELS[0].name : '',
+    model_underscore: MODELS[0] ? MODELS[0].underscore : '',
+    table_name: MODELS[0] ? MODELS[0].table_name : '',
     action_name: 'add_column',
-    attribute_type: 'string',
-    attribute_name: '',
-    new_attribute_name: '',
-    new_attribute_type: '',
+    column_type: 'string',
+    column_name: '',
+    new_column_name: '',
+    new_column_type: '',
     default: '',
     unique: false,
     foreign_key: false,
@@ -82,7 +84,7 @@ const NewMigrationForm = () => {
     let newValue = value;
 
     // Sanitise default input:
-    if (name === "attribute_name") {
+    if (name === "column_name") {
       newValue = snakeCase(newValue);
       newValue = newValue.trim();
     }
@@ -90,13 +92,32 @@ const NewMigrationForm = () => {
     updatedRows[index][name] = newValue;
 
     // Reset default if change.
-    if (name === 'attribute_type') {
-      // result index:
+    if (name === 'column_type') {
       // result default:
+      updatedRows[index].foreign_key = false;
+      updatedRows[index].unique = false;
       updatedRows[index].index = '';
       updatedRows[index].default = '';
       // close modal:
       setShowOptions({ [index]: false });
+    }
+
+    // Reset default if change.
+    if (name === 'action_name' && newValue === 'belongs_to') {
+      let current = (filterModels(updatedRows[index])[0] || {});
+
+      if (current.underscore) {
+        updatedRows[index].column_name = current.underscore;
+      }
+    }
+
+    // set the table
+    if (name === 'model_name' && newValue !== '') {
+      MODELS.map((model) => {
+        if (index && (model.name === newValue)) {
+          updatedRows[index].table_name = model.table_name;
+        }
+      });
     }
 
     if (name === 'default' && newValue !== '') {
@@ -104,12 +125,12 @@ const NewMigrationForm = () => {
     }
 
     // For the selector of the referenced model:
-    if (name === 'attribute_type' && value === 'references' && APP_MODELS[0]) {
-      updatedRows[index].attribute_name = APP_MODELS[0].name;
+    if (name === 'column_type' && value === 'references' && MODELS[0]) {
+      updatedRows[index].column_name = MODELS[0].name;
       updatedRows[index].foreign_key = true;
     }
 
-    if (updatedRows[index].attribute_type !== 'references' && updatedRows[index].foreign_key === true) {
+    if (updatedRows[index].column_type !== 'references' && updatedRows[index].foreign_key === true) {
       updatedRows[index].foreign_key = false;
     }
 
@@ -143,11 +164,11 @@ const NewMigrationForm = () => {
   };
 
   const filterModels = (row) => {
-    return MODELS.filter((model) => model.value !== row.model_name);
+    return MODELS.filter((model) => model.table_name !== row.table_name);
   }
 
   const filterAttributes = (row) => {
-    let model = MODELS_FULL.find((model) => model.underscore === row.model_name);
+    let model = MODELS.find((model) => model.table_name === row.table_name);
 
     if (model) {
       return model.attributes_list;
@@ -157,7 +178,7 @@ const NewMigrationForm = () => {
   }
 
   const filterIndexes = (row) => {
-    let model = MODELS_FULL.find((model) => model.underscore === row.model_name);
+    let model = MODELS.find((model) => model.table_name === row.table_name);
 
     let indexes = [];
 
@@ -181,7 +202,7 @@ const NewMigrationForm = () => {
     setFormRows(updatedRows);
     setShowOptions({ [index]: false });
 
-    updatedRows[index].nullable = (updatedRows[index].default !== '')
+    updatedRows[index].nullable = !(updatedRows[index].default !== '')
 
     addToForm();
   };
@@ -218,11 +239,11 @@ const NewMigrationForm = () => {
               <td>
                 <select
                   name="model_name"
-                  value={row.attribute_name}
+                  value={row.column_name}
                   onChange={(event) => handleInputChange(index, event)}
                 >
-                  { MODELS.map((model) => (
-                    <option value={model.value} key={model.value}>{model.label}</option>
+                  { MODELS.map((model, index) => (
+                    <option value={model.value} key={index}>{model.name}</option>
                   ))}
                 </select>
               </td>
@@ -232,70 +253,70 @@ const NewMigrationForm = () => {
                   value={row.action_name}
                   onChange={(event) => handleInputChange(index, event)}
                 >
-                  { COLUMN_ACTIONS.map((model) => (
-                    <option value={model.value} key={model.value}>{model.label}</option>
+                  { COLUMN_ACTIONS.map((model, index) => (
+                    <option value={model.value} key={index}>{model.label}</option>
                   ))}
                 </select>
               </td>
               <td>
                 <div style={{ display: shouldBeVisible(row, 'list_models') ? 'block' : 'none' }}>
                   <select
-                    name="attribute_name"
-                    value={row.attribute_name}
+                    name="column_name"
+                    value={row.column_name}
                     onChange={(event) => handleInputChange(index, event)}
                   >
-                    { filterModels(row).map((model) => (
-                      <option value={model.value} key={model.value}>{model.label}</option>
+                    { filterModels(row).map((model, index) => (
+                      <option value={model.underscore} key={index}>{model.name}</option>
                     ))}
                   </select>
                 </div>
                 <div style={{ display: shouldBeVisible(row, 'list_attributes') ? 'block' : 'none' }}>
                   <select
-                    name="attribute_name"
-                    value={row.attribute_name}
+                    name="column_name"
+                    value={row.column_name}
                     onChange={(event) => handleInputChange(index, event)}
                   >
-                    { filterAttributes(row).map((model) => (
-                      <option value={model.name} key={model.name}>{model.name} ({model.type_clean})</option>
+                    { filterAttributes(row).map((model, index) => (
+                      <option value={model.name} key={index}>{model.name} ({model.type_clean})</option>
                     ))}
                   </select>
                 </div>
-                <div style={{ display: shouldBeVisible(row, 'attribute_name') ? 'block' : 'none' }}>
+                <div style={{ display: shouldBeVisible(row, 'column_name') ? 'block' : 'none' }}>
                   <input
                     type="text"
-                    name="attribute_name"
-                    value={row.attribute_name}
+                    name="column_name"
+                    value={row.column_name}
                     onChange={(event) => handleInputChange(index, event)}
                   />
                 </div>
-                <div style={{ display: shouldBeVisible(row, 'new_attribute_name') ? 'block' : 'none' }}>
+                <div style={{ display: shouldBeVisible(row, 'new_column_name') ? 'block' : 'none' }}>
                   <input
                     type="text"
-                    name="new_attribute_name"
-                    value={row.new_attribute_name}
+                    name="new_column_name"
+                    value={row.new_column_name}
                     onChange={(event) => handleInputChange(index, event)}
                   />
                 </div>
-                <div style={{ display: shouldBeVisible(row, 'attribute_type') ? 'block' : 'none' }}>
+                <div style={{ display: shouldBeVisible(row, 'column_type') ? 'block' : 'none' }}>
                   <select
-                    name="attribute_type"
-                    value={row.attribute_type}
+                    name="column_type"
+                    value={row.column_type}
                     onChange={(event) => handleInputChange(index, event)}
                   >
-                    { COLUMN_TYPES.map((type) => (
-                      <option value={type.name} key={type.name}>{type.name}</option>
+                    { COLUMN_TYPES.map((type, index) => (
+                      <option value={type.name} key={index}>{type.name}</option>
                     ))}
                   </select>
 
                 </div>
-                <div style={{ display: shouldBeVisible(row, 'new_attribute_type') ? 'block' : 'none' }}>
+                <div style={{ display: shouldBeVisible(row, 'new_column_type') ? 'block' : 'none' }}>
                   <select
-                    name="new_attribute_type"
-                    value={row.new_attribute_type}
+                    name="new_column_type"
+                    value={row.new_column_type}
                     onChange={(event) => handleInputChange(index, event)}
                   >
-                    { COLUMN_TYPES.map((type) => (
-                      <option value={type.name} key={type.name}>{type.name}</option>
+                    { COLUMN_TYPES.map((type, index) => (
+                      <option value={type.name} key={index}>{type.name}</option>
                     ))}
                   </select>
 
@@ -309,12 +330,12 @@ const NewMigrationForm = () => {
                       placeholder="NULL"
                       onChange={( event) => handleInputChange(index, event)}
                     />
-                    {COLUMN_DEFAULTS[row.attribute_type] && (
+                    {COLUMN_DEFAULTS[row.column_type] && (
                       <button onClick={(event) => handleShowOptions(index, event)}>Options</button>
                     )}
-                    {COLUMN_DEFAULTS[row.attribute_type] && showOptions[index] && (
+                    {COLUMN_DEFAULTS[row.column_type] && showOptions[index] && (
                       <div className="options-popup" style={{ display: showOptions[index] ? 'block' : 'none', position: 'absolute', top: '100%', left: '0', right: '0' }}>
-                        {COLUMN_DEFAULTS[row.attribute_type] && COLUMN_DEFAULTS[row.attribute_type].map((option) => (
+                        {COLUMN_DEFAULTS[row.column_type] && COLUMN_DEFAULTS[row.column_type].map((option) => (
                           <div key={option.value} onClick={() => handleOptionClick(index, option)}>
                             {option.label}
                           </div>
@@ -357,8 +378,9 @@ const NewMigrationForm = () => {
                     value={row.index_name}
                     onChange={(event) => handleInputChange(index, event)}
                   >
+                    <option value="">-</option>
                     { filterIndexes(row).map((model, i) => (
-                      <option value={model.name} key={i}>{model.label}</option>
+                      <option value={model.value} key={i}>{model.label}</option>
                     ))}
                   </select>
                 </div>
@@ -370,8 +392,8 @@ const NewMigrationForm = () => {
                     onChange={(event) => handleInputChange(index, event)}
                     >
                     <option value="">(none)</option>
-                    { COLUMN_INDEXES.map((i) => (
-                      <option value={i} key={i}>{i}</option>
+                    { COLUMN_INDEXES.map((i, index) => (
+                      <option value={i} key={index}>{i}</option>
                     ))}
                   </select>
                 </div>
@@ -383,8 +405,8 @@ const NewMigrationForm = () => {
                     onChange={(event) => handleInputChange(index, event)}
                   >
                     <option value="default">default</option>
-                    { COLUMN_INDEXES_ALGORITHMS.map((i) => (
-                      <option value={i} key={i}>{i}</option>
+                    { COLUMN_INDEXES_ALGORITHMS.map((i, index) => (
+                      <option value={i} key={index}>{i}</option>
                     ))}
                   </select>
                 </div>

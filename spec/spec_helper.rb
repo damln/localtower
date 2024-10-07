@@ -25,7 +25,7 @@ def migration_files
   Dir["#{Rails.root}/db/migrate/*"]
 end
 
-def last_migration
+def last_migration_pending
   migration_files.sort.last
 end
 

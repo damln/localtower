@@ -263,7 +263,7 @@ MainApp = {
     MainApp.bySelector("tbody")
       .find("tr")
       .last()
-      .find('[name="model[attributes][][attribute_name]"]')
+      .find('[name="model[attributes][][column_name]"]')
       .val("")
       .focus();
   },

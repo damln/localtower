@@ -82,8 +82,8 @@ module Localtower
             attribute.each do |attr_key, attr_value|
               line_str = Localtower::Tools.line_for_attribute(attr_key)[0]
               if line_str.present?
-                content = File.read(Localtower::Tools.last_migration).gsub(line_str, "#{line_str}, default: #{attr_value}")
-                File.write(Localtower::Tools.last_migration, content)
+                content = File.read(Localtower::Tools.last_migration_pending).gsub(line_str, "#{line_str}, default: #{attr_value}")
+                File.write(Localtower::Tools.last_migration_pending, content)
               end
             end
           end

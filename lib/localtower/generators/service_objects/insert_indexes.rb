@@ -24,17 +24,17 @@ module Localtower
         def call
           attributes.each do |attribute|
             attribute.each do |attr_key, options|
-              line_str_original = File.read(Localtower::Tools.last_migration).match(/((.*)add_index :(.*), :#{attr_key})/)[0]
+              line_str_original = File.read(Localtower::Tools.last_migration_pending).match(/((.*)add_index :(.*), :#{attr_key})/)[0]
               line_str = line_str_original.clone
 
               line_str = inser_using(line_str, options)
               line_str = inser_algorithm(line_str, options)
               line_str = inser_unique(line_str, options)
 
-              content = File.read(Localtower::Tools.last_migration).gsub(line_str_original, line_str)
+              content = File.read(Localtower::Tools.last_migration_pending).gsub(line_str_original, line_str)
               content = add_disable_ddl_transaction(content, options)
 
-              File.write(Localtower::Tools.last_migration, content)
+              File.write(Localtower::Tools.last_migration_pending, content)
             end
           end
         end

@@ -4,33 +4,42 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "add_column",
+          action_name: "add_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "title",
+          column_name: "title",
           column_type: "string",
           nullable: true,
         },
         {
-          action: "add_column",
+          action_name: "add_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content",
+          column_name: "content",
           column_type: "text",
           nullable: true,
         },
         {
-          action: "add_column",
+          action_name: "add_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "views",
+          column_name: "views",
           column_type: "integer",
           index: true,
-          default: 0,
+          default: '0',
           nullable: false,
         },
         {
-          action: "add_column",
+          action_name: "add_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "tags",
+          column_name: "tags",
           column_type: "array",
+          default: '[]',
           index: true,
           nullable: true,
         }
@@ -43,9 +52,11 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "rename_column",
+          action_name: "rename_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content",
+          column_name: "content",
           new_column_name: "content_new",
         }
       ]
@@ -57,14 +68,18 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "remove_column",
+          action_name: "remove_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "title",
+          column_name: "title",
         },
         {
-          action: "rename_column",
+          action_name: "rename_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "views",
+          column_name: "views",
           new_column_name: "views_by_users",
         }
       ]
@@ -76,15 +91,20 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "change_column_type",
+          action_name: "change_column_type",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content_new",
+          column_name: "content_new",
           new_column_type: "string",
         },
         {
-          action: "add_index_to_column",
+          action_name: "add_index_to_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "views_by_users",
+          column_name: "views_by_users",
+          index: "default"
         }
       ]
     end
@@ -95,33 +115,40 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "add_column",
+          action_name: "add_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content",
+          column_name: "content",
           column_type: "text",
         },
         {
-          action: "add_index_to_column",
+          action_name: "add_index_to_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content",
+          column_name: "content",
+          index: "default"
         },
         {
-          action: "add_index_to_column",
+          action_name: "add_index_to_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content_second",
-          index: {
-            using: 'default',
-            unique: true,
-          }
+          column_name: "content_second",
+          index: "default",
+          index_algorithm: '',
+          unique: true
         },
         {
-          action: "add_index_to_column",
+          action_name: "add_index_to_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "content_third",
-          index: {
-            using: 'gin',
-            algorithm: 'concurrently',
-          }
+          column_name: "content_third",
+          index: "gin",
+          index_algorithm: 'concurrently',
+          unique: false
         }
       ]
     end
@@ -132,9 +159,13 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "belongs_to",
+          action_name: "belongs_to",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          belongs_to: "users",
+          column_name: "user",
+          foreign_key: true,
+          index: "default"
         }
       ]
     end
@@ -145,9 +176,13 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "remove_index_to_column",
+          action_name: "remove_index_to_column",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
-          column: "views_by_users",
+          column_name: "views_by_users",
+          index_name: "index_posts_on_views_by_users"
+
         }
       ]
     end
@@ -158,7 +193,9 @@ FactoryBot.define do
     migrations do
       [
         {
-          action: "drop_table",
+          action_name: "drop_table",
+          model_name: "Post",
+          model_underscore: "post",
           table_name: "posts",
         }
       ]

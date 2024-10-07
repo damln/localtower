@@ -41,7 +41,7 @@ module Localtower
           ::Localtower::Generators::Model.new(attributes).run
 
           expect(File.read("#{Rails.root}/app/models/post.rb")).to eq(expected_model)
-          expect(File.read(last_migration)).to eq(expected_migration)
+          expect(File.read(last_migration_pending)).to eq(expected_migration)
         end
       end
 
@@ -74,7 +74,7 @@ module Localtower
           ::Localtower::Generators::Model.new(attributes).run
 
           expect(File.read("#{Rails.root}/app/models/post.rb")).to eq(expected_model)
-          expect(File.read(last_migration)).to eq(expected_migration)
+          expect(File.read(last_migration_pending)).to eq(expected_migration)
         end
       end
 
@@ -107,7 +107,7 @@ module Localtower
           ::Localtower::Generators::Model.new(attributes).run
 
           expect(File.read("#{Rails.root}/app/models/post.rb")).to eq(expected_model)
-          expect(File.read(last_migration)).to eq(expected_migration)
+          expect(File.read(last_migration_pending)).to eq(expected_migration)
         end
       end
     end

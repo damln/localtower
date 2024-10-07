@@ -49,7 +49,7 @@ describe ::Localtower::Generators::ServiceObjects::InsertForeignKeys do
     it 'works' do
       service.call
 
-      expect(File.read(last_migration)).to eq(expected_file_content)
+      expect(File.read(last_migration_pending)).to eq(expected_file_content)
     end
   end
 
@@ -95,7 +95,7 @@ describe ::Localtower::Generators::ServiceObjects::InsertForeignKeys do
     it 'works' do
       service.call
 
-      expect(File.read(last_migration)).to eq(expected_file_content)
+      expect(File.read(last_migration_pending)).to eq(expected_file_content)
     end
   end
 end

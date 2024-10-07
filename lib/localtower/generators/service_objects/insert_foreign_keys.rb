@@ -13,14 +13,14 @@ module Localtower
               if line_str.present?
                 if options['foreign_key'].present?
                   if line_str['foreign_key: true']
-                    content = File.read(Localtower::Tools.last_migration)
+                    content = File.read(Localtower::Tools.last_migration_pending)
                   else
-                    content = File.read(Localtower::Tools.last_migration).gsub(line_str, "#{line_str}, foreign_key: true")
+                    content = File.read(Localtower::Tools.last_migration_pending).gsub(line_str, "#{line_str}, foreign_key: true")
                   end
                 else
-                  content = File.read(Localtower::Tools.last_migration).gsub(line_str, line_str.gsub(', foreign_key: true', ''))
+                  content = File.read(Localtower::Tools.last_migration_pending).gsub(line_str, line_str.gsub(', foreign_key: true', ''))
                 end
-                File.write(Localtower::Tools.last_migration, content)
+                File.write(Localtower::Tools.last_migration_pending, content)
               end
             end
           end
