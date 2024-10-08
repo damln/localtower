@@ -1096,7 +1096,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect4(create2, deps) {
+          function useEffect5(create2, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create2, deps);
           }
@@ -1879,7 +1879,7 @@
           exports.useContext = useContext6;
           exports.useDebugValue = useDebugValue2;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect4;
+          exports.useEffect = useEffect5;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -33321,8 +33321,7 @@
     const [showOptions, setShowOptions] = (0, import_react11.useState)({});
     const handleAddRow = (event) => {
       event.preventDefault();
-      setFormRows([...formRows, DEFAULT_LINE]);
-      addToForm();
+      setFormRows([...formRows, { ...DEFAULT_LINE }]);
     };
     const handleDeleteRow = (index, event) => {
       event.preventDefault();
@@ -33330,7 +33329,6 @@
         return;
       }
       setFormRows(formRows.filter((row, rowIndex) => rowIndex !== index));
-      addToForm();
     };
     const shouldBeVisible = (row, td_name) => {
       if (row.action_name === "") {
@@ -33342,16 +33340,13 @@
       const { name, value } = event.target;
       const updatedRows = [...formRows];
       let newValue = value;
-      if (name === "column_name") {
-        newValue = snakeCase(newValue);
-        newValue = newValue.trim();
-      }
       updatedRows[index][name] = newValue;
       if (name === "column_type") {
+        updatedRows[index].column_name = void 0;
         updatedRows[index].foreign_key = false;
         updatedRows[index].unique = false;
-        updatedRows[index].index = "";
-        updatedRows[index].default = "";
+        updatedRows[index].index = void 0;
+        updatedRows[index].default = void 0;
         setShowOptions({ [index]: false });
       }
       if (name === "action_name" && newValue === "belongs_to") {
@@ -33364,6 +33359,7 @@
         MODELS.map((model) => {
           if (index && model.name === newValue) {
             updatedRows[index].table_name = model.table_name;
+            updatedRows[index].model_underscore = model.underscore;
           }
         });
       }
@@ -33377,11 +33373,7 @@
       if (updatedRows[index].column_type !== "references" && updatedRows[index].foreign_key === true) {
         updatedRows[index].foreign_key = false;
       }
-      if (name === "index" && newValue === "" && updatedRows[index].unique === true) {
-        updatedRows[index].unique = false;
-      }
       setFormRows(updatedRows);
-      addToForm();
     };
     const handleCheckboxChange = (index, event) => {
       const { name, checked } = event.target;
@@ -33394,18 +33386,13 @@
       }
       updatedRows[index][name] = checked;
       setFormRows(updatedRows);
-      addToForm();
     };
     const filterModels = (row) => {
       return MODELS.filter((model) => model.table_name !== row.table_name);
     };
     const filterAttributes = (row) => {
       let model = MODELS.find((model2) => model2.table_name === row.table_name);
-      if (model) {
-        return model.attributes_list;
-      } else {
-        return [];
-      }
+      return model ? model.attributes_list : [];
     };
     const filterIndexes = (row) => {
       let model = MODELS.find((model2) => model2.table_name === row.table_name);
@@ -33424,18 +33411,13 @@
     const handleOptionClick = (index, option) => {
       const updatedRows = [...formRows];
       updatedRows[index].default = option.value;
-      setFormRows(updatedRows);
-      setShowOptions({ [index]: false });
       updatedRows[index].nullable = !(updatedRows[index].default !== "");
-      addToForm();
+      setShowOptions({ [index]: false });
+      setFormRows(updatedRows);
     };
     const handleShowOptions = (index, event) => {
       event.preventDefault();
-      if (showOptions[index]) {
-        setShowOptions({ [index]: false });
-      } else {
-        setShowOptions({ [index]: true });
-      }
+      setShowOptions({ [index]: !showOptions[index] });
     };
     const addToForm = () => {
       document.getElementById("form_attributes").value = JSON.stringify(formRows);
@@ -33447,8 +33429,11 @@
       const items = Array.from(formRows);
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
-      console.table(items);
+      setFormRows(items);
     };
+    (0, import_react11.useEffect)(() => {
+      addToForm();
+    }, [formRows]);
     return /* @__PURE__ */ import_react11.default.createElement("div", null, /* @__PURE__ */ import_react11.default.createElement(DragDropContext, { onDragEnd: onDragEnd3 }, /* @__PURE__ */ import_react11.default.createElement(ConnectedDroppable, { droppableId: "formRows" }, (provided) => /* @__PURE__ */ import_react11.default.createElement("table", { ...provided.droppableProps, ref: provided.innerRef }, /* @__PURE__ */ import_react11.default.createElement("thead", null, /* @__PURE__ */ import_react11.default.createElement("tr", null, /* @__PURE__ */ import_react11.default.createElement("th", null), /* @__PURE__ */ import_react11.default.createElement("th", null, "Model Name"), /* @__PURE__ */ import_react11.default.createElement("th", null, "Action"), /* @__PURE__ */ import_react11.default.createElement("th", null), /* @__PURE__ */ import_react11.default.createElement("th", null))), /* @__PURE__ */ import_react11.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react11.default.createElement(PublicDraggable, { key: index, draggableId: `row-${index}`, index }, (provided2) => /* @__PURE__ */ import_react11.default.createElement("tr", { ref: provided2.innerRef, ...provided2.draggableProps }, /* @__PURE__ */ import_react11.default.createElement("td", null, /* @__PURE__ */ import_react11.default.createElement("div", { ...provided2.dragHandleProps, style: { cursor: "move" } }, "\u22EE")), /* @__PURE__ */ import_react11.default.createElement("td", null, /* @__PURE__ */ import_react11.default.createElement(
       "select",
       {
@@ -33573,7 +33558,7 @@
       },
       /* @__PURE__ */ import_react11.default.createElement("option", { value: "default" }, "default"),
       COLUMN_INDEXES_ALGORITHMS.map((i, index2) => /* @__PURE__ */ import_react11.default.createElement("option", { value: i, key: index2 }, i))
-    ))), /* @__PURE__ */ import_react11.default.createElement("td", null, /* @__PURE__ */ import_react11.default.createElement("button", { onClick: (event) => handleDeleteRow(index, event), disabled: formRows.length === 1 }, "Delete"))))), provided.placeholder)))), /* @__PURE__ */ import_react11.default.createElement("button", { onClick: handleAddRow, disabled: formRows.at(-1).name === "" }, "Add"));
+    ))), /* @__PURE__ */ import_react11.default.createElement("td", null, /* @__PURE__ */ import_react11.default.createElement("button", { onClick: (event) => handleDeleteRow(index, event), disabled: formRows.length === 1 }, "Delete"))))), provided.placeholder)))), /* @__PURE__ */ import_react11.default.createElement("button", { onClick: handleAddRow }, "Add"));
   };
   var NewMigrationForm_default = NewMigrationForm;
 

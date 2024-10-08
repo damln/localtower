@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 const NewMigrationForm = () => {
@@ -52,9 +52,7 @@ const NewMigrationForm = () => {
   const handleAddRow = (event) => {
     event.preventDefault();
 
-    setFormRows([...formRows, DEFAULT_LINE]);
-
-    addToForm();
+    setFormRows([...formRows, { ...DEFAULT_LINE }]);
   };
 
   const handleDeleteRow = (index, event) => {
@@ -64,8 +62,6 @@ const NewMigrationForm = () => {
     if (formRows.length === 1) { return; }
 
     setFormRows(formRows.filter((row, rowIndex) => rowIndex !== index));
-
-    addToForm();
   };
 
   const shouldBeVisible = (row, td_name) => {
@@ -84,26 +80,21 @@ const NewMigrationForm = () => {
 
     let newValue = value;
 
-    // Sanitise default input:
-    if (name === "column_name") {
-      newValue = snakeCase(newValue);
-      newValue = newValue.trim();
-    }
-
     updatedRows[index][name] = newValue;
 
     // Reset default if change.
     if (name === 'column_type') {
       // result default:
+      updatedRows[index].column_name = undefined;
       updatedRows[index].foreign_key = false;
       updatedRows[index].unique = false;
-      updatedRows[index].index = '';
-      updatedRows[index].default = '';
+      updatedRows[index].index = undefined;
+      updatedRows[index].default = undefined;
       // close modal:
       setShowOptions({ [index]: false });
     }
 
-    // Reset default if change.
+    // Add "column_name" on belongs too relation:
     if (name === 'action_name' && newValue === 'belongs_to') {
       let current = (filterModels(updatedRows[index])[0] || {});
 
@@ -117,6 +108,7 @@ const NewMigrationForm = () => {
       MODELS.map((model) => {
         if (index && (model.name === newValue)) {
           updatedRows[index].table_name = model.table_name;
+          updatedRows[index].model_underscore = model.underscore;
         }
       });
     }
@@ -135,14 +127,7 @@ const NewMigrationForm = () => {
       updatedRows[index].foreign_key = false;
     }
 
-    // Reset unique if no index is selected:
-    if (name === 'index' && newValue === '' && updatedRows[index].unique === true) {
-      updatedRows[index].unique = false;
-    }
-
     setFormRows(updatedRows);
-
-    addToForm();
   };
 
   const handleCheckboxChange = (index, event) => {
@@ -160,8 +145,6 @@ const NewMigrationForm = () => {
     updatedRows[index][name] = checked;
 
     setFormRows(updatedRows);
-
-    addToForm();
   };
 
   const filterModels = (row) => {
@@ -171,11 +154,7 @@ const NewMigrationForm = () => {
   const filterAttributes = (row) => {
     let model = MODELS.find((model) => model.table_name === row.table_name);
 
-    if (model) {
-      return model.attributes_list;
-    } else {
-      return [];
-    }
+    return model ? model.attributes_list : [];
   }
 
   const filterIndexes = (row) => {
@@ -200,22 +179,16 @@ const NewMigrationForm = () => {
   const handleOptionClick = (index, option) => {
     const updatedRows = [...formRows];
     updatedRows[index].default = option.value;
-    setFormRows(updatedRows);
-    setShowOptions({ [index]: false });
-
     updatedRows[index].nullable = !(updatedRows[index].default !== '')
 
-    addToForm();
+    setShowOptions({ [index]: false });
+    setFormRows(updatedRows);
   };
 
   const handleShowOptions = (index, event) => {
     event.preventDefault();
 
-    if (showOptions[index]) {
-      setShowOptions({ [index]: false });
-    } else {
-      setShowOptions({ [index]: true });
-    }
+    setShowOptions({ [index]: !showOptions[index] });
   };
 
   const addToForm = () => {
@@ -232,11 +205,12 @@ const NewMigrationForm = () => {
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
-    console.table(items);
-
-    // setFormRows(items);
-    // addToForm();
+    setFormRows(items);
   };
+
+  useEffect(() => {
+    addToForm();
+  }, [formRows]); // This effect depends on formRows
 
   return (
     <div>
@@ -451,7 +425,7 @@ const NewMigrationForm = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <button onClick={handleAddRow} disabled={formRows.at(-1).name === ''}>Add</button>
+      <button onClick={handleAddRow}>Add</button>
     </div>
   );
 };
