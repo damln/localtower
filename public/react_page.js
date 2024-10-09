@@ -1096,7 +1096,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect5(create2, deps) {
+          function useEffect6(create2, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create2, deps);
           }
@@ -1879,7 +1879,7 @@
           exports.useContext = useContext6;
           exports.useDebugValue = useDebugValue2;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect5;
+          exports.useEffect = useEffect6;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
@@ -24818,8 +24818,7 @@
       if (formRows.at(-1).column_name === "") {
         return;
       }
-      setFormRows([...formRows, DEFAULT_LINE]);
-      addToForm();
+      setFormRows([...formRows, { ...DEFAULT_LINE }]);
     };
     const handleDeleteRow = (index, event) => {
       event.preventDefault();
@@ -24827,7 +24826,6 @@
         return;
       }
       setFormRows(formRows.filter((row, rowIndex) => rowIndex !== index));
-      addToForm();
     };
     const handleInputChange = (index, event) => {
       const { name, value } = event.target;
@@ -24857,7 +24855,6 @@
         updatedRows[index].unique = false;
       }
       setFormRows(updatedRows);
-      addToForm();
     };
     const handleCheckboxChange = (index, event) => {
       const { name, checked } = event.target;
@@ -24870,19 +24867,17 @@
       }
       updatedRows[index][name] = checked;
       setFormRows(updatedRows);
-      addToForm();
     };
     const handleOptionClick = (index, option) => {
       const updatedRows = [...formRows];
       updatedRows[index].default = option.value;
-      setFormRows(updatedRows);
-      setShowOptions({ [index]: false });
       if (updatedRows[index].default !== "") {
         updatedRows[index].nullable = false;
       } else {
         updatedRows[index].nullable = true;
       }
-      addToForm();
+      setFormRows(updatedRows);
+      setShowOptions({ [index]: false });
     };
     const handleShowOptions = (index, event) => {
       event.preventDefault();
@@ -24895,6 +24890,9 @@
     const addToForm = () => {
       document.getElementById("form_attributes").value = JSON.stringify(formRows);
     };
+    (0, import_react.useEffect)(() => {
+      addToForm();
+    }, [formRows]);
     return /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("table", null, /* @__PURE__ */ import_react.default.createElement("thead", null, /* @__PURE__ */ import_react.default.createElement("tr", null, /* @__PURE__ */ import_react.default.createElement("th", null, "Column Name"), /* @__PURE__ */ import_react.default.createElement("th", null, "Column Type"), /* @__PURE__ */ import_react.default.createElement("th", null, "Default Value"), /* @__PURE__ */ import_react.default.createElement("th", null, "Options"), /* @__PURE__ */ import_react.default.createElement("th", null, "Index"), /* @__PURE__ */ import_react.default.createElement("th", null))), /* @__PURE__ */ import_react.default.createElement("tbody", null, formRows.map((row, index) => /* @__PURE__ */ import_react.default.createElement("tr", { key: index }, row.column_type === "references" ? /* @__PURE__ */ import_react.default.createElement("td", null, /* @__PURE__ */ import_react.default.createElement(
       "select",
       {
@@ -33549,7 +33547,7 @@
       },
       /* @__PURE__ */ import_react11.default.createElement("option", { value: "" }, "(none)"),
       COLUMN_INDEXES.map((i, index2) => /* @__PURE__ */ import_react11.default.createElement("option", { value: i, key: index2 }, i))
-    )), /* @__PURE__ */ import_react11.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react11.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react11.default.createElement(
+    )), row.index && /* @__PURE__ */ import_react11.default.createElement("div", { style: { display: shouldBeVisible(row, "index") ? "block" : "none" } }, /* @__PURE__ */ import_react11.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react11.default.createElement(
       "select",
       {
         name: "index_algorithm",

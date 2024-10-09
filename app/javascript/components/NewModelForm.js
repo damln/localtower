@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const NewModelForm = () => {
   const COLUMN_TYPES = window.COLUMN_TYPES;
@@ -35,9 +35,7 @@ const NewModelForm = () => {
     // Don't add if the name is empty:
     if (formRows.at(-1).column_name === '') { return; }
 
-    setFormRows([...formRows, DEFAULT_LINE]);
-
-    addToForm();
+    setFormRows([...formRows, { ...DEFAULT_LINE }]);
   };
 
   const handleDeleteRow = (index, event) => {
@@ -47,8 +45,6 @@ const NewModelForm = () => {
     if (formRows.length === 1) { return; }
 
     setFormRows(formRows.filter((row, rowIndex) => rowIndex !== index));
-
-    addToForm();
   };
 
   const handleInputChange = (index, event) => {
@@ -95,8 +91,6 @@ const NewModelForm = () => {
     }
 
     setFormRows(updatedRows);
-
-    addToForm();
   };
 
   const handleCheckboxChange = (index, event) => {
@@ -114,15 +108,11 @@ const NewModelForm = () => {
     updatedRows[index][name] = checked;
 
     setFormRows(updatedRows);
-
-    addToForm();
   };
 
   const handleOptionClick = (index, option) => {
     const updatedRows = [...formRows];
     updatedRows[index].default = option.value;
-    setFormRows(updatedRows);
-    setShowOptions({ [index]: false });
 
     if (updatedRows[index].default !== '') {
       updatedRows[index].nullable = false;
@@ -130,7 +120,8 @@ const NewModelForm = () => {
       updatedRows[index].nullable = true;
     }
 
-    addToForm();
+    setFormRows(updatedRows);
+    setShowOptions({ [index]: false });
   };
 
   const handleShowOptions = (index, event) => {
@@ -147,6 +138,10 @@ const NewModelForm = () => {
     // Add the form to the hidden input:
     document.getElementById("form_attributes").value = JSON.stringify(formRows);
   };
+
+  useEffect(() => {
+    addToForm();
+  }, [formRows]); // This effect depends on formRows
 
   return (
     <div>

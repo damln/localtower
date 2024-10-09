@@ -398,19 +398,21 @@ const NewMigrationForm = () => {
                               ))}
                             </select>
                           </div>
+                          { row.index && (
                           <div style={{ display: shouldBeVisible(row, 'index') ? 'block' : 'none' }}>
                             <label>Index Algorithm:</label>
                             <select
                               name="index_algorithm"
                               value={row.index_algorithm}
                               onChange={(event) => handleInputChange(index, event)}
-                            >
+                              >
                               <option value="default">default</option>
                               { COLUMN_INDEXES_ALGORITHMS.map((i, index) => (
                                 <option value={i} key={index}>{i}</option>
                               ))}
                             </select>
                           </div>
+                          )}
                         </td>
                         <td>
                           <button onClick={(event) => handleDeleteRow(index, event)} disabled={formRows.length === 1}>Delete</button>
