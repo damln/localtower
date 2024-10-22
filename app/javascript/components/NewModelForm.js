@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
+import { Camera } from 'lucide-react';
+import Select from 'react-select'
 
 const NewModelForm = () => {
   const COLUMN_TYPES = window.COLUMN_TYPES;
@@ -6,6 +8,13 @@ const NewModelForm = () => {
   const COLUMN_INDEXES_ALGORITHMS = window.COLUMN_INDEXES_ALGORITHMS;
   const COLUMN_DEFAULTS = window.COLUMN_DEFAULTS;
   const MODELS = window.APP_MODELS.map((model) => ({ value: model.underscore, label: model.name }));
+
+  const OPTIONS = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+    { value: 'fifou', label: 'Fifou' }
+  ]
 
   const snakeCase = (str) => {
     return str
@@ -183,6 +192,24 @@ const NewModelForm = () => {
                 )
               }
               <td>
+                {/* <Camera color="black" size={48} />
+                <Select
+                  options={OPTIONS}
+                  isSearchable={true}
+                  isClearable={true}
+                  onChange={(selectedOption) => {
+                    if (selectedOption && selectedOption.value) {
+                      const syntheticEvent = {
+                        target: {
+                          name: 'column_type',
+                          value: selectedOption.value
+                        }
+                      }
+                      handleInputChange(index, syntheticEvent)
+                    }
+                  }}
+                /> */}
+
                 <select
                   name="column_type"
                   value={row.column_type}

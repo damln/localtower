@@ -1,18 +1,19 @@
-// import './styles/tailwind.css'
-
 import React from 'react'
-import ReactDOM from 'react-dom'
 import NewModelForm from './components/NewModelForm'
 import NewMigrationForm from './components/NewMigrationForm'
+
+import { createRoot } from 'react-dom/client';
 
 document.addEventListener('DOMContentLoaded', () => {
   const container1 = document.getElementById('react-container-new-model')
   if (container1) {
-    ReactDOM.render(<NewModelForm />, container1)
+    const root1 = createRoot(container1); // createRoot(container!) if you use TypeScript
+    root1.render(<NewModelForm />);
   }
 
   const container2 = document.getElementById('react-container-new-migration')
   if (container2) {
-    ReactDOM.render(<NewMigrationForm />, container2)
+    const root2 = createRoot(container2); // createRoot(container!) if you use TypeScript
+    root2.render(<NewMigrationForm />);
   }
-})
+});
