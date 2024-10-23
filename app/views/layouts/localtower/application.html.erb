@@ -20,48 +20,46 @@
     </script>
   </head>
   <body>
-    <div class="wrapper">
-      <ul class="nav">
-        <li class="<%= is_active_link?(models_path, :exclusive) ? "active" : nil %>">
-          <a href="<%= models_path %>">
-            <p>Models</p>
-          </a>
-        </li>
-        <li class="<%= is_active_link?(migrations_path, :exclusive) ? "active" : nil %>">
-          <a href="<%= migrations_path %>">
-            <p>Migrations</p>
-          </a>
-        </li>
-        <li class="<%= is_active_link?(new_model_path, :inclusive) ? "active" : nil %>">
-          <a href="<%= new_model_path %>">
-            <p>New Model</p>
-          </a>
-        </li>
-        <li class="<%= is_active_link?(new_migration_path, :exclusive) ? "active" : nil %>">
-          <a href="<%= new_migration_path %>">
-            <p>New Migration</p>
-          </a>
-        </li>
-      </ul>
-      <div class="main-panel">
+    <div class="wrapper flex h-screen bg-gray-100">
+      <!-- Sidebar -->
+      <nav class="w-[200px] flex-shrink-0 bg-gray-900 text-gray-100">
+        <ul class="flex flex-col py-4">
+          <li class="<%= is_active_link?(models_path, :exclusive) ? 'bg-gray-800' : '' %>">
+            <a href="<%= models_path %>"
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+              <p class="text-sm font-medium">Models</p>
+            </a>
+          </li>
+
+          <li class="<%= is_active_link?(migrations_path, :exclusive) ? 'bg-gray-800' : '' %>">
+            <a href="<%= migrations_path %>"
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+              <p class="text-sm font-medium">Migrations</p>
+            </a>
+          </li>
+
+          <li class="<%= is_active_link?(new_model_path, :inclusive) ? 'bg-gray-800' : '' %>">
+            <a href="<%= new_model_path %>"
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+              <p class="text-sm font-medium">New Model</p>
+            </a>
+          </li>
+
+          <li class="<%= is_active_link?(new_migration_path, :exclusive) ? 'bg-gray-800' : '' %>">
+            <a href="<%= new_migration_path %>"
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+              <p class="text-sm font-medium">New Migration</p>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="flex-1 overflow-y-auto p-8">
         <%= yield %>
-      </div>
+      </main>
     </div>
-    <div class="full-message" style="display: none;">
-      <div class="text-center">
-        <h3>Generating files</h3>
-        <i class="pe-7s-refresh-2 rotate"></i>
-        <br>
-        <br>
-        <br>
-        <p class="full-message-migrate" style="display: none;">
-          If you're seeing an error message on the next page (pending migrations), just run in your terminal:
-          <br>
-          <br>
-          <code>bundle exec rails db:migrate</code>
-        </p>
-      </div>
-    </div>
+
     <!--   Core JS Files   -->
     <script src="/vendor/jquery-3.7.1.min.js"></script>
     <script src="/vendor/highlight.min.js"></script>
