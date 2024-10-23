@@ -1,2 +1,2 @@
-js: yarn build --watch=forever
-postcss: yarn build:postcss --watch
+js: yarn build:js --watch=forever
+css: yarn build:postcss --watch

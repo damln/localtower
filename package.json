@@ -1,7 +1,6 @@
 {
   "name": "localtower",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@github.com:damln/localtower.git",
   "author": "Damian Le Nouaille <damlenouaille@gmail.com>",
   "license": "MIT",
@@ -22,6 +21,11 @@
     "react-select": "^5.8.1"
   },
   "devDependencies": {
+    "standard": "^17.1.2",
+    "yarn": "^1.22.22"
+  },
+  "engines": {
+    "node": "22.4.1"
   },
   "scripts": {
     "build": "yarn build:js && yarn build:css",
