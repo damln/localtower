@@ -22,32 +22,32 @@
   <body>
     <div class="wrapper flex h-screen bg-gray-100">
       <!-- Sidebar -->
-      <nav class="w-[200px] flex-shrink-0 bg-gray-900 text-gray-100">
+      <nav class="w-[200px] flex-shrink-0 bg-zinc-900 text-gray-100">
         <ul class="flex flex-col py-4">
-          <li class="<%= is_active_link?(models_path, :exclusive) ? 'bg-gray-800' : '' %>">
+          <li class="<%= is_active_link?(models_path, :exclusive) ? 'bg-zinc-800' : '' %>">
             <a href="<%= models_path %>"
-           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-zinc-800 hover:text-white transition-colors duration-200">
               <p class="text-sm font-medium">Models</p>
             </a>
           </li>
 
-          <li class="<%= is_active_link?(migrations_path, :exclusive) ? 'bg-gray-800' : '' %>">
+          <li class="<%= is_active_link?(migrations_path, :exclusive) ? 'bg-zinc-800' : '' %>">
             <a href="<%= migrations_path %>"
-           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-zinc-800 hover:text-white transition-colors duration-200">
               <p class="text-sm font-medium">Migrations</p>
             </a>
           </li>
 
-          <li class="<%= is_active_link?(new_model_path, :inclusive) ? 'bg-gray-800' : '' %>">
+          <li class="<%= is_active_link?(new_model_path, :inclusive) ? 'bg-zinc-800' : '' %>">
             <a href="<%= new_model_path %>"
-           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-zinc-800 hover:text-white transition-colors duration-200">
               <p class="text-sm font-medium">New Model</p>
             </a>
           </li>
 
-          <li class="<%= is_active_link?(new_migration_path, :exclusive) ? 'bg-gray-800' : '' %>">
+          <li class="<%= is_active_link?(new_migration_path, :exclusive) ? 'bg-zinc-800' : '' %>">
             <a href="<%= new_migration_path %>"
-           class="flex items-center px-6 py-4 text-gray-300 hover:bg-gray-800 hover:text-white transition-colors duration-200">
+           class="flex items-center px-6 py-4 text-gray-300 hover:bg-zinc-800 hover:text-white transition-colors duration-200">
               <p class="text-sm font-medium">New Migration</p>
             </a>
           </li>
