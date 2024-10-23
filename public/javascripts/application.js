@@ -33444,6 +33444,14 @@ document.addEventListener("DOMContentLoaded", () => {
     root2.render(/* @__PURE__ */ import_react12.default.createElement(NewMigrationForm_default, null));
   }
 });
+$(document).ready(function() {
+  $(".grid").masonry({
+    itemSelector: ".grid-item",
+    percentPosition: true,
+    columnWidth: ".grid-sizer"
+  });
+  hljs.highlightAll();
+});
 /*! Bundled license information:
 
 react/cjs/react.development.js:

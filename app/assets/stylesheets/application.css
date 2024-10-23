@@ -1,3 +1,31 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+
+.full-message {
+  z-index: 999;
+  position: fixed;
+  background: rgba(0,0,0,0.9);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  color: #fff;
+}
+
+.grid-sizer, .grid-item {
+  box-sizing: border-box;
+  width: 45%;
+  margin: 2%;
+}
+
+.pointer:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+
+.pointer:active {
+  position: relative;
+  top: 1px;
+}

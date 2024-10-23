@@ -559,3 +559,27 @@ video {
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
+.full-message {
+  z-index: 999;
+  position: fixed;
+  background: rgba(0,0,0,0.9);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  color: #fff;
+}
+.grid-sizer, .grid-item {
+  box-sizing: border-box;
+  width: 45%;
+  margin: 2%;
+}
+.pointer:hover {
+  cursor: pointer;
+  opacity: 0.9;
+}
+.pointer:active {
+  position: relative;
+  top: 1px;
+}

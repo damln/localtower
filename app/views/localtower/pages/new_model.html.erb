@@ -1,33 +1,19 @@
 <% content_for :title do %>New Model<% end %>
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <div class="header">
-        <div class="alert alert-warning">
-          <span>Remember, you can always edit your migration files manually before running "rails db:migrate"</span>
-        </div>
-      </div>
-      <div class="content">
-        <%= form_tag models_path, class: "form" do %>
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label>Name of the Model</label>
-                <input autocomplete="off" type="text" data-selector="modelName" name="model[model_name]" class="form-control">
-                <input type="hidden" id="form_attributes" name="model[attributes]">
-              </div>
-            </div>
-          </div>
-          <div id="react-container-new-model"></div>
-          <div class="row">
-            <div class="col-md-12 text-right">
-              <button type="submit" value="true" class="btn btn-success btn-fill" data-selector="submitNewModel">
-                Generate the migration (and the model)
-              </button>
-            </div>
-          </div>
-        <% end %>
-      </div>
+<div class="alert alert-warning">
+  <span>Remember, you can always edit your migration files manually before running "rails db:migrate"</span>
+</div>
+<div>
+  <%= form_tag models_path, class: "form" do %>
+    <div>
+      <label>Name of the Model</label>
+      <input autocomplete="off" type="text" data-selector="modelName" name="model[model_name]" class="form-control">
+      <input type="hidden" id="form_attributes" name="model[attributes]">
     </div>
-  </div>
+    <div id="react-container-new-model"></div>
+    <div>
+      <button type="submit" value="true" class="btn btn-success btn-fill" data-selector="submitNewModel">
+        Generate the migration (and the model)
+      </button>
+    </div>
+  <% end %>
 </div>

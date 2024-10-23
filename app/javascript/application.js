@@ -17,3 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
     root2.render(<NewMigrationForm />);
   }
 });
+
+$(document).ready(function () {
+  $(".grid").masonry({
+    itemSelector: ".grid-item",
+    percentPosition: true,
+    columnWidth: ".grid-sizer",
+  });
+
+  hljs.highlightAll();
+});
