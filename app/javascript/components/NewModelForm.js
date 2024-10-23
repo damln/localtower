@@ -281,34 +281,32 @@ const NewModelForm = () => {
               <td>
               { (row.column_type !== 'references') && (
                 <div>
-                <div>
-                  <label>Index:</label>
-                  <select
-                    name="index"
-                    value={row.index}
-                    onChange={(event) => handleInputChange(index, event)}
+                  <div>
+                    <label>Index:</label>
+                    <select
+                      name="index"
+                      value={row.index}
+                      onChange={(event) => handleInputChange(index, event)}
+                      >
+                      <option value="">(none)</option>
+                      { COLUMN_INDEXES.map((i) => (
+                        <option value={i} key={i}>{i}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div style={{ opacity: row.index ? 1 : 0.5 }}>
+                    <label>Index Algorithm:</label>
+                    <select
+                      name="index_algorithm"
+                      value={row.index_algorithm}
+                      onChange={(event) => handleInputChange(index, event)}
                     >
-                    <option value="">(none)</option>
-                    { COLUMN_INDEXES.map((i) => (
-                      <option value={i} key={i}>{i}</option>
-                    ))}
-                  </select>
-                </div>
-                { row.index && (
-                <div>
-                  <label>Index Algorithm:</label>
-                  <select
-                    name="index_algorithm"
-                    value={row.index_algorithm}
-                    onChange={(event) => handleInputChange(index, event)}
-                  >
-                    <option value="default">default</option>
-                    { COLUMN_INDEXES_ALGORITHMS.map((i) => (
-                      <option value={i} key={i}>{i}</option>
-                    ))}
-                  </select>
-                </div>
-                )}
+                      <option value="default">default</option>
+                      { COLUMN_INDEXES_ALGORITHMS.map((i) => (
+                        <option value={i} key={i}>{i}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
               )}
               </td>

@@ -24919,7 +24919,7 @@ var NewModelForm = () => {
     },
     /* @__PURE__ */ import_react.default.createElement("option", { value: "" }, "(none)"),
     COLUMN_INDEXES.map((i) => /* @__PURE__ */ import_react.default.createElement("option", { value: i, key: i }, i))
-  )), row.index && /* @__PURE__ */ import_react.default.createElement("div", null, /* @__PURE__ */ import_react.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react.default.createElement(
+  )), /* @__PURE__ */ import_react.default.createElement("div", { style: { opacity: row.index ? 1 : 0.5 } }, /* @__PURE__ */ import_react.default.createElement("label", null, "Index Algorithm:"), /* @__PURE__ */ import_react.default.createElement(
     "select",
     {
       name: "index_algorithm",
