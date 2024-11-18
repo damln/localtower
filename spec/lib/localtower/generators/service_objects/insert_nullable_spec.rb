@@ -38,7 +38,7 @@ describe ::Localtower::Generators::ServiceObjects::InsertNullable do
             t.string  :first, null: false
             t.integer :second
             t.string  :third, null: false
-            t.string  :fourth, null: false, default: 'foo'
+            t.string  :fourth, default: 'foo', null: false
             t.integer :fifth
 
             t.timestamps
@@ -56,6 +56,6 @@ describe ::Localtower::Generators::ServiceObjects::InsertNullable do
   it 'works' do
     service.call
 
-    expect(File.read(last_migration)).to eq(expected_file_content)
+    expect(File.read(last_migration_pending)).to eq(expected_file_content)
   end
 end

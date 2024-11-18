@@ -42,6 +42,6 @@ describe ::Localtower::Generators::ServiceObjects::InsertArray do
   it 'works' do
     service.call
 
-    expect(File.read(last_migration)).to eq(expected_file_content)
+    expect(File.read(last_migration_pending)).to eq(expected_file_content)
   end
 end

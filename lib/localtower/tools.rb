@@ -33,10 +33,6 @@ module Localtower
         root_klass.subclasses - [ActiveRecord::SchemaMigration]
       end
 
-      def enought_models_for_relation?
-        models.size >= 2
-      end
-
       def models_presented
         self.force_reload!
 
@@ -72,6 +68,7 @@ module Localtower
 
           list << {
             name: model.name,
+            underscore: model.name.underscore,
             table_name: model.table_name,
             attributes_list: attributes_list,
           }
@@ -100,14 +97,14 @@ module Localtower
         list
       end
 
-      def indexes_for_model_and_attribute(model, attribute_name)
+      def indexes_for_model_and_attribute(model, column_name)
         indexes = self.indexes_for_model(model)
 
         list = []
         done = []
 
         indexes.each do |index|
-          conditions = index[:columns].include?(attribute_name.to_s) and not done.include?(index[:name])
+          conditions = index[:columns].include?(column_name.to_s) and not done.include?(index[:name])
           next unless conditions
           infos = {
             unique: index[:unique],
@@ -116,7 +113,7 @@ module Localtower
             max_size: index[:max_size]
           }
 
-          done << attribute_name
+          done << column_name
           list << infos
         end
 
@@ -173,8 +170,22 @@ module Localtower
         @log_file ||= Rails.root.join('log', 'localtower.log')
       end
 
-      def last_migration
-        Dir["#{Rails.root}/db/migrate/*.rb"].sort.last
+      def last_migration_pending
+        last_not_run_migration = Localtower::Status.new.run.select {|i| i['status'] == :todo}.sort { |a, b| a['time'] <=> b['time'] }.last
+
+        return nil if last_not_run_migration.blank?
+        return nil unless File.exist?(last_not_run_migration["file_full_path"])
+
+
+        last_not_run_migration["file_full_path"]
+      end
+
+      def pending_migrations
+        Localtower::Status.new.run.select {|i| i['status'] == :todo}
+      end
+
+      def line_for_attribute(attribute)
+        (File.read(last_migration_pending).match(/^\s*t\.(.*)\s*:#{attribute}.*$/) || [])
       end
 
       # PRIVATE ==============

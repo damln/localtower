@@ -1,17 +1,19 @@
 ![Gem](https://img.shields.io/gem/v/localtower) ![Gem](https://img.shields.io/gem/dt/localtower?label=gem%20downloads)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/damln/localtower/master/public/twitter-cover-1.png" alt="Localtower">
+<img src="https://raw.githubusercontent.com/damln/localtower/0f279b82e9a7701b9f0aab21a8e4561468535046/public/com/twitter-cover-2.png" alt="Localtower">
 </p>
 
 ## Introduction
+
+![New Model](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
 
 **- What is Localtower?**
 
 Localtower is a Rails Engine mountable in development environment to help you generate migrations for your Rails application.
 It's like ActiveAdmin or Sidekiq UI.
 You plug it in your `config/routes.rb` and it works out of the box.
-Check the *Installation* section below for more details.
+Check the _Installation_ section below for more details.
 
 **- How Localtower works?**
 
@@ -19,7 +21,7 @@ Localtower gives you a UI to create models and migrations. It will generate a mi
 
 **- Why creating a UI for Rails migrations?**
 
-Rails migrations are well documented in the official [Rails Guides](https://guides.rubyonrails.org/v3.2/migrations.html) but we often tend to forget some commands or do typo errors. Like writing `add_index :user, :email` instead of `add_index :users, :email` (did you spot the typo?). Working from a UI with a fixed list of commands reduces the chance of making errors.
+Rails migrations are well documented in the official [Rails Guides](https://guides.rubyonrails.org/active_record_migrations.html) but we often tend to forget some commands or do typo errors. Like writing `add_index :user, :email` instead of `add_index :users, :email` (did you spot the typo?). Working from a UI with a fixed list of commands reduces the chance of making errors.
 
 **- When I'm using Localtower, can I still generate migrations from the command line?**
 
@@ -36,27 +38,29 @@ Localtower doesn't implement all the Rails Migrations API. I focused on the most
 ## Screenshots
 
 ### Create a model
-![New Model](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v1.0.0/new_model.png)
+
+![New Model](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
 
 ### Create a migration
-![New Migration](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v1.0.0/new_migration.png)
 
-### See the Models
-![Models](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v1.0.0/models.png)
+![New Migration](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.21.jpg)
 
 ### See the Migrations (and migrate)
-![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v1.0.0/migrations.png)
+
+![Migrations](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.11.jpg)
 
 ## Installation
 
-Please use localtower version `>= 1.0.0`
+Please use the best localtower version: `>= 2.0.0`
 See installation process below.
 
 Compatibility:
+
 - Rails >= 5.2
 - Ruby >= 2.3
 
 Add to your `Gemfile` file:
+
 ```ruby
 # In your current group 'development':
 group :development do
@@ -69,11 +73,13 @@ gem 'localtower', group: :development
 ```
 
 Run command in your terminal:
+
 ```bash
 bundle install
 ```
 
 Add to your `config/routes.rb`:
+
 ```ruby
 MyApp::Application.routes.draw do
   if Rails.env.development?
@@ -107,20 +113,44 @@ If you know how to override this configuration in the gem instead of doing it in
 
 To access the UI, run your local rails server and open your browser at [http://localhost:3000/localtower](http://localhost:3000/localtower).
 
+## Full scenrio ScreenShots
+
+### Create a model
+
+![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
+
+It will create a migration file:
+
+![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.42.jpg)
+
+### Create a migration
+
+![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.21.jpg)
+
+It will generate a migration file:
+
+![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.51.jpg)
+
+### Create another model
+
+Now, we add a `Book` model:
+
+![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.04.jpg)
+
+### All the migrations generated
+
+![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.19.jpg)
+
+
 ## Upgrading
 
-I recommend you to upgrade to the latest version which is `1.0.0`.
-To upgrade, just use the latest version of Localtower:
+I recommend you to upgrade to the latest version which is `2.0.0`.
+To upgrade, just use the latest version of Localtower.
+You have nothing else to do.
 
 ```
 bundle update localtower
 ```
-
-## Roadmap
-
-- Be able to use `uuid` instead of `id` as primary when creating models.
-- Realtime preview of the migration files
-- Better frontend validation
 
 ## Contribute
 
@@ -139,7 +169,17 @@ LOCALTOWER_PG_USERNAME="admin"
 LOCALTOWER_PG_PASSWORD="root_or_smething"
 ```
 
+drop / create database:
+
+```bash
+cd spec/dummy
+bundle exec rails db:drop
+bundle exec rails db:create
+rm app/models/*.rb
+```
+
 Run the spec:
+
 ```bash
 bundle install
 bundle exec rspec spec/
@@ -149,7 +189,7 @@ bundle exec rspec spec/
 
 Only for official contributors.
 
-    git tag v1.0.0 # change by last version
+    git tag v2.0.0 # change by last version
     git push --tags
     rm *.gem
     gem build localtower.gemspec

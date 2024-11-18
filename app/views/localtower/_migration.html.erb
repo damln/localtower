@@ -1,0 +1,30 @@
+<div class="">
+  <div class="">
+    <h5 class="py-3 flex flex-row gap-3 items-center">
+      <% if entry['status'] == :todo %>
+        <div class="rounded-full bg-orange-700 text-localtower-100 text-xs px-3 py-0.5 inline-flex items-center">
+          <span>Pending</span>
+        </div>
+      <% else %>
+        <%= form_tag actions_path, class: "inline-flex" do %>
+          <button name="cmd" title="rake db:migrate:down VERSION=<%= entry['time'] %>" type="submit" value="rake db:migrate:down VERSION=<%= entry['time'] %>" class="px-2 py-0.5 rounded-md bg-green-800 text-localtower-100 border border-green-700 outline-none hover:border-green-500 hover:bg-green-700 hover:text-white active:opacity-60 transition-colors text-xs inline-flex items-center">
+            Rollback
+          </button>
+        <% end %>
+      <% end %>
+      <a href="<%= file_link(entry['file_full_path']) %>" class="font-mono text-xs text-localtower-400 inline-flex"><%= entry['relative_path'] %></a>
+      <% if entry['status'] == :todo %>
+        <%= form_tag rm_file_path, class: "inline-flex" do %>
+          <button name="file" title="rake db:migrate:down VERSION=<%= entry['time'] %>" type="submit" value="<%= entry['file_full_path'] %>" class="px-2 py-0.5 rounded-md text-red-500 border border-red-500 hover:border-red-300 outline-none active:opacity-60 transition-colors text-xs inline-flex items-center" data-confirm="Are you sure?">
+            destroy
+          </button>
+        <% end %>
+      <% end %>
+    </h5>
+  </div>
+</div>
+<div class="pb-4 border-b border-localtower-500">
+  <div class="">
+    <pre class="px-3 py-1.5 rounded border border-localtower-500 block" style="background-color: rgb(35, 36, 31);"><code class="language-ruby text-xs"><%= entry['content'] %></code></pre>
+  </div>
+</div>

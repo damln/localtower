@@ -15,13 +15,15 @@ module Localtower
         time = name.split("_")[0] # 201203890987
         status = db_migrations.include?(time) ? :done : :todo
         content = File.open(file_full_path).read
+        relative_path = file_full_path.gsub(Rails.root.to_s, '')
 
         {
           "file_full_path" => file_full_path,
           "name" => name,
           "time" => time.to_i,
           "status" => status,
-          "content" => content
+          "content" => content,
+          "relative_path" => relative_path
         }
       end
     end
