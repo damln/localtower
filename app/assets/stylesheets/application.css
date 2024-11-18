@@ -1,0 +1,68 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+th {
+  font-weight: 400;
+  text-align: left;
+}
+
+.text-xss {
+  font-size: 0.6rem;
+  line-height: 0.9rem;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  background-color: #000;
+  margin: 0;
+  font: inherit;
+  color: currentColor;
+  width: 1.2em;
+  height: 1.2em;
+  border: 0.1em solid currentColor;
+  border-radius: 0.15em;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+input[type="checkbox"]:active {
+  opacity: 0.6;
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 0.65em;
+  height: 0.65em;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em rgb(19, 187, 59);
+
+  transform-origin: bottom left;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+/*---------------*/
+
+.full-message {
+  z-index: 999;
+  position: fixed;
+  background: rgba(0,0,0,0.9);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  color: #fff;
+}
+
+.grid-sizer, .grid-item {
+  box-sizing: border-box;
+  width: 45%;
+  margin: 2%;
+}

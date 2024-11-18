@@ -1,0 +1,36 @@
+{
+  "name": "localtower",
+  "version": "2.0.0",
+  "repository": "git@github.com:damln/localtower.git",
+  "author": "Damian Le Nouaille <damlenouaille@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/preset-env": "^7.25.4",
+    "@babel/preset-react": "^7.24.7",
+    "lucide-react": "^0.453.0",
+    "react": "^18.3.1",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
+    "esbuild": "^0.24.0",
+    "postcss": "^8.4.47",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
+    "sass": "^1.79.4",
+    "tailwindcss": "^3.4.14",
+    "react-select": "^5.8.1"
+  },
+  "devDependencies": {
+    "standard": "^17.1.2",
+    "yarn": "^1.22.22"
+  },
+  "engines": {
+    "node": "22.4.1"
+  },
+  "scripts": {
+    "build": "yarn build:js && yarn build:css",
+    "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=public/javascripts --public-path=/assets --format=esm --splitting --loader:.js=jsx --chunk-names='[name]-[hash].digested'",
+    "build:css": "yarn build:postcss",
+    "build:postcss": "postcss app/assets/stylesheets/*.css app/assets/stylesheets/**/*.css --base app/assets/stylesheets -d public/stylesheets"
+  }
+}

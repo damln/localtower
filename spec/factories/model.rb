@@ -4,50 +4,70 @@ FactoryBot.define do
     attributes do
       [
         {
-          'attribute_name' => 'title',
-          'attribute_type' => 'string',
-          'index' => {
-            'using' => 'default',
-            'unique' => true,
-            'algorithm' => 'default',
-          }
+          'column_name' => 'title',
+          'column_type' => 'string',
+          'unique' => true,
+          'index' => 'default',
+          'index_algorithm' => 'default'
         },
         {
-          'attribute_name' => 'tags',
-          'attribute_type' => 'array',
+          'column_name' => 'tags',
+          'column_type' => 'array',
           'nullable' => false,
           'default' => '[]',
-          'index' => {
-            'using' => 'gin',
-            'unique' => true,
-            'algorithm' => 'concurrently',
-          }
+          'index' => 'gin',
+          'index_algorithm' => 'concurrently',
+          'unique' => true
         },
         {
-          'attribute_name' => 'content',
-          'attribute_type' => 'text',
+          'column_name' => 'content',
+          'column_type' => 'text',
           'nullable' => false,
-          'index' => {
-            'using' => 'gist',
-            'algorithm' => 'default',
-          }
+          "index" => "gist",
+          "index_algorithm" => "default"
         },
         {
-          'attribute_name' => 'likes_count',
-          'attribute_type' => 'integer',
+          'column_name' => 'likes_count',
+          'column_type' => 'integer',
           'nullable' => true,
           'default' => '0',
         },
         {
-          'attribute_name' => 'score',
-          'attribute_type' => 'float',
+          'column_name' => 'score',
+          'column_type' => 'float',
         },
         {
-          'attribute_name' => 'metadata',
-          'attribute_type' => 'jsonb',
+          'column_name' => 'metadata',
+          'column_type' => 'jsonb',
           'nullable' => false,
           'default' => '{}',
         },
+      ]
+    end
+  end
+
+  factory :post_two, class: "Hash" do
+    model_name { 'Post' }
+    attributes do
+      [
+        {
+          'column_name' => 'user',
+          'column_type' => 'references',
+          'foreign_key' => true
+        }
+      ]
+    end
+  end
+
+  factory :post_three, class: "Hash" do
+    model_name { 'Post' }
+    attributes do
+      [
+        {
+          'column_name' => 'user',
+          'column_type' => 'references',
+          'foreign_key' => false
+        }
       ]
     end
   end

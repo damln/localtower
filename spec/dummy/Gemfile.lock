@@ -1,7 +1,7 @@
 PATH
   remote: /Users/damln/Work/localtower
   specs:
-    localtower (1.0.0)
+    localtower (2.0.0)
       active_link_to (>= 1.0.4)
       rails (>= 5.2.0)
       thor (>= 0.18.1)
@@ -122,6 +122,7 @@ GEM
       date
       net-protocol
     net-pop (0.1.2)
+      net-protocol
     net-protocol (0.2.2)
       timeout
     net-smtp (0.5.0)
