@@ -62,14 +62,9 @@ Compatibility:
 Add to your `Gemfile` file:
 
 ```ruby
-# In your current group 'development':
 group :development do
-  # [probably other gems here]
-  gem 'localtower'
+  gem 'localtower', '~> 2.0'
 end
-
-# Or as a one liner:
-gem 'localtower', group: :development
 ```
 
 Run command in your terminal:
