@@ -6,7 +6,7 @@
 
 ## Introduction
 
-![New Model](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
+![New Model](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
 
 **- What is Localtower?**
 
@@ -39,15 +39,15 @@ Localtower doesn't implement all the Rails Migrations API. I focused on the most
 
 ### Create a model
 
-![New Model](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
+![New Model](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
 
 ### Create a migration
 
-![New Migration](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.21.jpg)
+![New Migration](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.21.jpg)
 
 ### See the Migrations (and migrate)
 
-![Migrations](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.11.jpg)
+![Migrations](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.11.jpg)
 
 ## Installation
 
@@ -112,29 +112,37 @@ To access the UI, run your local rails server and open your browser at [http://l
 
 ### Create a model
 
-![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
 
 It will create a migration file:
 
-![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.42.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.42.jpg)
 
 ### Create a migration
 
-![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.21.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.21.jpg)
 
 It will generate a migration file:
 
-![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.51.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.48.51.jpg)
 
 ### Create another model
 
 Now, we add a `Book` model:
 
-![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.04.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.04.jpg)
 
 ### All the migrations generated
 
-![](https://raw.githubusercontent.com/damln/localtower/react/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.19.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.19.jpg)
+
+### Files generated
+
+Every action made from the UI will generate native rails migration files.
+Exactly like the `rails generate` command.
+But instead of generating files in the console, they are generated in the `db/migrate` folder.
+
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.19.jpg)
 
 
 ## Upgrading
