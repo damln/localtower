@@ -138,11 +138,20 @@ Now, we add a `Book` model:
 
 ### Files generated
 
-Every action made from the UI will generate native rails migration files.
+Every action made from the UI will generate native Rails migration files.
 Exactly like the `rails generate` command.
 But instead of generating files in the console, they are generated in the `db/migrate` folder.
 
-![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.50.19.jpg)
+- The models:
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.51.47.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.51.48.jpg)
+
+- The migration files:
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.52.18.jpg)
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.52.26.jpg)
+
+- The final schema:
+![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.52.38.jpg)
 
 
 ## Upgrading
