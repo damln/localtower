@@ -108,7 +108,7 @@ If you know how to override this configuration in the gem instead of doing it in
 
 To access the UI, run your local rails server and open your browser at [http://localhost:3000/localtower](http://localhost:3000/localtower).
 
-## Full scenrio ScreenShots
+## Full scenario
 
 ### Create a model
 
