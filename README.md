@@ -1,7 +1,7 @@
 ![Gem](https://img.shields.io/gem/v/localtower) ![Gem](https://img.shields.io/gem/dt/localtower?label=gem%20downloads)
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/damln/localtower/0f279b82e9a7701b9f0aab21a8e4561468535046/public/com/twitter-cover-2.png" alt="Localtower">
+<img src="https://raw.githubusercontent.com/damln/localtower/master/public/com/twitter-cover-3.png" alt="Localtower">
 </p>
 
 ## Introduction
