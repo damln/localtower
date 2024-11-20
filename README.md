@@ -51,7 +51,7 @@ Localtower doesn't implement all the Rails Migrations API. I focused on the most
 
 ## Installation
 
-Please use the best localtower version: `>= 2.0.0`
+Please use the best localtower version: `>= 2`
 See installation process below.
 
 Compatibility:
@@ -63,7 +63,7 @@ Add to your `Gemfile` file:
 
 ```ruby
 group :development do
-  gem 'localtower', '~> 2.0'
+  gem 'localtower', '~> 2'
 end
 ```
 
@@ -201,7 +201,7 @@ bundle exec rspec spec/
 
 Only for official contributors.
 
-    git tag v2.0.0 # change by last version
+    git tag vX.X.X # change by last version
     git push --tags
     rm *.gem
     gem build localtower.gemspec

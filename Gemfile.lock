@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    localtower (2.0.0)
+    localtower (2.0.1)
       active_link_to (>= 1.0.4)
       rails (>= 5.2.0)
       thor (>= 0.18.1)
