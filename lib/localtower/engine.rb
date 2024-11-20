@@ -8,5 +8,9 @@ module Localtower
       # Later: have a better assets pipeline to be able to version and cache assets forever
       # app.config.middleware.use ::ActionDispatch::Static, "#{root}/public", headers: { "Cache-Control" => "public, max-age=31536000" }
     end
+
+    initializer "localtower.assets.precompile" do |app|
+      app.config.assets.precompile += ["localtower/application.css", "localtower/application.js"]
+    end
   end
 end

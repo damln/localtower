@@ -29,8 +29,7 @@
   },
   "scripts": {
     "build": "yarn build:js && yarn build:css",
-    "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=public/javascripts --public-path=/assets --format=esm --splitting --loader:.js=jsx --chunk-names='[name]-[hash].digested'",
-    "build:css": "yarn build:postcss",
-    "build:postcss": "postcss app/assets/stylesheets/*.css app/assets/stylesheets/**/*.css --base app/assets/stylesheets -d public/stylesheets"
+    "build:js": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/javascripts/localtower --public-path=/assets --format=esm --splitting --loader:.js=jsx --chunk-names='[name]-[hash].digested'",
+    "build:css": "postcss app/assets/stylesheets/src/**/*.css --base app/assets/stylesheets/src -d app/assets/stylesheets/localtower"
   }
 }
