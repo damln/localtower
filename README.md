@@ -156,13 +156,21 @@ But instead of generating files in the console, they are generated in the `db/mi
 
 ## Upgrading
 
-I recommend you to upgrade to the latest version which is `2.0.0`.
+I recommend you to upgrade to the latest version which is `2.X.X`.
+Be sure you have this in your `Gemfile`:
+```ruby
+group :development do
+  gem 'localtower', '~> 2'
+end
+```
+
 To upgrade, just use the latest version of Localtower.
-You have nothing else to do.
 
 ```
 bundle update localtower
 ```
+
+Then restart your server.
 
 ## Contribute
 
