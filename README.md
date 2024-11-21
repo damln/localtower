@@ -110,6 +110,10 @@ To access the UI, run your local rails server and open your browser at [http://l
 
 ## Full scenario
 
+### Demo (2min)
+
+[![Localtower v2 demo](https://raw.githubusercontent.com/damln/localtower/master/public/com/localtower-play.png)](https://www.youtube.com/watch?v=Bd01fm3xuko)
+
 ### Create a model
 
 ![](https://raw.githubusercontent.com/damln/localtower/master/public/screenshots/v2.0.0/Screenshot%202024-11-18%20at%2022.44.30.jpg)
