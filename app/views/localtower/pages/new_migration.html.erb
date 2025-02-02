@@ -9,7 +9,7 @@
     <%= form_tag migrations_path, class: "pb-10" do %>
       <input type="hidden" id="form_attributes" name="migrations">
       <div class="flex flex-col gap-2 pb-4">
-        <div class="block text-localtower-100">Migration name <span class="text-localtower-400">(optionnal)</span></div>
+        <div class="block text-localtower-100">Migration name <span class="text-localtower-400">(optional)</span></div>
         <div class="w-80">
           <input autocomplete="off" type="text" data-selector="modelName" name="migration_name" class="px-2 py-1.5 rounded bg-localtower-600 border border-localtower-500 inline-block w-full outline-none focus:border-localtower-400 transition-colors text-localtower-100 placeholder:italic placeholder:text-localtower-450 focus:placeholder:text-localtower-600 disabled:cursor-not-allowed" placeholder="Ex: AddFieldsToUser" <%= @migrations.any? ? 'disabled' : '' %>>
         </div>
